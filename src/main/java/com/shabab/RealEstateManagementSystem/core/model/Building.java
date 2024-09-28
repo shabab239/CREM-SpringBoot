@@ -1,0 +1,51 @@
+package com.shabab.RealEstateManagementSystem.core.model;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+import java.util.List;
+
+/**
+ * Project: ConstructionAndRealEstateManagement-SpringBoot
+ * Author: Shabab
+ * Created on: 28/09/2024
+ */
+
+@AllArgsConstructor
+@NoArgsConstructor
+@Getter
+@Setter
+@Entity
+@Table(name = "core_buildings")
+public class Building {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    private String name;
+
+    private BuildingType type;
+
+    private Integer floors;
+
+    @ManyToOne
+    private Project project;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "building", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
+    private List<Unit> units;
+
+    public enum BuildingType {
+        RESIDENTIAL,
+        COMMERCIAL,
+        MIXED_USE
+    }
+
+    @Column(nullable = false)
+    private Long companyId; //Loose relation to Company
+}
