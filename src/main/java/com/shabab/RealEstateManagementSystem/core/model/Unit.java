@@ -1,6 +1,7 @@
 package com.shabab.RealEstateManagementSystem.core.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -36,8 +37,11 @@ public class Unit {
     @Enumerated(EnumType.STRING)
     private UnitStatus status;
 
+    @NotNull(message = "Floor is required")
     @ManyToOne
-    private Building building;
+    @JoinColumn(nullable = false)
+    private Floor floor;
+
     @Column(nullable = false)
     private Long companyId; //Loose relation to Company
 

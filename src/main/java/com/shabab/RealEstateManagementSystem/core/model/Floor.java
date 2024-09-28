@@ -12,7 +12,7 @@ import java.util.List;
 
 /**
  * Project: ConstructionAndRealEstateManagement-SpringBoot
- * Author: Shabab
+ * Author: Shabab-1281539
  * Created on: 28/09/2024
  */
 
@@ -21,30 +21,42 @@ import java.util.List;
 @Getter
 @Setter
 @Entity
-@Table(name = "core_buildings")
-public class Building {
+@Table(name = "core_floors")
+public class Floor {
+
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String name;
+    @Enumerated(EnumType.STRING)
+    private NAME name;
 
-    private BuildingType type;
-
-    @NotNull(message = "Project is required")
+    @NotNull(message = "Building is required")
     @ManyToOne
     @JoinColumn(nullable = false)
-    private Project project;
+    private Building building;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "building", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
-    private List<Floor> floors;
+    @OneToMany(mappedBy = "floor", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
+    private List<Unit> units;
 
-    public enum BuildingType {
-        RESIDENTIAL,
-        COMMERCIAL,
-        MIXED_USE
+    public enum NAME {
+        FIRST,
+        SECOND,
+        THIRD,
+        FOURTH,
+        FIFTH,
+        SIXTH,
+        SEVENTH,
+        EIGHTH,
+        NINTH,
+        TENTH,
+        ELEVENTH,
+        TWELVETH,
+        THIRTEENTH,
+        FOURTEENTH,
+        FIFTEENTH
     }
 
     @Column(nullable = false)

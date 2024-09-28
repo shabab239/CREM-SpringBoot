@@ -1,6 +1,7 @@
 package com.shabab.RealEstateManagementSystem.core.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -26,13 +27,20 @@ public class Expense {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotNull(message = "Description is required")
+    @Column(nullable = false)
     private String description;
 
+    @NotNull(message = "Amount is required")
+    @Column(nullable = false)
     private Double amount;
 
+    @Temporal(TemporalType.DATE)
     private Date date;
 
+    @NotNull(message = "Construction stage is required")
     @ManyToOne
+    @JoinColumn(nullable = false)
     private ConstructionStage constructionStage;
 
     @Column(nullable = false)

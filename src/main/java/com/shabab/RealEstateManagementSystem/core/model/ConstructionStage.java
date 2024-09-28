@@ -1,6 +1,7 @@
 package com.shabab.RealEstateManagementSystem.core.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -43,7 +44,9 @@ public class ConstructionStage {
         COMPLETED
     }
 
+    @NotNull(message = "Building is required")
     @ManyToOne
+    @JoinColumn(nullable = false)
     private Building building;
 
     @Column(nullable = false)

@@ -2,11 +2,13 @@ package com.shabab.RealEstateManagementSystem.core.service;
 
 import com.shabab.RealEstateManagementSystem.core.model.Unit;
 import com.shabab.RealEstateManagementSystem.core.repository.UnitRepository;
+import com.shabab.RealEstateManagementSystem.util.ApiResponse;
+import com.shabab.RealEstateManagementSystem.util.AuthUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 /**
  * Project: ConstructionAndRealEstateManagement-SpringBoot
@@ -20,19 +22,87 @@ public class UnitService {
     @Autowired
     private UnitRepository unitRepository;
 
-    public Optional<Unit> findUnitById(Long id) {
-        return unitRepository.findById(id);
+    public ApiResponse findById(Long id) {
+        ApiResponse response = new ApiResponse();
+        try {
+            Unit dbUnit = unitRepository.findByIdAndCompanyId(
+                    id, AuthUtil.getCurrentCompanyId()
+            ).orElse(null);
+            if (dbUnit == null) {
+                return response.error("Unit not found");
+            }
+            response.setData("unit", dbUnit);
+            response.setMessage("Successfully retrieved unit");
+        } catch (Exception e) {
+            return response.error(e);
+        }
+        return response;
     }
 
-    public List<Unit> findAllUnits() {
-        return unitRepository.findAll();
+    public ApiResponse findAll() {
+        ApiResponse response = new ApiResponse();
+        try {
+            List<Unit> units = unitRepository.findAllByCompanyId(
+                    AuthUtil.getCurrentCompanyId()
+            ).orElse(new ArrayList<>());
+            if (units.isEmpty()) {
+                return response.error("No unit found");
+            }
+            response.setData("units", units);
+            response.setMessage("Successfully retrieved all units");
+        } catch (Exception e) {
+            return response.error(e);
+        }
+        return response;
     }
 
-    public Unit saveUnit(Unit unit) {
-        return unitRepository.save(unit);
+    public ApiResponse save(Unit unit) {
+        ApiResponse response = new ApiResponse();
+        try {
+            unit.setCompanyId(AuthUtil.getCurrentCompanyId());
+            unitRepository.save(unit);
+            response.setData("unit", unit);
+            response.setMessage("Successfully saved unit");
+        } catch (Exception e) {
+            return response.error(e);
+        }
+        return response;
     }
 
-    public void deleteUnitById(Long id) {
-        unitRepository.deleteById(id);
+    public ApiResponse update(Unit unit) {
+        ApiResponse response = new ApiResponse();
+        try {
+            Unit dbUnit = unitRepository.findByIdAndCompanyId(
+                    unit.getId(), AuthUtil.getCurrentCompanyId()
+            ).orElse(null);
+            if (dbUnit == null) {
+                return response.error("Unit not found");
+            }
+            unit.setCompanyId(AuthUtil.getCurrentCompanyId());
+            unitRepository.save(unit);
+            response.setData("unit", unit);
+            response.setMessage("Successfully updated unit");
+        } catch (Exception e) {
+            return response.error(e);
+        }
+        return response;
     }
+
+    public ApiResponse deleteById(Long id) {
+        ApiResponse response = new ApiResponse();
+        try {
+            Unit unit = unitRepository.findByIdAndCompanyId(
+                    id, AuthUtil.getCurrentCompanyId()
+            ).orElse(null);
+            if (unit == null) {
+                return response.error("Unit not found");
+            }
+            unitRepository.deleteById(id);
+            response.setMessage("Successfully deleted unit");
+        } catch (Exception e) {
+            return response.error(e);
+        }
+        return response;
+    }
+
 }
