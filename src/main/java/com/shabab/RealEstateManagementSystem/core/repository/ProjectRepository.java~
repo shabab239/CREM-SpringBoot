@@ -21,4 +21,6 @@ public interface ProjectRepository extends JpaRepository<Project, Long> {
 
     Optional<Project> findByNameAndCompanyId(String name, Long companyId);
 
+    Optional<List<Project>> findAllByCompanyId(Long projectId, Long companyId);
+
 }
