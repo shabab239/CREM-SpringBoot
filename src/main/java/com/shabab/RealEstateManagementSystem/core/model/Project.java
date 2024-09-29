@@ -1,6 +1,7 @@
 package com.shabab.RealEstateManagementSystem.core.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.shabab.RealEstateManagementSystem.security.model.User;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -33,7 +34,6 @@ public class Project {
     @Column(nullable = false)
     private String name;
 
-
     @NotBlank(message = "Location is required")
     @Column(nullable = false)
     private String location;
@@ -49,6 +49,9 @@ public class Project {
     @NotNull(message = "Project Status is required")
     @Column(nullable = false)
     private ProjectStatus status;
+
+    @ManyToOne
+    private User manager;
 
     @JsonIgnore
     @OneToMany(mappedBy = "project", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)

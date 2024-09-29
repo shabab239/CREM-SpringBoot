@@ -6,12 +6,12 @@ import org.springframework.web.bind.annotation.RestController;
 /**
  * Project: ConstructionAndRealEstateManagement-SpringBoot
  * Author: Shabab
- * Created on: 27/09/2024
+ * Created on: 28/09/2024
  */
 
-@RestController("/api/building")
+@RestController("/api/stage")
 @CrossOrigin
-public class BuildingRestController {
+public class ConstructionStageRestController {
 
 
 

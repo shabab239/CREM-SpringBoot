@@ -13,17 +13,16 @@ import org.springframework.web.bind.annotation.*;
  * Created on: 28/09/2024
  */
 
-@RestController("/api/project")
 @CrossOrigin
+@RestController("/api/project")
 public class ProjectRestController {
-
 
     @Autowired
     private ProjectService projectService;
 
     @GetMapping("/")
-    public ApiResponse findAllProjects() {
-        return projectService.findAllProjects();
+    public ApiResponse findAll() {
+        return projectService.findAll();
     }
 
     @PostMapping("/save")
@@ -38,7 +37,7 @@ public class ProjectRestController {
 
     @GetMapping("/{id}")
     public ApiResponse getById(@PathVariable Long id) {
-        return projectService.getById(id);
+        return projectService.findById(id);
     }
 
     @DeleteMapping("/{id}")
