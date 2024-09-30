@@ -1,6 +1,6 @@
 package com.shabab.RealEstateManagementSystem.core.repository;
 
-import com.shabab.RealEstateManagementSystem.core.model.Expense;
+import com.shabab.RealEstateManagementSystem.core.model.PaymentSchedule;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.sql.Date;
@@ -12,13 +12,13 @@ import java.util.Optional;
  * Author: Shabab
  * Created on: 27/09/2024
  */
-public interface ExpenseRepository extends JpaRepository<Expense, Long> {
+public interface ExpenseRepository extends JpaRepository<PaymentSchedule, Long> {
 
-    Optional<List<Expense>> findAllByCompanyId(Long companyId);
+    Optional<List<PaymentSchedule>> findAllByCompanyId(Long companyId);
 
-    Optional<List<Expense>> findAllByDateBetweenAndCompanyId(Date fromDate, Date toDate, Long companyId);
+    Optional<List<PaymentSchedule>> findAllByDateBetweenAndCompanyId(Date fromDate, Date toDate, Long companyId);
 
-    Optional<Expense> findByIdAndCompanyId(Long id, Long companyId);
+    Optional<PaymentSchedule> findByIdAndCompanyId(Long id, Long companyId);
 
-    Optional<List<Expense>> findAllByConstructionStage_IdAndCompanyId(Long stageId, Long companyId);
+    Optional<List<PaymentSchedule>> findAllByConstructionStage_IdAndCompanyId(Long stageId, Long companyId);
 }

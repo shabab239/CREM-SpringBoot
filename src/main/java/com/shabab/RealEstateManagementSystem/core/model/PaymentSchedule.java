@@ -1,5 +1,7 @@
 package com.shabab.RealEstateManagementSystem.core.model;
 
+import com.shabab.RealEstateManagementSystem.security.model.Company;
+import com.shabab.RealEstateManagementSystem.security.model.User;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -20,23 +22,19 @@ import java.sql.Date;
 @Getter
 @Setter
 @Entity
-@Table(name = "const_expenses")
-public class Expense {
+@Table(name = "const_pay_schedules")
+public class PaymentSchedule {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @NotNull(message = "Description is required")
-    @Column(nullable = false)
-    private String description;
 
     @NotNull(message = "Amount is required")
     @Column(nullable = false)
     private Double amount;
 
     @Temporal(TemporalType.DATE)
-    private Date date;
+    private Date dueDate;
 
     @NotNull(message = "Construction stage is required")
     @ManyToOne

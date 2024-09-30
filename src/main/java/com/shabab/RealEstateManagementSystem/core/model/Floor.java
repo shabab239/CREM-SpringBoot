@@ -24,7 +24,6 @@ import java.util.List;
 @Table(name = "core_floors")
 public class Floor {
 
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -42,6 +41,8 @@ public class Floor {
     private List<Unit> units;
 
     public enum NAME {
+        BASEMENT,
+        GROUND,
         FIRST,
         SECOND,
         THIRD,

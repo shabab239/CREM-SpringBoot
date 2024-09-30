@@ -86,16 +86,19 @@ public class User implements UserDetails {
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
     private Token token;
 
+    @JsonIgnore
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(new SimpleGrantedAuthority(role.name()));
     }
 
+    @JsonIgnore
     @Override
     public String getPassword() {
         return token.getPassword();
     }
 
+    @JsonIgnore
     @Override
     public String getUsername() {
         return token.getUsername();
@@ -110,5 +113,8 @@ public class User implements UserDetails {
         ROLE_OWNER
     }
 
+    public User(Long id) {
+        this.id = id;
+    }
 }
 

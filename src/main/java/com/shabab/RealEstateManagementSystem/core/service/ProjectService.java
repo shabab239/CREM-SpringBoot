@@ -25,13 +25,14 @@ public class ProjectService {
     public ApiResponse findById(Long id) {
         ApiResponse response = new ApiResponse();
         try {
-            Project dbProject = projectRepository.findByIdAndCompanyId(
+            Project project = projectRepository.findByIdAndCompanyId(
                     id, AuthUtil.getCurrentCompanyId()
             ).orElse(null);
-            if (dbProject == null) {
+            if (project == null) {
                 return response.error("Project not found");
             }
-            response.setData("project", dbProject);
+            response.setData("project", project);
+            response.setSuccessful(true);
             response.setMessage("Successfully retrieved project");
         } catch (Exception e) {
             return response.error(e);
@@ -50,6 +51,7 @@ public class ProjectService {
                 return response.error("No project found");
             }
             response.setData("projects", projects);
+            response.setSuccessful(true);
             response.setMessage("Successfully retrieved projects");
         } catch (Exception e) {
             return response.error(e);
@@ -63,6 +65,7 @@ public class ProjectService {
             project.setCompanyId(AuthUtil.getCurrentCompanyId());
             projectRepository.save(project);
             response.setData("project", project);
+            response.setSuccessful(true);
             response.success("Saved Successfully");
         } catch (Exception e) {
             return response.error(e);
@@ -82,6 +85,7 @@ public class ProjectService {
             project.setCompanyId(AuthUtil.getCurrentCompanyId());
             projectRepository.save(project);
             response.setData("project", project);
+            response.setSuccessful(true);
             response.success("Updated Successfully");
         } catch (Exception e) {
             return response.error(e);
@@ -99,6 +103,7 @@ public class ProjectService {
                 return response.error("Project not found");
             }
             projectRepository.delete(dbProject);
+            response.setSuccessful(true);
             response.success("Deleted Successfully");
         } catch (Exception e) {
             return response.error(e);

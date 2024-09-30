@@ -1,6 +1,6 @@
 package com.shabab.RealEstateManagementSystem.core.service;
 
-import com.shabab.RealEstateManagementSystem.core.model.Expense;
+import com.shabab.RealEstateManagementSystem.core.model.PaymentSchedule;
 import com.shabab.RealEstateManagementSystem.core.repository.ExpenseRepository;
 import com.shabab.RealEstateManagementSystem.util.ApiResponse;
 import com.shabab.RealEstateManagementSystem.util.AuthUtil;
@@ -25,14 +25,15 @@ public class ExpenseService {
     public ApiResponse findById(Long id) {
         ApiResponse response = new ApiResponse();
         try {
-            Expense dbExpense = expenseRepository.findByIdAndCompanyId(
+            PaymentSchedule paymentSchedule = expenseRepository.findByIdAndCompanyId(
                     id, AuthUtil.getCurrentCompanyId()
             ).orElse(null);
-            if (dbExpense == null) {
-                return response.error("Expense not found");
+            if (paymentSchedule == null) {
+                return response.error("PaymentSchedule not found");
             }
-            response.setData("expense", dbExpense);
-            response.setMessage("Successfully retrieved expense");
+            response.setData("paymentSchedule", paymentSchedule);
+            response.setSuccessful(true);
+            response.setMessage("Successfully retrieved paymentSchedule");
         } catch (Exception e) {
             return response.error(e);
         }
@@ -42,46 +43,49 @@ public class ExpenseService {
     public ApiResponse findAll() {
         ApiResponse response = new ApiResponse();
         try {
-            List<Expense> expenses = expenseRepository.findAllByCompanyId(
+            List<PaymentSchedule> expens = expenseRepository.findAllByCompanyId(
                     AuthUtil.getCurrentCompanyId()
             ).orElse(new ArrayList<>());
-            if (expenses.isEmpty()) {
+            if (expens.isEmpty()) {
                 return response.error("No expense found");
             }
-            response.setData("expenses", expenses);
-            response.setMessage("Successfully retrieved all expenses");
+            response.setData("expens", expens);
+            response.setSuccessful(true);
+            response.setMessage("Successfully retrieved all expens");
         } catch (Exception e) {
             return response.error(e);
         }
         return response;
     }
 
-    public ApiResponse save(Expense expense) {
+    public ApiResponse save(PaymentSchedule paymentSchedule) {
         ApiResponse response = new ApiResponse();
         try {
-            expense.setCompanyId(AuthUtil.getCurrentCompanyId());
-            expenseRepository.save(expense);
-            response.setData("expense", expense);
-            response.setMessage("Successfully saved expense");
+            paymentSchedule.setCompanyId(AuthUtil.getCurrentCompanyId());
+            expenseRepository.save(paymentSchedule);
+            response.setData("paymentSchedule", paymentSchedule);
+            response.setSuccessful(true);
+            response.setMessage("Successfully saved paymentSchedule");
         } catch (Exception e) {
             return response.error(e);
         }
         return response;
     }
 
-    public ApiResponse update(Expense expense) {
+    public ApiResponse update(PaymentSchedule paymentSchedule) {
         ApiResponse response = new ApiResponse();
         try {
-            Expense dbExpense = expenseRepository.findByIdAndCompanyId(
-                    expense.getId(), AuthUtil.getCurrentCompanyId()
+            PaymentSchedule dbPaymentSchedule = expenseRepository.findByIdAndCompanyId(
+                    paymentSchedule.getId(), AuthUtil.getCurrentCompanyId()
             ).orElse(null);
-            if (dbExpense == null) {
-                return response.error("Expense not found");
+            if (dbPaymentSchedule == null) {
+                return response.error("PaymentSchedule not found");
             }
-            expense.setCompanyId(AuthUtil.getCurrentCompanyId());
-            expenseRepository.save(expense);
-            response.setData("expense", expense);
-            response.setMessage("Successfully updated expense");
+            paymentSchedule.setCompanyId(AuthUtil.getCurrentCompanyId());
+            expenseRepository.save(paymentSchedule);
+            response.setData("paymentSchedule", paymentSchedule);
+            response.setSuccessful(true);
+            response.setMessage("Successfully updated paymentSchedule");
         } catch (Exception e) {
             return response.error(e);
         }
@@ -91,14 +95,15 @@ public class ExpenseService {
     public ApiResponse deleteById(Long id) {
         ApiResponse response = new ApiResponse();
         try {
-            Expense expense = expenseRepository.findByIdAndCompanyId(
+            PaymentSchedule paymentSchedule = expenseRepository.findByIdAndCompanyId(
                     id, AuthUtil.getCurrentCompanyId()
             ).orElse(null);
-            if (expense == null) {
-                return response.error("Expense not found");
+            if (paymentSchedule == null) {
+                return response.error("PaymentSchedule not found");
             }
             expenseRepository.deleteById(id);
-            response.setMessage("Successfully deleted expense");
+            response.setSuccessful(true);
+            response.setMessage("Successfully deleted paymentSchedule");
         } catch (Exception e) {
             return response.error(e);
         }

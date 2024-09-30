@@ -30,6 +30,7 @@ public class Building {
 
     private String name;
 
+    @Enumerated(EnumType.STRING)
     private BuildingType type;
 
     @NotNull(message = "Project is required")

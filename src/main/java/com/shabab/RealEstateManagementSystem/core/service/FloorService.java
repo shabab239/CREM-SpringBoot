@@ -1,8 +1,7 @@
 package com.shabab.RealEstateManagementSystem.core.service;
 
-import com.shabab.RealEstateManagementSystem.core.model.Building;
-import com.shabab.RealEstateManagementSystem.core.model.Project;
-import com.shabab.RealEstateManagementSystem.core.repository.BuildingRepository;
+import com.shabab.RealEstateManagementSystem.core.model.Floor;
+import com.shabab.RealEstateManagementSystem.core.repository.FloorRepository;
 import com.shabab.RealEstateManagementSystem.util.ApiResponse;
 import com.shabab.RealEstateManagementSystem.util.AuthUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,7 +9,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 /**
  * Project: ConstructionAndRealEstateManagement-SpringBoot
@@ -19,76 +17,75 @@ import java.util.Optional;
  */
 
 @Service
-public class BuildingService {
+public class FloorService {
 
     @Autowired
-    private BuildingRepository buildingRepository;
+    private FloorRepository floorRepository;
 
     public ApiResponse findById(Long id) {
         ApiResponse response = new ApiResponse();
         try {
-            Building building = buildingRepository.findByIdAndCompanyId(
+            Floor floor = floorRepository.findByIdAndCompanyId(
                     id, AuthUtil.getCurrentCompanyId()
             ).orElse(null);
-            if (building == null) {
-                return response.error("Building not found");
+            if (floor == null) {
+                return response.error("Floor not found");
             }
-            response.setData("building", building);
+            response.setData("floor", floor);
             response.setSuccessful(true);
-            response.setMessage("Successfully retrieved building");
+            response.setMessage("Successfully retrieved floor");
         } catch (Exception e) {
             return response.error(e);
         }
         return response;
     }
-
 
     public ApiResponse findAll() {
         ApiResponse response = new ApiResponse();
         try {
-            List<Building> buildings = buildingRepository.findAllByCompanyId(
+            List<Floor> floors = floorRepository.findAllByCompanyId(
                     AuthUtil.getCurrentCompanyId()
             ).orElse(new ArrayList<>());
-            if (buildings.isEmpty()) {
-                return response.error("No building found");
+            if (floors.isEmpty()) {
+                return response.error("No floor found");
             }
-            response.setData("buildings", buildings);
+            response.setData("floors", floors);
             response.setSuccessful(true);
-            response.setMessage("Successfully retrieved all buildings");
+            response.setMessage("Successfully retrieved all floors");
         } catch (Exception e) {
             return response.error(e);
         }
         return response;
     }
 
-    public ApiResponse save(Building building) {
+    public ApiResponse save(Floor floor) {
         ApiResponse response = new ApiResponse();
         try {
-            building.setCompanyId(AuthUtil.getCurrentCompanyId());
-            buildingRepository.save(building);
-            response.setData("building", building);
+            floor.setCompanyId(AuthUtil.getCurrentCompanyId());
+            floorRepository.save(floor);
+            response.setData("floor", floor);
             response.setSuccessful(true);
-            response.setMessage("Successfully saved building");
+            response.setMessage("Successfully saved floor");
         } catch (Exception e) {
             return response.error(e);
         }
         return response;
     }
 
-    public ApiResponse update(Building building) {
+    public ApiResponse update(Floor floor) {
         ApiResponse response = new ApiResponse();
         try {
-            Building dbBuilding = buildingRepository.findByIdAndCompanyId(
-                    building.getId(), AuthUtil.getCurrentCompanyId()
+            Floor dbFloor = floorRepository.findByIdAndCompanyId(
+                    floor.getId(), AuthUtil.getCurrentCompanyId()
             ).orElse(null);
-            if (dbBuilding == null) {
-                return response.error("Building not found");
+            if (dbFloor == null) {
+                return response.error("Floor not found");
             }
-            building.setCompanyId(AuthUtil.getCurrentCompanyId());
-            buildingRepository.save(building);
-            response.setData("building", building);
+            floor.setCompanyId(AuthUtil.getCurrentCompanyId());
+            floorRepository.save(floor);
+            response.setData("floor", floor);
             response.setSuccessful(true);
-            response.setMessage("Successfully updated building");
+            response.setMessage("Successfully updated floor");
         } catch (Exception e) {
             return response.error(e);
         }
@@ -98,15 +95,15 @@ public class BuildingService {
     public ApiResponse deleteById(Long id) {
         ApiResponse response = new ApiResponse();
         try {
-            Building building = buildingRepository.findByIdAndCompanyId(
+            Floor floor = floorRepository.findByIdAndCompanyId(
                     id, AuthUtil.getCurrentCompanyId()
             ).orElse(null);
-            if (building == null) {
-                return response.error("Building not found");
+            if (floor == null) {
+                return response.error("Floor not found");
             }
-            buildingRepository.deleteById(id);
+            floorRepository.deleteById(id);
             response.setSuccessful(true);
-            response.setMessage("Successfully deleted building");
+            response.setMessage("Successfully deleted floor");
         } catch (Exception e) {
             return response.error(e);
         }

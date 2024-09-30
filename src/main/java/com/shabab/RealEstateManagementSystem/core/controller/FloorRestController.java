@@ -1,7 +1,7 @@
 package com.shabab.RealEstateManagementSystem.core.controller;
 
-import com.shabab.RealEstateManagementSystem.core.model.PaymentSchedule;
-import com.shabab.RealEstateManagementSystem.core.service.ExpenseService;
+import com.shabab.RealEstateManagementSystem.core.model.Floor;
+import com.shabab.RealEstateManagementSystem.core.service.FloorService;
 import com.shabab.RealEstateManagementSystem.util.ApiResponse;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,34 +15,34 @@ import org.springframework.web.bind.annotation.*;
 
 @CrossOrigin
 @RestController
-@RequestMapping("/api/expense")
-public class ExpenseRestController {
+@RequestMapping("/api/floor")
+public class FloorRestController {
 
     @Autowired
-    private ExpenseService expenseService;
+    private FloorService floorService;
 
     @GetMapping("/")
     public ApiResponse findAll() {
-        return expenseService.findAll();
+        return floorService.findAll();
     }
 
     @PostMapping("/save")
-    public ApiResponse save(@Valid @RequestBody PaymentSchedule paymentSchedule) {
-        return expenseService.save(paymentSchedule);
+    public ApiResponse save(@Valid @RequestBody Floor floor) {
+        return floorService.save(floor);
     }
 
     @PutMapping("/update")
-    public ApiResponse update(@Valid @RequestBody PaymentSchedule paymentSchedule) {
-        return expenseService.update(paymentSchedule);
+    public ApiResponse update(@Valid @RequestBody Floor floor) {
+        return floorService.update(floor);
     }
 
     @GetMapping("/{id}")
     public ApiResponse getById(@PathVariable Long id) {
-        return expenseService.findById(id);
+        return floorService.findById(id);
     }
 
     @DeleteMapping("/{id}")
     public ApiResponse deleteById(@PathVariable Long id) {
-        return expenseService.deleteById(id);
+        return floorService.deleteById(id);
     }
 }

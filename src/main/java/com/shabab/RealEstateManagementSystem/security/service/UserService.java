@@ -52,6 +52,7 @@ public class UserService implements UserDetailsService {
                 return response.error("No user found");
             }
             response.setData("users", users);
+            response.setSuccessful(true);
             response.success("Successfully retrieved all users");
             return response;
         } catch (Exception e) {
@@ -84,6 +85,7 @@ public class UserService implements UserDetailsService {
             userRepository.save(user);
 
             response.setData("user", user);
+            response.setSuccessful(true);
             response.success("Saved Successfully. Account created");
             return response;
         } catch (Exception e) {
@@ -121,6 +123,7 @@ public class UserService implements UserDetailsService {
             user.setCompany(AuthUtil.getCurrentCompany());
             userRepository.save(user);
             response.setData("user", user);
+            response.setSuccessful(true);
             response.success("Updated Successfully");
             return response;
         } catch (Exception e) {
@@ -138,6 +141,7 @@ public class UserService implements UserDetailsService {
                 return response.error("User not found");
             }
             response.setData("user", user);
+            response.setSuccessful(true);
             response.success("Successfully retrieved user");
             return response;
         } catch (Exception e) {
@@ -156,6 +160,7 @@ public class UserService implements UserDetailsService {
             }
 
             userRepository.deleteById(id);
+            response.setSuccessful(true);
             response.success("Deleted Successfully");
             return response;
         } catch (Exception e) {

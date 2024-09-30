@@ -25,13 +25,14 @@ public class UnitService {
     public ApiResponse findById(Long id) {
         ApiResponse response = new ApiResponse();
         try {
-            Unit dbUnit = unitRepository.findByIdAndCompanyId(
+            Unit unit = unitRepository.findByIdAndCompanyId(
                     id, AuthUtil.getCurrentCompanyId()
             ).orElse(null);
-            if (dbUnit == null) {
+            if (unit == null) {
                 return response.error("Unit not found");
             }
-            response.setData("unit", dbUnit);
+            response.setData("unit", unit);
+            response.setSuccessful(true);
             response.setMessage("Successfully retrieved unit");
         } catch (Exception e) {
             return response.error(e);
@@ -49,6 +50,7 @@ public class UnitService {
                 return response.error("No unit found");
             }
             response.setData("units", units);
+            response.setSuccessful(true);
             response.setMessage("Successfully retrieved all units");
         } catch (Exception e) {
             return response.error(e);
@@ -62,6 +64,7 @@ public class UnitService {
             unit.setCompanyId(AuthUtil.getCurrentCompanyId());
             unitRepository.save(unit);
             response.setData("unit", unit);
+            response.setSuccessful(true);
             response.setMessage("Successfully saved unit");
         } catch (Exception e) {
             return response.error(e);
@@ -81,6 +84,7 @@ public class UnitService {
             unit.setCompanyId(AuthUtil.getCurrentCompanyId());
             unitRepository.save(unit);
             response.setData("unit", unit);
+            response.setSuccessful(true);
             response.setMessage("Successfully updated unit");
         } catch (Exception e) {
             return response.error(e);
@@ -98,6 +102,7 @@ public class UnitService {
                 return response.error("Unit not found");
             }
             unitRepository.deleteById(id);
+            response.setSuccessful(true);
             response.setMessage("Successfully deleted unit");
         } catch (Exception e) {
             return response.error(e);

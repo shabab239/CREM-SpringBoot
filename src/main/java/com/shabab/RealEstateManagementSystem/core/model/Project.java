@@ -46,12 +46,18 @@ public class Project {
 
     private Double budget;
 
+    private String description;
+
     @NotNull(message = "Project Status is required")
     @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
     private ProjectStatus status;
 
     @ManyToOne
     private User manager;
+
+    @ManyToMany
+    private List<User> teamMembers;
 
     @JsonIgnore
     @OneToMany(mappedBy = "project", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)

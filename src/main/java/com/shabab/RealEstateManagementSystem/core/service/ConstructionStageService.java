@@ -25,13 +25,14 @@ public class ConstructionStageService {
     public ApiResponse findById(Long id) {
         ApiResponse response = new ApiResponse();
         try {
-            ConstructionStage dbConstructionStage = constructionStageRepository.findByIdAndCompanyId(
+            ConstructionStage constructionStage = constructionStageRepository.findByIdAndCompanyId(
                     id, AuthUtil.getCurrentCompanyId()
             ).orElse(null);
-            if (dbConstructionStage == null) {
+            if (constructionStage == null) {
                 return response.error("Construction Stage not found");
             }
-            response.setData("constructionStage", dbConstructionStage);
+            response.setData("constructionStage", constructionStage);
+            response.setSuccessful(true);
             response.setMessage("Successfully retrieved construction stage");
         } catch (Exception e) {
             return response.error(e);
@@ -49,6 +50,7 @@ public class ConstructionStageService {
                 return response.error("No construction stage found");
             }
             response.setData("constructionStages", constructionStages);
+            response.setSuccessful(true);
             response.setMessage("Successfully retrieved all construction stages");
         } catch (Exception e) {
             return response.error(e);
@@ -62,6 +64,7 @@ public class ConstructionStageService {
             constructionStage.setCompanyId(AuthUtil.getCurrentCompanyId());
             constructionStageRepository.save(constructionStage);
             response.setData("constructionStage", constructionStage);
+            response.setSuccessful(true);
             response.setMessage("Successfully saved construction stage");
         } catch (Exception e) {
             return response.error(e);
@@ -81,6 +84,7 @@ public class ConstructionStageService {
             constructionStage.setCompanyId(AuthUtil.getCurrentCompanyId());
             constructionStageRepository.save(constructionStage);
             response.setData("constructionStage", constructionStage);
+            response.setSuccessful(true);
             response.setMessage("Successfully updated construction stage");
         } catch (Exception e) {
             return response.error(e);
@@ -98,6 +102,7 @@ public class ConstructionStageService {
                 return response.error("Construction Stage not found");
             }
             constructionStageRepository.deleteById(id);
+            response.setSuccessful(true);
             response.setMessage("Successfully deleted construction stage");
         } catch (Exception e) {
             return response.error(e);
