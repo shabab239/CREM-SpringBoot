@@ -1,7 +1,6 @@
 package com.shabab.RealEstateManagementSystem.core.model;
 
 import com.shabab.RealEstateManagementSystem.security.model.Company;
-import com.shabab.RealEstateManagementSystem.security.model.User;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -13,7 +12,7 @@ import java.sql.Date;
 
 /**
  * Project: ConstructionAndRealEstateManagement-SpringBoot
- * Author: Shabab
+ * Author: Shabab-1281539
  * Created on: 30/09/2024
  */
 
@@ -22,33 +21,33 @@ import java.sql.Date;
 @Getter
 @Setter
 @Entity
-@Table(name = "const_payments")
-public class Payment {
+@Table(name = "worker_attendances")
+public class WorkerAttendance {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotNull(message = "Paid Amount is required")
-    @Column(nullable = false)
-    private Double paidAmount;
-
     @NotNull(message = "Date is required")
+    @Temporal(TemporalType.DATE)
     @Column(nullable = false)
     private Date date;
 
-    @ManyToOne
-    private User customer;
+    @NotNull(message = "Status is required")
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private AttendanceStatus status;
 
     @ManyToOne
-    private Company company;
-
-    @NotNull(message = "Payment schedule is required")
-    @ManyToOne
-    @JoinColumn(nullable = false)
-    private PaymentSchedule paymentSchedule;
+    @JoinColumn(name = "worker_id", nullable = false)
+    private Worker worker;
 
     @Column(nullable = false)
     private Long companyId; //Loose relation to Company
 
+    public enum AttendanceStatus {
+        PRESENT,
+        ABSENT,
+        ON_LEAVE
+    }
 }

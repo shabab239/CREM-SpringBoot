@@ -108,7 +108,6 @@ public class User implements UserDetails {
         ROLE_ADMIN,
         ROLE_MANAGER,
         ROLE_EMPLOYEE,
-        ROLE_WORKER,
         ROLE_CUSTOMER,
         ROLE_OWNER
     }

@@ -12,7 +12,7 @@ import java.util.Optional;
  * Author: Shabab
  * Created on: 27/09/2024
  */
-public interface ExpenseRepository extends JpaRepository<PaymentSchedule, Long> {
+public interface PaymentScheduleRepository extends JpaRepository<PaymentSchedule, Long> {
 
     Optional<List<PaymentSchedule>> findAllByCompanyId(Long companyId);
 

@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.sql.Date;
+import java.util.List;
 
 /**
  * Project: ConstructionAndRealEstateManagement-SpringBoot
@@ -50,6 +51,12 @@ public class ConstructionStage {
 
     @ManyToOne
     private Unit unit;
+
+    @ManyToMany
+    private List<RawMaterial> rawMaterials;
+
+    @ManyToMany
+    private List<Worker> workers;
 
     @Column(nullable = false)
     private Long companyId; //Loose relation to Company
