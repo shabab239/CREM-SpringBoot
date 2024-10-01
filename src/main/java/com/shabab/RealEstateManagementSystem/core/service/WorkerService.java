@@ -1,15 +1,21 @@
 package com.shabab.RealEstateManagementSystem.core.service;
 
+import com.shabab.RealEstateManagementSystem.core.model.ConstructionStage;
 import com.shabab.RealEstateManagementSystem.core.model.Worker;
 import com.shabab.RealEstateManagementSystem.core.model.WorkerAttendance;
+import com.shabab.RealEstateManagementSystem.core.repository.ConstructionStageRepository;
 import com.shabab.RealEstateManagementSystem.core.repository.WorkerAttendanceRepository;
 import com.shabab.RealEstateManagementSystem.core.repository.WorkerRepository;
 import com.shabab.RealEstateManagementSystem.util.ApiResponse;
 import com.shabab.RealEstateManagementSystem.util.AuthUtil;
+import com.shabab.RealEstateManagementSystem.util.PhotoUtil;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.sql.Date;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,8 +33,10 @@ public class WorkerService {
 
     @Autowired
     private WorkerAttendanceRepository workerAttendanceRepository;
+    @Autowired
+    private ConstructionStageRepository constructionStageRepository;
 
-    public ApiResponse findById(Long id) {
+    public ApiResponse getById(Long id) {
         ApiResponse response = new ApiResponse();
         try {
             Worker worker = workerRepository.findByIdAndCompanyId(
@@ -46,16 +54,12 @@ public class WorkerService {
         return response;
     }
 
-    public ApiResponse findAll() {
+    public ApiResponse getAll() {
         ApiResponse response = new ApiResponse();
         try {
             List<Worker> workers = workerRepository.findAllByCompanyId(
                     AuthUtil.getCurrentCompanyId()
             ).orElse(new ArrayList<>());
-
-            if (workers.isEmpty()) {
-                return response.error("No workers found");
-            }
             response.setData("workers", workers);
             response.setSuccessful(true);
             response.setMessage("Successfully retrieved workers");
@@ -65,9 +69,16 @@ public class WorkerService {
         return response;
     }
 
-    public ApiResponse save(Worker worker) {
+    public ApiResponse save(Worker worker, MultipartFile avatarFile) {
         ApiResponse response = new ApiResponse();
         try {
+            if (avatarFile != null) {
+                ApiResponse avatarResponse = PhotoUtil.saveAvatar(avatarFile);
+                if (!avatarResponse.isSuccessful()) {
+                    return avatarResponse;
+                }
+                worker.setAvatar((String) avatarResponse.getData("avatar"));
+            }
             worker.setCompanyId(AuthUtil.getCurrentCompanyId());
             workerRepository.save(worker);
             response.setData("worker", worker);
@@ -79,7 +90,7 @@ public class WorkerService {
         return response;
     }
 
-    public ApiResponse update(Worker worker) {
+    public ApiResponse update(Worker worker, MultipartFile avatarFile) {
         ApiResponse response = new ApiResponse();
         try {
             Worker dbWorker = workerRepository.findByIdAndCompanyId(
@@ -88,9 +99,23 @@ public class WorkerService {
             if (dbWorker == null) {
                 return response.error("Worker not found");
             }
-            worker.setCompanyId(AuthUtil.getCurrentCompanyId());
-            workerRepository.save(worker);
-            response.setData("worker", worker);
+            if (avatarFile != null) {
+                ApiResponse avatarResponse = PhotoUtil.saveAvatar(avatarFile);
+                if (!avatarResponse.isSuccessful()) {
+                    return avatarResponse;
+                }
+                dbWorker.setAvatar((String) avatarResponse.getData("avatar"));
+            }
+            dbWorker.setName(worker.getName());
+            dbWorker.setSalary(worker.getSalary());
+            dbWorker.setCell(worker.getCell());
+            dbWorker.setGender(worker.getGender());
+            dbWorker.setAddress(worker.getAddress());
+            dbWorker.setJoiningDate(worker.getJoiningDate());
+            dbWorker.setJoiningDate(worker.getJoiningDate());
+            dbWorker.setCompanyId(AuthUtil.getCurrentCompanyId());
+            workerRepository.save(dbWorker);
+            response.setData("worker", dbWorker);
             response.setSuccessful(true);
             response.success("Updated Successfully");
         } catch (Exception e) {
@@ -108,6 +133,7 @@ public class WorkerService {
             if (dbWorker == null) {
                 return response.error("Worker not found");
             }
+            //TODO delete worker avatar
             workerRepository.delete(dbWorker);
             response.setSuccessful(true);
             response.success("Deleted Successfully");
@@ -169,7 +195,7 @@ public class WorkerService {
         return response;
     }
 
-    public ApiResponse findAttendanceById(Long id) {
+    public ApiResponse getAttendanceById(Long id) {
         ApiResponse response = new ApiResponse();
         try {
             WorkerAttendance workerAttendance = workerAttendanceRepository.findByIdAndCompanyId(
@@ -187,16 +213,12 @@ public class WorkerService {
         return response;
     }
 
-    public ApiResponse findAllAttendance() {
+    public ApiResponse getAllAttendance() {
         ApiResponse response = new ApiResponse();
         try {
             List<WorkerAttendance> workerAttendances = workerAttendanceRepository.findAllByCompanyId(
                     AuthUtil.getCurrentCompanyId()
             ).orElse(new ArrayList<>());
-
-            if (workerAttendances.isEmpty()) {
-                return response.error("No worker attendances found");
-            }
             response.setData("workerAttendances", workerAttendances);
             response.setSuccessful(true);
             response.setMessage("Successfully retrieved worker attendances");
@@ -206,7 +228,7 @@ public class WorkerService {
         return response;
     }
 
-    public ApiResponse findAttendanceByWorkerId(Long workerId) {
+    public ApiResponse getAttendanceByWorkerId(Long workerId) {
         ApiResponse response = new ApiResponse();
         try {
             List<WorkerAttendance> workerAttendances = workerAttendanceRepository.findAllByWorkerIdAndCompanyId(
@@ -225,7 +247,7 @@ public class WorkerService {
         return response;
     }
 
-    public ApiResponse findAttendanceByDate(Date date) {
+    public ApiResponse getAttendanceByDate(Date date) {
         ApiResponse response = new ApiResponse();
         try {
             List<WorkerAttendance> workerAttendances = workerAttendanceRepository.findAllByDateAndCompanyId(
@@ -244,7 +266,7 @@ public class WorkerService {
         return response;
     }
 
-    public ApiResponse findAttendanceByWorkerIdAndDate(Long workerId, Date date) {
+    public ApiResponse getAttendanceByWorkerIdAndDate(Long workerId, Date date) {
         ApiResponse response = new ApiResponse();
         try {
             WorkerAttendance workerAttendance = workerAttendanceRepository.findByWorkerIdAndDateAndCompanyId(
@@ -262,7 +284,7 @@ public class WorkerService {
         return response;
     }
 
-    public ApiResponse findAttendanceByWorkerIdAndDateRange(Long workerId, Date startDate, Date endDate) {
+    public ApiResponse getAttendanceByWorkerIdAndDateRange(Long workerId, Date startDate, Date endDate) {
         ApiResponse response = new ApiResponse();
         try {
             List<WorkerAttendance> workerAttendances = workerAttendanceRepository.findAllByWorkerIdAndDateBetweenAndCompanyId(
@@ -281,7 +303,7 @@ public class WorkerService {
         return response;
     }
 
-    public ApiResponse findAttendanceByDateRange(Date startDate, Date endDate) {
+    public ApiResponse getAttendanceByDateRange(Date startDate, Date endDate) {
         ApiResponse response = new ApiResponse();
         try {
             List<WorkerAttendance> workerAttendances = workerAttendanceRepository.findAllByDateBetweenAndCompanyId(
@@ -300,8 +322,8 @@ public class WorkerService {
         return response;
     }
 
-    public ApiResponse findAttendanceByWorkerIdAndDateRangeAndStatus(Long workerId, Date startDate, Date endDate,
-                                                                     WorkerAttendance.AttendanceStatus status) {
+    public ApiResponse getAttendanceByWorkerIdAndDateRangeAndStatus(Long workerId, Date startDate, Date endDate,
+                                                                    WorkerAttendance.AttendanceStatus status) {
         ApiResponse response = new ApiResponse();
         try {
             List<WorkerAttendance> workerAttendances = workerAttendanceRepository.findAllByWorkerIdAndDateBetweenAndStatusAndCompanyId(
@@ -320,8 +342,8 @@ public class WorkerService {
         return response;
     }
 
-    public ApiResponse findAttendanceByDateRangeAndStatus(Date startDate, Date endDate,
-                                                          WorkerAttendance.AttendanceStatus status) {
+    public ApiResponse getAttendanceByDateRangeAndStatus(Date startDate, Date endDate,
+                                                         WorkerAttendance.AttendanceStatus status) {
         ApiResponse response = new ApiResponse();
         try {
             List<WorkerAttendance> workerAttendances = workerAttendanceRepository.findAllByDateBetweenAndStatusAndCompanyId(
@@ -340,7 +362,7 @@ public class WorkerService {
         return response;
     }
 
-    public ApiResponse findAttendanceByWorkerIdAndStatus(Long workerId, WorkerAttendance.AttendanceStatus status) {
+    public ApiResponse getAttendanceByWorkerIdAndStatus(Long workerId, WorkerAttendance.AttendanceStatus status) {
         ApiResponse response = new ApiResponse();
         try {
             List<WorkerAttendance> workerAttendances = workerAttendanceRepository.findAllByWorkerIdAndStatusAndCompanyId(
@@ -359,7 +381,7 @@ public class WorkerService {
         return response;
     }
 
-    public ApiResponse findAttendanceByStatus(WorkerAttendance.AttendanceStatus status) {
+    public ApiResponse getAttendanceByStatus(WorkerAttendance.AttendanceStatus status) {
         ApiResponse response = new ApiResponse();
         try {
             List<WorkerAttendance> workerAttendances = workerAttendanceRepository.findAllByStatusAndCompanyId(
@@ -378,7 +400,7 @@ public class WorkerService {
         return response;
     }
 
-    public ApiResponse findAttendanceByStatusAndDate(WorkerAttendance.AttendanceStatus status, Date date) {
+    public ApiResponse getAttendanceByStatusAndDate(WorkerAttendance.AttendanceStatus status, Date date) {
         ApiResponse response = new ApiResponse();
         try {
             List<WorkerAttendance> workerAttendances = workerAttendanceRepository.findAllByStatusAndDateAndCompanyId(
@@ -397,7 +419,7 @@ public class WorkerService {
         return response;
     }
 
-    public ApiResponse findAttendanceByStatusAndDateRange(WorkerAttendance.AttendanceStatus status, Date startDate, Date endDate) {
+    public ApiResponse getAttendanceByStatusAndDateRange(WorkerAttendance.AttendanceStatus status, Date startDate, Date endDate) {
         ApiResponse response = new ApiResponse();
         try {
             List<WorkerAttendance> workerAttendances = workerAttendanceRepository.findAllByStatusAndDateBetweenAndCompanyId(
@@ -410,6 +432,73 @@ public class WorkerService {
             response.setData("workerAttendances", workerAttendances);
             response.setSuccessful(true);
             response.setMessage("Successfully retrieved worker attendances");
+        } catch (Exception e) {
+            return response.error(e);
+        }
+        return response;
+    }
+
+    @Transactional(rollbackOn = Exception.class)
+public ApiResponse getAttendanceByStageIdAndDate(Long stageId, LocalDate date) {
+    ApiResponse response = new ApiResponse();
+    try {
+        ConstructionStage constructionStage = constructionStageRepository.findByIdAndCompanyId(
+                stageId, AuthUtil.getCurrentCompanyId()
+        ).orElse(null);
+        if (constructionStage == null) {
+            return response.error("Construction Stage not found");
+        }
+        List<Worker> workers = constructionStage.getWorkers();
+        if (workers.isEmpty()) {
+            return response.error("No workers found in this stage");
+        }
+        List<WorkerAttendance> workerAttendances = workerAttendanceRepository.findAllByWorkerListAndDateAndStageIdAndCompanyId(
+                workers, Date.valueOf(date), stageId, AuthUtil.getCurrentCompanyId()
+        ).orElse(new ArrayList<>());
+        for (Worker worker : workers) {
+            boolean found = false;
+            for (WorkerAttendance workerAttendance : workerAttendances) {
+                if (workerAttendance.getWorker().getId().equals(worker.getId()) && workerAttendance.getStage().getId().equals(stageId)) {
+                    found = true;
+                    break;
+                }
+            }
+            if (!found) {
+                WorkerAttendance emptyAttendance = new WorkerAttendance();
+                emptyAttendance.setWorker(worker);
+                emptyAttendance.setDate(Date.valueOf(date));
+                emptyAttendance.setStage(constructionStage);
+                emptyAttendance.setCompanyId(AuthUtil.getCurrentCompanyId());
+                workerAttendances.add(emptyAttendance);
+            }
+        }
+        workerAttendanceRepository.saveAll(workerAttendances);
+        response.setData("workers", workers);
+        response.setData("attendances", workerAttendances);
+        response.setSuccessful(true);
+        response.setMessage("Successfully retrieved worker attendances");
+    } catch (Exception e) {
+        return response.error(e);
+    }
+    return response;
+}
+
+    public ApiResponse recordAttendance(Long attendanceId, String attendance) {
+        ApiResponse response = new ApiResponse();
+        try {
+            WorkerAttendance.AttendanceStatus status = WorkerAttendance.AttendanceStatus.valueOf(attendance);
+            WorkerAttendance workerAttendance = workerAttendanceRepository.findByIdAndCompanyId(
+                    attendanceId, AuthUtil.getCurrentCompanyId()
+            ).orElse(null);
+            if (workerAttendance == null) {
+                return response.error("Worker attendance not found");
+            }
+            workerAttendance.setStatus(WorkerAttendance.AttendanceStatus.valueOf(attendance));
+            workerAttendance.setCompanyId(AuthUtil.getCurrentCompanyId());
+            workerAttendanceRepository.save(workerAttendance);
+            response.setData("workerAttendance", workerAttendance);
+            response.setSuccessful(true);
+            response.success("Attendance recorded successfully");
         } catch (Exception e) {
             return response.error(e);
         }

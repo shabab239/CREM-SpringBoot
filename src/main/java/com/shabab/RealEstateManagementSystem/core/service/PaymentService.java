@@ -1,7 +1,9 @@
 package com.shabab.RealEstateManagementSystem.core.service;
 
 import com.shabab.RealEstateManagementSystem.core.model.Payment;
+import com.shabab.RealEstateManagementSystem.core.model.PaymentSchedule;
 import com.shabab.RealEstateManagementSystem.core.repository.PaymentRepository;
+import com.shabab.RealEstateManagementSystem.core.repository.PaymentScheduleRepository;
 import com.shabab.RealEstateManagementSystem.util.ApiResponse;
 import com.shabab.RealEstateManagementSystem.util.AuthUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +24,11 @@ public class PaymentService {
     @Autowired
     private PaymentRepository paymentRepository;
 
-    public ApiResponse findById(Long id) {
+    @Autowired
+    private PaymentScheduleRepository paymentScheduleRepository;
+
+    // Payment methods
+    public ApiResponse getById(Long id) {
         ApiResponse response = new ApiResponse();
         try {
             Payment payment = paymentRepository.findByIdAndCompanyId(
@@ -40,18 +46,15 @@ public class PaymentService {
         return response;
     }
 
-    public ApiResponse findAll() {
+    public ApiResponse getAll() {
         ApiResponse response = new ApiResponse();
         try {
             List<Payment> payments = paymentRepository.findAllByCompanyId(
                     AuthUtil.getCurrentCompanyId()
             ).orElse(new ArrayList<>());
-            if (payments.isEmpty()) {
-                return response.error("No payments found");
-            }
             response.setData("payments", payments);
             response.setSuccessful(true);
-            response.setMessage("Successfully retrieved all payments");
+            response.setMessage("Successfully retrieved payments");
         } catch (Exception e) {
             return response.error(e);
         }
@@ -65,7 +68,7 @@ public class PaymentService {
             paymentRepository.save(payment);
             response.setData("payment", payment);
             response.setSuccessful(true);
-            response.setMessage("Successfully saved payment");
+            response.success("Saved Successfully");
         } catch (Exception e) {
             return response.error(e);
         }
@@ -85,7 +88,7 @@ public class PaymentService {
             paymentRepository.save(payment);
             response.setData("payment", payment);
             response.setSuccessful(true);
-            response.setMessage("Successfully updated payment");
+            response.success("Updated Successfully");
         } catch (Exception e) {
             return response.error(e);
         }
@@ -95,19 +98,104 @@ public class PaymentService {
     public ApiResponse deleteById(Long id) {
         ApiResponse response = new ApiResponse();
         try {
-            Payment payment = paymentRepository.findByIdAndCompanyId(
+            Payment dbPayment = paymentRepository.findByIdAndCompanyId(
                     id, AuthUtil.getCurrentCompanyId()
             ).orElse(null);
-            if (payment == null) {
+            if (dbPayment == null) {
                 return response.error("Payment not found");
             }
-            paymentRepository.deleteById(id);
+            paymentRepository.delete(dbPayment);
             response.setSuccessful(true);
-            response.setMessage("Successfully deleted payment");
+            response.success("Deleted Successfully");
         } catch (Exception e) {
             return response.error(e);
         }
         return response;
     }
 
+    // PaymentSchedule methods
+    public ApiResponse getScheduleById(Long id) {
+        ApiResponse response = new ApiResponse();
+        try {
+            PaymentSchedule paymentSchedule = paymentScheduleRepository.findByIdAndCompanyId(
+                    id, AuthUtil.getCurrentCompanyId()
+            ).orElse(null);
+            if (paymentSchedule == null) {
+                return response.error("Payment schedule not found");
+            }
+            response.setData("paymentSchedule", paymentSchedule);
+            response.setSuccessful(true);
+            response.setMessage("Successfully retrieved payment schedule");
+        } catch (Exception e) {
+            return response.error(e);
+        }
+        return response;
+    }
+
+    public ApiResponse getAllSchedules() {
+        ApiResponse response = new ApiResponse();
+        try {
+            List<PaymentSchedule> paymentSchedules = paymentScheduleRepository.findAllByCompanyId(
+                    AuthUtil.getCurrentCompanyId()
+            ).orElse(new ArrayList<>());
+            response.setData("paymentSchedules", paymentSchedules);
+            response.setSuccessful(true);
+            response.setMessage("Successfully retrieved payment schedules");
+        } catch (Exception e) {
+            return response.error(e);
+        }
+        return response;
+    }
+
+    public ApiResponse saveSchedule(PaymentSchedule paymentSchedule) {
+        ApiResponse response = new ApiResponse();
+        try {
+            paymentSchedule.setCompanyId(AuthUtil.getCurrentCompanyId());
+            paymentScheduleRepository.save(paymentSchedule);
+            response.setData("paymentSchedule", paymentSchedule);
+            response.setSuccessful(true);
+            response.success("Saved Successfully");
+        } catch (Exception e) {
+            return response.error(e);
+        }
+        return response;
+    }
+
+    public ApiResponse updateSchedule(PaymentSchedule paymentSchedule) {
+        ApiResponse response = new ApiResponse();
+        try {
+            PaymentSchedule dbPaymentSchedule = paymentScheduleRepository.findByIdAndCompanyId(
+                    paymentSchedule.getId(), AuthUtil.getCurrentCompanyId()
+            ).orElse(null);
+            if (dbPaymentSchedule == null) {
+                return response.error("Payment schedule not found");
+            }
+            paymentSchedule.setCompanyId(AuthUtil.getCurrentCompanyId());
+            paymentScheduleRepository.save(paymentSchedule);
+            response.setData("paymentSchedule", paymentSchedule);
+            response.setSuccessful(true);
+            response.success("Updated Successfully");
+        } catch (Exception e) {
+            return response.error(e);
+        }
+        return response;
+    }
+
+    public ApiResponse deleteScheduleById(Long id) {
+        ApiResponse response = new ApiResponse();
+        try {
+            PaymentSchedule dbPaymentSchedule = paymentScheduleRepository.findByIdAndCompanyId(
+                    id, AuthUtil.getCurrentCompanyId()
+            ).orElse(null);
+            if (dbPaymentSchedule == null) {
+                return response.error("Payment schedule not found");
+            }
+            paymentScheduleRepository.delete(dbPaymentSchedule);
+            response.setSuccessful(true);
+            response.success("Deleted Successfully");
+        } catch (Exception e) {
+            return response.error(e);
+        }
+        return response;
+    }
 }

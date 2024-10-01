@@ -34,6 +34,13 @@ public class ApiResponse {
         this.message = message;
     }
 
+    public Object getData(String key) {
+        if (this.data == null) {
+            return null;
+        }
+        return this.data.get(key);
+    }
+
     public void setData(String key, Object value) {
         if (this.data == null) {
             this.data = new HashMap<>();

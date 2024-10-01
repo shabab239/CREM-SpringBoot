@@ -3,6 +3,7 @@ package com.shabab.RealEstateManagementSystem.core.repository;
 import com.shabab.RealEstateManagementSystem.core.model.Worker;
 import com.shabab.RealEstateManagementSystem.core.model.WorkerAttendance;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 
 import javax.xml.crypto.Data;
 import java.sql.Date;
@@ -42,4 +43,25 @@ public interface WorkerAttendanceRepository extends JpaRepository<WorkerAttendan
     Optional<List<WorkerAttendance>> findAllByStatusAndDateAndCompanyId(WorkerAttendance.AttendanceStatus status, Date date, Long companyId);
 
     Optional<List<WorkerAttendance>> findAllByStatusAndDateBetweenAndCompanyId(WorkerAttendance.AttendanceStatus status, Date startDate, Date endDate, Long companyId);
+
+    Optional<List<WorkerAttendance>> findAllByStageIdAndDateAndCompanyId(Long stageId, Date date, Long companyId);
+
+    @Query("""
+                        SELECT wa
+                        FROM WorkerAttendance wa
+                        WHERE wa.worker IN :workerList
+                        AND wa.date = :date
+                        AND wa.companyId = :companyId
+            """)
+    Optional<List<WorkerAttendance>> findAllByWorkerListAndDateAndCompanyId(List<Worker> workerList, Date date, Long companyId);
+
+    @Query("""
+                        SELECT wa
+                        FROM WorkerAttendance wa
+                        WHERE wa.worker IN :workerList
+                        AND wa.date = :date
+                        AND wa.stage.id = :stageId
+                        AND wa.companyId = :companyId
+            """)
+    Optional<List<WorkerAttendance>> findAllByWorkerListAndDateAndStageIdAndCompanyId(List<Worker> workerList, Date date, Long stageId, Long companyId);
 }

@@ -3,7 +3,6 @@ package com.shabab.RealEstateManagementSystem.core.controller;
 import com.shabab.RealEstateManagementSystem.core.model.Payment;
 import com.shabab.RealEstateManagementSystem.core.model.PaymentSchedule;
 import com.shabab.RealEstateManagementSystem.core.service.PaymentService;
-import com.shabab.RealEstateManagementSystem.core.service.PaymentScheduleService;
 import com.shabab.RealEstateManagementSystem.util.ApiResponse;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,17 +17,14 @@ import org.springframework.web.bind.annotation.*;
 @CrossOrigin
 @RestController
 @RequestMapping("/api/payment")
-public class PaymentRestController {
+public class PaymentController {
 
     @Autowired
     private PaymentService paymentService;
 
-    @Autowired
-    private PaymentScheduleService paymentScheduleService;
-
     @GetMapping("/")
-    public ApiResponse findAll() {
-        return paymentService.findAll();
+    public ApiResponse getAll() {
+        return paymentService.getAll();
     }
 
     @PostMapping("/save")
@@ -43,7 +39,7 @@ public class PaymentRestController {
 
     @GetMapping("/{id}")
     public ApiResponse getById(@PathVariable Long id) {
-        return paymentService.findById(id);
+        return paymentService.getById(id);
     }
 
     @DeleteMapping("/{id}")
@@ -52,27 +48,27 @@ public class PaymentRestController {
     }
 
     @GetMapping("/schedules")
-    public ApiResponse findAllSchedules() {
-        return paymentScheduleService.findAll();
+    public ApiResponse getAllSchedules() {
+        return paymentService.getAllSchedules();
     }
 
     @PostMapping("/schedules/save")
     public ApiResponse saveSchedule(@Valid @RequestBody PaymentSchedule paymentSchedule) {
-        return paymentScheduleService.save(paymentSchedule);
+        return paymentService.saveSchedule(paymentSchedule);
     }
 
     @PutMapping("/schedules/update")
     public ApiResponse updateSchedule(@Valid @RequestBody PaymentSchedule paymentSchedule) {
-        return paymentScheduleService.update(paymentSchedule);
+        return paymentService.updateSchedule(paymentSchedule);
     }
 
     @GetMapping("/schedules/{id}")
     public ApiResponse getScheduleById(@PathVariable Long id) {
-        return paymentScheduleService.findById(id);
+        return paymentService.getScheduleById(id);
     }
 
     @DeleteMapping("/schedules/{id}")
     public ApiResponse deleteScheduleById(@PathVariable Long id) {
-        return paymentScheduleService.deleteById(id);
+        return paymentService.deleteScheduleById(id);
     }
 }

@@ -33,13 +33,17 @@ public class WorkerAttendance {
     @Column(nullable = false)
     private Date date;
 
-    @NotNull(message = "Status is required")
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
     private AttendanceStatus status;
 
+    @NotNull(message = "Stage is required")
     @ManyToOne
-    @JoinColumn(name = "worker_id", nullable = false)
+    @JoinColumn(nullable = false)
+    private ConstructionStage stage;
+
+    @NotNull(message = "Worker ID is required")
+    @ManyToOne
+    @JoinColumn(nullable = false)
     private Worker worker;
 
     @Column(nullable = false)

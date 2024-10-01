@@ -1,7 +1,13 @@
+// src/main/java/com/shabab/RealEstateManagementSystem/core/service/RawMaterialService.java
+
 package com.shabab.RealEstateManagementSystem.core.service;
 
 import com.shabab.RealEstateManagementSystem.core.model.RawMaterial;
+import com.shabab.RealEstateManagementSystem.core.model.RawMaterialOrder;
+import com.shabab.RealEstateManagementSystem.core.model.RawMaterialStock;
 import com.shabab.RealEstateManagementSystem.core.repository.RawMaterialRepository;
+import com.shabab.RealEstateManagementSystem.core.repository.RawMaterialOrderRepository;
+import com.shabab.RealEstateManagementSystem.core.repository.RawMaterialStockRepository;
 import com.shabab.RealEstateManagementSystem.util.ApiResponse;
 import com.shabab.RealEstateManagementSystem.util.AuthUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +28,14 @@ public class RawMaterialService {
     @Autowired
     private RawMaterialRepository rawMaterialRepository;
 
-    public ApiResponse findById(Long id) {
+    @Autowired
+    private RawMaterialOrderRepository rawMaterialOrderRepository;
+
+    @Autowired
+    private RawMaterialStockRepository rawMaterialStockRepository;
+
+    // RawMaterial methods
+    public ApiResponse getById(Long id) {
         ApiResponse response = new ApiResponse();
         try {
             RawMaterial rawMaterial = rawMaterialRepository.findByIdAndCompanyId(
@@ -40,16 +53,12 @@ public class RawMaterialService {
         return response;
     }
 
-    public ApiResponse findAll() {
+    public ApiResponse getAll() {
         ApiResponse response = new ApiResponse();
         try {
             List<RawMaterial> rawMaterials = rawMaterialRepository.findAllByCompanyId(
                     AuthUtil.getCurrentCompanyId()
             ).orElse(new ArrayList<>());
-
-            if (rawMaterials.isEmpty()) {
-                return response.error("No raw materials found");
-            }
             response.setData("rawMaterials", rawMaterials);
             response.setSuccessful(true);
             response.setMessage("Successfully retrieved raw materials");
@@ -103,6 +112,178 @@ public class RawMaterialService {
                 return response.error("Raw material not found");
             }
             rawMaterialRepository.delete(dbRawMaterial);
+            response.setSuccessful(true);
+            response.success("Deleted Successfully");
+        } catch (Exception e) {
+            return response.error(e);
+        }
+        return response;
+    }
+
+    // RawMaterialOrder methods
+    public ApiResponse getAllOrders() {
+        ApiResponse response = new ApiResponse();
+        try {
+            List<RawMaterialOrder> orders = rawMaterialOrderRepository.findAllByCompanyId(
+                    AuthUtil.getCurrentCompanyId()
+            ).orElse(new ArrayList<>());
+            response.setData("orders", orders);
+            response.setSuccessful(true);
+            response.setMessage("Successfully retrieved orders");
+        } catch (Exception e) {
+            return response.error(e);
+        }
+        return response;
+    }
+
+    public ApiResponse saveOrder(RawMaterialOrder rawMaterialOrder) {
+        ApiResponse response = new ApiResponse();
+        try {
+            rawMaterialOrder.setCompanyId(AuthUtil.getCurrentCompanyId());
+            rawMaterialOrderRepository.save(rawMaterialOrder);
+            response.setData("order", rawMaterialOrder);
+            response.setSuccessful(true);
+            response.success("Saved Successfully");
+        } catch (Exception e) {
+            return response.error(e);
+        }
+        return response;
+    }
+
+    public ApiResponse updateOrder(RawMaterialOrder rawMaterialOrder) {
+        ApiResponse response = new ApiResponse();
+        try {
+            RawMaterialOrder dbOrder = rawMaterialOrderRepository.findByIdAndCompanyId(
+                    rawMaterialOrder.getId(), AuthUtil.getCurrentCompanyId()
+            ).orElse(null);
+            if (dbOrder == null) {
+                return response.error("Order not found");
+            }
+            rawMaterialOrder.setCompanyId(AuthUtil.getCurrentCompanyId());
+            rawMaterialOrderRepository.save(rawMaterialOrder);
+            response.setData("order", rawMaterialOrder);
+            response.setSuccessful(true);
+            response.success("Updated Successfully");
+        } catch (Exception e) {
+            return response.error(e);
+        }
+        return response;
+    }
+
+    public ApiResponse getOrderById(Long id) {
+        ApiResponse response = new ApiResponse();
+        try {
+            RawMaterialOrder order = rawMaterialOrderRepository.findByIdAndCompanyId(
+                    id, AuthUtil.getCurrentCompanyId()
+            ).orElse(null);
+            if (order == null) {
+                return response.error("Order not found");
+            }
+            response.setData("order", order);
+            response.setSuccessful(true);
+            response.setMessage("Successfully retrieved order");
+        } catch (Exception e) {
+            return response.error(e);
+        }
+        return response;
+    }
+
+    public ApiResponse deleteOrderById(Long id) {
+        ApiResponse response = new ApiResponse();
+        try {
+            RawMaterialOrder dbOrder = rawMaterialOrderRepository.findByIdAndCompanyId(
+                    id, AuthUtil.getCurrentCompanyId()
+            ).orElse(null);
+            if (dbOrder == null) {
+                return response.error("Order not found");
+            }
+            rawMaterialOrderRepository.delete(dbOrder);
+            response.setSuccessful(true);
+            response.success("Deleted Successfully");
+        } catch (Exception e) {
+            return response.error(e);
+        }
+        return response;
+    }
+
+    // RawMaterialStock methods
+    public ApiResponse getAllStocks() {
+        ApiResponse response = new ApiResponse();
+        try {
+            List<RawMaterialStock> stocks = rawMaterialStockRepository.findAllByCompanyId(
+                    AuthUtil.getCurrentCompanyId()
+            ).orElse(new ArrayList<>());
+            response.setData("stocks", stocks);
+            response.setSuccessful(true);
+            response.setMessage("Successfully retrieved stocks");
+        } catch (Exception e) {
+            return response.error(e);
+        }
+        return response;
+    }
+
+    public ApiResponse saveStock(RawMaterialStock rawMaterialStock) {
+        ApiResponse response = new ApiResponse();
+        try {
+            rawMaterialStock.setCompanyId(AuthUtil.getCurrentCompanyId());
+            rawMaterialStockRepository.save(rawMaterialStock);
+            response.setData("stock", rawMaterialStock);
+            response.setSuccessful(true);
+            response.success("Saved Successfully");
+        } catch (Exception e) {
+            return response.error(e);
+        }
+        return response;
+    }
+
+    public ApiResponse updateStock(RawMaterialStock rawMaterialStock) {
+        ApiResponse response = new ApiResponse();
+        try {
+            RawMaterialStock dbStock = rawMaterialStockRepository.findByIdAndCompanyId(
+                    rawMaterialStock.getId(), AuthUtil.getCurrentCompanyId()
+            ).orElse(null);
+            if (dbStock == null) {
+                return response.error("Stock not found");
+            }
+            rawMaterialStock.setCompanyId(AuthUtil.getCurrentCompanyId());
+            rawMaterialStockRepository.save(rawMaterialStock);
+            response.setData("stock", rawMaterialStock);
+            response.setSuccessful(true);
+            response.success("Updated Successfully");
+        } catch (Exception e) {
+            return response.error(e);
+        }
+        return response;
+    }
+
+    public ApiResponse getStockById(Long id) {
+        ApiResponse response = new ApiResponse();
+        try {
+            RawMaterialStock stock = rawMaterialStockRepository.findByIdAndCompanyId(
+                    id, AuthUtil.getCurrentCompanyId()
+            ).orElse(null);
+            if (stock == null) {
+                return response.error("Stock not found");
+            }
+            response.setData("stock", stock);
+            response.setSuccessful(true);
+            response.setMessage("Successfully retrieved stock");
+        } catch (Exception e) {
+            return response.error(e);
+        }
+        return response;
+    }
+
+    public ApiResponse deleteStockById(Long id) {
+        ApiResponse response = new ApiResponse();
+        try {
+            RawMaterialStock dbStock = rawMaterialStockRepository.findByIdAndCompanyId(
+                    id, AuthUtil.getCurrentCompanyId()
+            ).orElse(null);
+            if (dbStock == null) {
+                return response.error("Stock not found");
+            }
+            rawMaterialStockRepository.delete(dbStock);
             response.setSuccessful(true);
             response.success("Deleted Successfully");
         } catch (Exception e) {

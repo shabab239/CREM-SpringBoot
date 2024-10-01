@@ -1,13 +1,11 @@
+// src/main/java/com/shabab/RealEstateManagementSystem/core/controller/RawMaterialController.java
+
 package com.shabab.RealEstateManagementSystem.core.controller;
 
 import com.shabab.RealEstateManagementSystem.core.model.RawMaterial;
 import com.shabab.RealEstateManagementSystem.core.model.RawMaterialOrder;
 import com.shabab.RealEstateManagementSystem.core.model.RawMaterialStock;
-import com.shabab.RealEstateManagementSystem.core.model.Supplier;
 import com.shabab.RealEstateManagementSystem.core.service.RawMaterialService;
-import com.shabab.RealEstateManagementSystem.core.service.RawMaterialOrderService;
-import com.shabab.RealEstateManagementSystem.core.service.RawMaterialStockService;
-import com.shabab.RealEstateManagementSystem.core.service.SupplierService;
 import com.shabab.RealEstateManagementSystem.util.ApiResponse;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,23 +20,14 @@ import org.springframework.web.bind.annotation.*;
 @CrossOrigin
 @RestController
 @RequestMapping("/api/rawMaterial")
-public class RawMaterialRestController {
+public class RawMaterialController {
 
     @Autowired
     private RawMaterialService rawMaterialService;
 
-    @Autowired
-    private RawMaterialOrderService rawMaterialOrderService;
-
-    @Autowired
-    private RawMaterialStockService rawMaterialStockService;
-
-    @Autowired
-    private SupplierService supplierService;
-
     @GetMapping("/")
-    public ApiResponse findAll() {
-        return rawMaterialService.findAll();
+    public ApiResponse getAll() {
+        return rawMaterialService.getAll();
     }
 
     @PostMapping("/save")
@@ -53,7 +42,7 @@ public class RawMaterialRestController {
 
     @GetMapping("/{id}")
     public ApiResponse getById(@PathVariable Long id) {
-        return rawMaterialService.findById(id);
+        return rawMaterialService.getById(id);
     }
 
     @DeleteMapping("/{id}")
@@ -62,78 +51,52 @@ public class RawMaterialRestController {
     }
 
     @GetMapping("/orders")
-    public ApiResponse findAllOrders() {
-        return rawMaterialOrderService.findAll();
+    public ApiResponse getAllOrders() {
+        return rawMaterialService.getAllOrders();
     }
 
     @PostMapping("/orders/save")
     public ApiResponse saveOrder(@Valid @RequestBody RawMaterialOrder rawMaterialOrder) {
-        return rawMaterialOrderService.save(rawMaterialOrder);
+        return rawMaterialService.saveOrder(rawMaterialOrder);
     }
 
     @PutMapping("/orders/update")
     public ApiResponse updateOrder(@Valid @RequestBody RawMaterialOrder rawMaterialOrder) {
-        return rawMaterialOrderService.update(rawMaterialOrder);
+        return rawMaterialService.updateOrder(rawMaterialOrder);
     }
 
     @GetMapping("/orders/{id}")
     public ApiResponse getOrderById(@PathVariable Long id) {
-        return rawMaterialOrderService.findById(id);
+        return rawMaterialService.getOrderById(id);
     }
 
     @DeleteMapping("/orders/{id}")
     public ApiResponse deleteOrderById(@PathVariable Long id) {
-        return rawMaterialOrderService.deleteById(id);
+        return rawMaterialService.deleteOrderById(id);
     }
 
     @GetMapping("/stocks")
-    public ApiResponse findAllStocks() {
-        return rawMaterialStockService.findAll();
+    public ApiResponse getAllStocks() {
+        return rawMaterialService.getAllStocks();
     }
 
     @PostMapping("/stocks/save")
     public ApiResponse saveStock(@Valid @RequestBody RawMaterialStock rawMaterialStock) {
-        return rawMaterialStockService.save(rawMaterialStock);
+        return rawMaterialService.saveStock(rawMaterialStock);
     }
 
     @PutMapping("/stocks/update")
     public ApiResponse updateStock(@Valid @RequestBody RawMaterialStock rawMaterialStock) {
-        return rawMaterialStockService.update(rawMaterialStock);
+        return rawMaterialService.updateStock(rawMaterialStock);
     }
 
     @GetMapping("/stocks/{id}")
     public ApiResponse getStockById(@PathVariable Long id) {
-        return rawMaterialStockService.findById(id);
+        return rawMaterialService.getStockById(id);
     }
 
     @DeleteMapping("/stocks/{id}")
     public ApiResponse deleteStockById(@PathVariable Long id) {
-        return rawMaterialStockService.deleteById(id);
+        return rawMaterialService.deleteStockById(id);
     }
-
-    @GetMapping("/suppliers")
-    public ApiResponse findAllSuppliers() {
-        return supplierService.findAll();
-    }
-
-    @PostMapping("/suppliers/save")
-    public ApiResponse saveSupplier(@Valid @RequestBody Supplier supplier) {
-        return supplierService.save(supplier);
-    }
-
-    @PutMapping("/suppliers/update")
-    public ApiResponse updateSupplier(@Valid @RequestBody Supplier supplier) {
-        return supplierService.update(supplier);
-    }
-
-    @GetMapping("/suppliers/{id}")
-    public ApiResponse getSupplierById(@PathVariable Long id) {
-        return supplierService.findById(id);
-    }
-
-    @DeleteMapping("/suppliers/{id}")
-    public ApiResponse deleteSupplierById(@PathVariable Long id) {
-        return supplierService.deleteById(id);
-    }
-
 }

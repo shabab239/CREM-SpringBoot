@@ -26,6 +26,7 @@ public class CompanyService {
             List<Company> companyList = companyRepository.findAll();
             apiResponse.setData("companyList", companyList);
             apiResponse.setSuccessful(true);
+            apiResponse.setMessage("Successfully retrieved companies");
             return apiResponse;
         } catch (Exception e) {
             return apiResponse.error(e);

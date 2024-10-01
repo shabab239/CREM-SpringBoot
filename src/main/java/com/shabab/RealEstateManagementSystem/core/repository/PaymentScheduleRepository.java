@@ -16,7 +16,7 @@ public interface PaymentScheduleRepository extends JpaRepository<PaymentSchedule
 
     Optional<List<PaymentSchedule>> findAllByCompanyId(Long companyId);
 
-    Optional<List<PaymentSchedule>> findAllByDateBetweenAndCompanyId(Date fromDate, Date toDate, Long companyId);
+    Optional<List<PaymentSchedule>> findAllByDueDateBetweenAndCompanyId(Date fromDate, Date toDate, Long companyId);
 
     Optional<PaymentSchedule> findByIdAndCompanyId(Long id, Long companyId);
 

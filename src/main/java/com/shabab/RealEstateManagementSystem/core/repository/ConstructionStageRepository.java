@@ -32,4 +32,10 @@ public interface ConstructionStageRepository extends JpaRepository<ConstructionS
     Optional<ConstructionStage> findByStatusAndCompanyId(ConstructionStage.StageStatus status, Long companyId);
 
     Optional<List<ConstructionStage>> findAllByBuilding_IdAndCompanyId(Long buildingId, Long companyId);
+
+    Optional<List<ConstructionStage>> findAllByBuildingIdAndCompanyId(Long buildingId, Long companyId);
+
+    Optional<List<ConstructionStage>> findAllByFloorIdAndCompanyId(Long floorId, Long companyId);
+
+    Optional<List<ConstructionStage>> findAllByUnitIdAndCompanyId(Long unitId, Long companyId);
 }

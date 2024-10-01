@@ -19,7 +19,7 @@ public interface UnitRepository extends JpaRepository<Unit, Long> {
 
     Optional<Unit> findByIdAndCompanyId(Long id, Long companyId);
 
-    Optional<Unit> findByUnitNumberAndCompanyId(String unitNumber, Long companyId);
+    Optional<Unit> findByNameAndCompanyId(String name, Long companyId);
 
     Optional<List<Unit>> findAllByStatusAndCompanyId(Unit.UnitStatus unitStatus, Long companyId);
 

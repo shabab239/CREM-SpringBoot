@@ -48,9 +48,6 @@ public class UserService implements UserDetailsService {
             List<User> users = userRepository.findAll(
                     AuthUtil.getCurrentCompanyId()
             ).orElse(new ArrayList<>());
-            if (users.isEmpty()) {
-                return response.error("No user found");
-            }
             response.setData("users", users);
             response.setSuccessful(true);
             response.success("Successfully retrieved all users");

@@ -9,6 +9,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.sql.Date;
 
@@ -63,5 +64,8 @@ public class Worker {
     @Column(nullable = false)
     private Long companyId; //Loose relation to Company
 
+    public Worker(Long id) {
+        this.id = id;
+    }
 }
 

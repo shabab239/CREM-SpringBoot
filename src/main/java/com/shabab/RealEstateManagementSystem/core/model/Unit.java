@@ -25,7 +25,7 @@ public class Unit {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String unitNumber;
+    private String name;
 
     private Integer size;
 

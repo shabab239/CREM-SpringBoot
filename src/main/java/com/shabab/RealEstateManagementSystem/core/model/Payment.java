@@ -41,6 +41,7 @@ public class Payment {
     private User customer;
 
     @ManyToOne
+    @JoinColumn(name = "company")
     private Company company;
 
     @NotNull(message = "Payment schedule is required")

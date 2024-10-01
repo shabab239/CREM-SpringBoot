@@ -22,7 +22,7 @@ public class SupplierService {
     @Autowired
     private SupplierRepository supplierRepository;
 
-    public ApiResponse findById(Long id) {
+    public ApiResponse getById(Long id) {
         ApiResponse response = new ApiResponse();
         try {
             Supplier supplier = supplierRepository.findByIdAndCompanyId(
@@ -40,16 +40,12 @@ public class SupplierService {
         return response;
     }
 
-    public ApiResponse findAll() {
+    public ApiResponse getAll() {
         ApiResponse response = new ApiResponse();
         try {
             List<Supplier> suppliers = supplierRepository.findAllByCompanyId(
                     AuthUtil.getCurrentCompanyId()
             ).orElse(new ArrayList<>());
-
-            if (suppliers.isEmpty()) {
-                return response.error("No suppliers found");
-            }
             response.setData("suppliers", suppliers);
             response.setSuccessful(true);
             response.setMessage("Successfully retrieved suppliers");

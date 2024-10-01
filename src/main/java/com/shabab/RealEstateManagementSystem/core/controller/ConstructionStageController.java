@@ -16,14 +16,14 @@ import org.springframework.web.bind.annotation.*;
 @CrossOrigin
 @RestController
 @RequestMapping("/api/stage")
-public class ConstructionStageRestController {
+public class ConstructionStageController {
 
     @Autowired
     private ConstructionStageService constructionStageService;
 
     @GetMapping("/")
-    public ApiResponse findAll() {
-        return constructionStageService.findAll();
+    public ApiResponse getAll() {
+        return constructionStageService.getAll();
     }
 
     @PostMapping("/save")
@@ -38,12 +38,37 @@ public class ConstructionStageRestController {
 
     @GetMapping("/{id}")
     public ApiResponse getById(@PathVariable Long id) {
-        return constructionStageService.findById(id);
+        return constructionStageService.getById(id);
     }
 
     @DeleteMapping("/{id}")
     public ApiResponse deleteById(@PathVariable Long id) {
         return constructionStageService.deleteById(id);
+    }
+
+    @GetMapping("/getAllStagesByBuildingId")
+    public ApiResponse getAllStagesByBuildingId(@RequestParam Long buildingId) {
+        return constructionStageService.getAllStagesByBuildingId(buildingId);
+    }
+
+    @GetMapping("/getAllStagesByFloorId")
+    public ApiResponse getAllStagesByFloorId(@RequestParam Long floorId) {
+        return constructionStageService.getAllStagesByFloorId(floorId);
+    }
+
+    @GetMapping("/getAllStagesByUnitId")
+    public ApiResponse getAllStagesByUnitId(@RequestParam Long unitId) {
+        return constructionStageService.getAllStagesByUnitId(unitId);
+    }
+
+    @GetMapping("/getAllWorkersByStageId")
+    public ApiResponse getAllWorkersByStageId(@RequestParam Long stageId) {
+        return constructionStageService.getAllWorkersByStageId(stageId);
+    }
+
+    @PostMapping("/addWorkerToStage")
+    public ApiResponse addWorkerToStage(@RequestParam Long stageId, @RequestParam Long workerId) {
+        return constructionStageService.addWorkerToStage(stageId, workerId);
     }
 
 }
