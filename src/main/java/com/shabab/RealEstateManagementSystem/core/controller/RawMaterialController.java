@@ -99,4 +99,6 @@ public class RawMaterialController {
     public ApiResponse deleteStockById(@PathVariable Long id) {
         return rawMaterialService.deleteStockById(id);
     }
+
+
 }

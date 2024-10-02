@@ -247,16 +247,12 @@ public class WorkerService {
         return response;
     }
 
-    public ApiResponse getAttendanceByDate(Date date) {
+    public ApiResponse getAttendanceByDate(LocalDate date) {
         ApiResponse response = new ApiResponse();
         try {
             List<WorkerAttendance> workerAttendances = workerAttendanceRepository.findAllByDateAndCompanyId(
-                    date, AuthUtil.getCurrentCompanyId()
+                    Date.valueOf(date), AuthUtil.getCurrentCompanyId()
             ).orElse(new ArrayList<>());
-
-            if (workerAttendances.isEmpty()) {
-                return response.error("No worker attendances found");
-            }
             response.setData("workerAttendances", workerAttendances);
             response.setSuccessful(true);
             response.setMessage("Successfully retrieved worker attendances");

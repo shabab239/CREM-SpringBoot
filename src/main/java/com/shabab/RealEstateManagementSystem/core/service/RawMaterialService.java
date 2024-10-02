@@ -10,10 +10,12 @@ import com.shabab.RealEstateManagementSystem.core.repository.RawMaterialOrderRep
 import com.shabab.RealEstateManagementSystem.core.repository.RawMaterialStockRepository;
 import com.shabab.RealEstateManagementSystem.util.ApiResponse;
 import com.shabab.RealEstateManagementSystem.util.AuthUtil;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -136,9 +138,25 @@ public class RawMaterialService {
         return response;
     }
 
+    @Transactional(rollbackOn = Exception.class)
     public ApiResponse saveOrder(RawMaterialOrder rawMaterialOrder) {
         ApiResponse response = new ApiResponse();
         try {
+            if (rawMaterialOrder.getStatus().equals(RawMaterialOrder.RawMaterialOrderStatus.DELIVERED)) {
+                RawMaterialStock stock = rawMaterialStockRepository.findByRawMaterialIdAndCompanyId(
+                        rawMaterialOrder.getRawMaterial().getId(), AuthUtil.getCurrentCompanyId()
+                ).orElse(null);
+                if (stock == null) {
+                    stock = new RawMaterialStock();
+                    stock.setRawMaterial(rawMaterialOrder.getRawMaterial());
+                    stock.setQuantity(rawMaterialOrder.getQuantity());
+                } else {
+                    stock.setQuantity(stock.getQuantity() + rawMaterialOrder.getQuantity());
+                }
+                stock.setLastUpdated(new Date());
+                stock.setCompanyId(AuthUtil.getCurrentCompanyId());
+                rawMaterialStockRepository.save(stock);
+            }
             rawMaterialOrder.setCompanyId(AuthUtil.getCurrentCompanyId());
             rawMaterialOrderRepository.save(rawMaterialOrder);
             response.setData("order", rawMaterialOrder);
@@ -150,9 +168,25 @@ public class RawMaterialService {
         return response;
     }
 
+    @Transactional(rollbackOn = Exception.class)
     public ApiResponse updateOrder(RawMaterialOrder rawMaterialOrder) {
         ApiResponse response = new ApiResponse();
         try {
+            if (rawMaterialOrder.getStatus().equals(RawMaterialOrder.RawMaterialOrderStatus.DELIVERED)) {
+                RawMaterialStock stock = rawMaterialStockRepository.findByRawMaterialIdAndCompanyId(
+                        rawMaterialOrder.getRawMaterial().getId(), AuthUtil.getCurrentCompanyId()
+                ).orElse(null);
+                if (stock == null) {
+                    stock = new RawMaterialStock();
+                    stock.setRawMaterial(rawMaterialOrder.getRawMaterial());
+                    stock.setQuantity(rawMaterialOrder.getQuantity());
+                } else {
+                    stock.setQuantity(stock.getQuantity() + rawMaterialOrder.getQuantity());
+                }
+                stock.setLastUpdated(new Date());
+                stock.setCompanyId(AuthUtil.getCurrentCompanyId());
+                rawMaterialStockRepository.save(stock);
+            }
             RawMaterialOrder dbOrder = rawMaterialOrderRepository.findByIdAndCompanyId(
                     rawMaterialOrder.getId(), AuthUtil.getCurrentCompanyId()
             ).orElse(null);
@@ -291,4 +325,6 @@ public class RawMaterialService {
         }
         return response;
     }
+
+
 }

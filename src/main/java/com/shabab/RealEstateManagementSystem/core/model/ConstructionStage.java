@@ -1,5 +1,6 @@
 package com.shabab.RealEstateManagementSystem.core.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -59,6 +60,10 @@ public class ConstructionStage {
 
     @ManyToMany
     private List<Worker> workers;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "stage", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
+    private List<WorkerAttendance> workerAttendances;
 
     @Column(nullable = false)
     private Long companyId; //Loose relation to Company

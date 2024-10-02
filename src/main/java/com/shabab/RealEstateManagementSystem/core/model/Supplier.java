@@ -1,11 +1,14 @@
 package com.shabab.RealEstateManagementSystem.core.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.util.List;
 
 /**
  * Project: ConstructionAndRealEstateManagement-SpringBoot
@@ -28,6 +31,10 @@ public class Supplier {
     @NotNull(message = "Name is required")
     @Column(nullable = false)
     private String name;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "supplier", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
+    private List<RawMaterialOrder> orders;
 
     @Column(nullable = false)
     private Long companyId; //Loose relation to Company

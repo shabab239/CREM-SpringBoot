@@ -1,6 +1,5 @@
 package com.shabab.RealEstateManagementSystem.core.model;
 
-import com.shabab.RealEstateManagementSystem.security.model.Company;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;

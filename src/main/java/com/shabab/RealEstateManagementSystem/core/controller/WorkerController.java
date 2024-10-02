@@ -85,7 +85,7 @@ public class WorkerController {
     }
 
     @GetMapping("/attendance/getByDate")
-    public ApiResponse getAttendanceByDate(@RequestParam Date date) {
+    public ApiResponse getAttendanceByDate(@RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date) {
         return workerService.getAttendanceByDate(date);
     }
 

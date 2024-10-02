@@ -19,4 +19,6 @@ public interface RawMaterialStockRepository extends JpaRepository<RawMaterialSto
 
     Optional<RawMaterialStock> findByIdAndCompanyId(Long id, Long companyId);
 
+    Optional<RawMaterialStock> findByRawMaterialIdAndCompanyId(Long rawMaterialId, Long companyId);
+
 }
