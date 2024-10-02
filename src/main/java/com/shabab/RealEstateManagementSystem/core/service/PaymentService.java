@@ -104,7 +104,7 @@ public class PaymentService {
             creditTransaction.setAccount(AuthUtil.getCurrentUser().getAccount());
             creditTransaction.setGroupTransactionId(groupTransactionId);
             creditTransaction.setTransactionDate(new Date());
-            debitTransaction.setParticular("Payment for " + payment.getBooking().getUnit().getName());
+            creditTransaction.setParticular("Payment for " + payment.getBooking().getUnit().getName());
             creditTransaction.setCompanyId(AuthUtil.getCurrentCompanyId());
             transactionRepository.save(creditTransaction);
 

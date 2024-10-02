@@ -25,19 +25,20 @@ CREATE TABLE `acc_accounts` (
   `balance` double NOT NULL,
   `company_id` bigint(20) NOT NULL,
   `name` varchar(255) NOT NULL,
+  `number` bigint(20) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1000 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 /*Data for the table `acc_accounts` */
 
-insert  into `acc_accounts`(`id`,`balance`,`company_id`,`name`) values 
-(1,0,1,'Shabab Ahmed Cash A/C'),
-(2,0,1,'Supplier A Cash A/C'),
-(3,0,1,'Supplier B Cash A/C'),
-(4,0,1,'Customer A Cash A/C'),
-(5,0,1,'Custoemr B Cash A/C'),
-(6,0,1,'Supplier C Cash A/C'),
-(999,0,1,'Workers Salary A/C');
+insert  into `acc_accounts`(`id`,`balance`,`company_id`,`name`,`number`) values 
+(1,0,1,'Shabab Ahmed Cash A/C',123456789),
+(2,0,1,'Supplier A Cash A/C',123465788),
+(3,0,1,'Supplier B Cash A/C',123465797),
+(4,0,1,'Customer A Cash A/C',123456786),
+(5,0,1,'Custoemr B Cash A/C',123465785),
+(6,0,1,'Supplier C Cash A/C',123456784),
+(999,0,1,'Workers Salary A/C',123456666);
 
 /*Table structure for table `acc_transactions` */
 
@@ -202,9 +203,12 @@ CREATE TABLE `const_stages` (
   CONSTRAINT `FKd103821kalv27jd3u83f9ht2p` FOREIGN KEY (`building_id`) REFERENCES `core_buildings` (`id`),
   CONSTRAINT `FKg4rang1wy6vhge97t8gsyaxh7` FOREIGN KEY (`unit_id`) REFERENCES `core_units` (`id`),
   CONSTRAINT `FKhq2uqw5u7qgcapu42rxtcmoa9` FOREIGN KEY (`floor_id`) REFERENCES `core_floors` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 /*Data for the table `const_stages` */
+
+insert  into `const_stages`(`id`,`company_id`,`end_date`,`name`,`start_date`,`status`,`building_id`,`floor_id`,`unit_id`) values 
+(1,1,'2024-10-30','Pillar','2024-10-01','NOT_STARTED',1,NULL,NULL);
 
 /*Table structure for table `const_stages_raw_materials` */
 
@@ -360,12 +364,18 @@ CREATE TABLE `core_units` (
   PRIMARY KEY (`id`),
   KEY `FKeyvtk2j1j9hwnf81p5856b2pj` (`floor_id`),
   CONSTRAINT `FKeyvtk2j1j9hwnf81p5856b2pj` FOREIGN KEY (`floor_id`) REFERENCES `core_floors` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 /*Data for the table `core_units` */
 
 insert  into `core_units`(`id`,`company_id`,`name`,`price`,`size`,`status`,`type`,`floor_id`) values 
-(1,1,'Unit 201',700000,500,'AVAILABLE','OFFICE',4);
+(1,1,'Unit 201',700000,500,'AVAILABLE','OFFICE',4),
+(2,1,'Unit 101',800000,500,'AVAILABLE','APARTMENT',3),
+(3,1,'Unit 102',800000,500,'AVAILABLE','SHOP',3),
+(4,1,'Parking',NULL,1200,'AVAILABLE','OTHER',1),
+(5,1,'Unit G101',1200000,1200,'AVAILABLE','SHOP',2),
+(6,1,'Unit G102',1200000,1200,'AVAILABLE','OFFICE',2),
+(7,1,'Unit G103',1200000,1200,'AVAILABLE','SHOP',2);
 
 /*Table structure for table `sec_companies` */
 
@@ -404,7 +414,7 @@ CREATE TABLE `sec_tokens` (
 /*Data for the table `sec_tokens` */
 
 insert  into `sec_tokens`(`id`,`password`,`username`,`user_id`) values 
-(1,'$2a$12$sedEacITyzNq8bDWuRXsyeoTJdfHuYS0cWiCgzfLW3Aj/W7E.QY16','shabab1',1);
+(1,'$2a$12$gQTOwzULa//tJJkAg1AxheGXw/tkhjP2vPto5pr6ciq5TF8vaRB2.','shabab1',1);
 
 /*Table structure for table `sec_users` */
 

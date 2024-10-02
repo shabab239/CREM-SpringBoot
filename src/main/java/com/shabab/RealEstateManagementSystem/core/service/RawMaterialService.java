@@ -187,7 +187,7 @@ public class RawMaterialService {
                 creditTransaction.setAccount(AuthUtil.getCurrentUser().getAccount());
                 creditTransaction.setGroupTransactionId(groupTransactionId);
                 creditTransaction.setTransactionDate(new Date());
-                debitTransaction.setParticular("Raw Material Order - " + rawMaterialOrder.getRawMaterial().getName());
+                creditTransaction.setParticular("Raw Material Order - " + rawMaterialOrder.getRawMaterial().getName());
                 creditTransaction.setCompanyId(AuthUtil.getCurrentCompanyId());
                 transactionRepository.save(creditTransaction);
 
@@ -273,7 +273,7 @@ public class RawMaterialService {
                     creditTransaction.setAccount(AuthUtil.getCurrentUser().getAccount());
                     creditTransaction.setGroupTransactionId(groupTransactionId);
                     creditTransaction.setTransactionDate(new Date());
-                    debitTransaction.setParticular("Raw Material Order - " + rawMaterialOrder.getRawMaterial().getName());
+                    creditTransaction.setParticular("Raw Material Order - " + rawMaterialOrder.getRawMaterial().getName());
                     creditTransaction.setCompanyId(AuthUtil.getCurrentCompanyId());
                     transactionRepository.save(creditTransaction);
 
