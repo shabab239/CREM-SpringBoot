@@ -1,7 +1,6 @@
 package com.shabab.RealEstateManagementSystem.core.controller;
 
 import com.shabab.RealEstateManagementSystem.core.model.Payment;
-import com.shabab.RealEstateManagementSystem.core.model.PaymentSchedule;
 import com.shabab.RealEstateManagementSystem.core.service.PaymentService;
 import com.shabab.RealEstateManagementSystem.util.ApiResponse;
 import jakarta.validation.Valid;
@@ -32,11 +31,6 @@ public class PaymentController {
         return paymentService.save(payment);
     }
 
-    @PutMapping("/update")
-    public ApiResponse update(@Valid @RequestBody Payment payment) {
-        return paymentService.update(payment);
-    }
-
     @GetMapping("/{id}")
     public ApiResponse getById(@PathVariable Long id) {
         return paymentService.getById(id);
@@ -47,28 +41,8 @@ public class PaymentController {
         return paymentService.deleteById(id);
     }
 
-    @GetMapping("/schedules")
-    public ApiResponse getAllSchedules() {
-        return paymentService.getAllSchedules();
-    }
-
-    @PostMapping("/schedules/save")
-    public ApiResponse saveSchedule(@Valid @RequestBody PaymentSchedule paymentSchedule) {
-        return paymentService.saveSchedule(paymentSchedule);
-    }
-
-    @PutMapping("/schedules/update")
-    public ApiResponse updateSchedule(@Valid @RequestBody PaymentSchedule paymentSchedule) {
-        return paymentService.updateSchedule(paymentSchedule);
-    }
-
-    @GetMapping("/schedules/{id}")
-    public ApiResponse getScheduleById(@PathVariable Long id) {
-        return paymentService.getScheduleById(id);
-    }
-
-    @DeleteMapping("/schedules/{id}")
-    public ApiResponse deleteScheduleById(@PathVariable Long id) {
-        return paymentService.deleteScheduleById(id);
+    @GetMapping("/customer/{customerId}")
+    public ApiResponse getAllByCustomerId(@PathVariable Long customerId) {
+        return paymentService.getAllByCustomerId(customerId);
     }
 }

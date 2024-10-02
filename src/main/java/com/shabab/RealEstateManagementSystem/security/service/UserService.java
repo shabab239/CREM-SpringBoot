@@ -1,5 +1,7 @@
 package com.shabab.RealEstateManagementSystem.security.service;
 
+import com.shabab.RealEstateManagementSystem.account.model.Account;
+import com.shabab.RealEstateManagementSystem.account.repository.AccountRepository;
 import com.shabab.RealEstateManagementSystem.security.model.Token;
 import com.shabab.RealEstateManagementSystem.security.model.User;
 import com.shabab.RealEstateManagementSystem.security.repository.TokenRepository;
@@ -42,6 +44,9 @@ public class UserService implements UserDetailsService {
     @Autowired
     private TokenRepository tokenRepository;
 
+    @Autowired
+    private AccountRepository accountRepository;
+
     public ApiResponse getAll() {
         ApiResponse response = new ApiResponse();
         try {
@@ -51,6 +56,39 @@ public class UserService implements UserDetailsService {
             response.setData("users", users);
             response.setSuccessful(true);
             response.success("Successfully retrieved all users");
+            return response;
+        } catch (Exception e) {
+            return response.error(e);
+        }
+    };
+
+    public ApiResponse getAllCustomers() {
+        ApiResponse response = new ApiResponse();
+        try {
+            List<User> users = userRepository.findAllCustomers(
+                    AuthUtil.getCurrentCompanyId()
+            ).orElse(new ArrayList<>());
+            response.setData("users", users);
+            response.setSuccessful(true);
+            response.success("Successfully retrieved all customers");
+            return response;
+        } catch (Exception e) {
+            return response.error(e);
+        }
+    }
+
+    public ApiResponse getCustomerById(Long id) {
+        ApiResponse response = new ApiResponse();
+        try {
+            User user = userRepository.findById(
+                    id, AuthUtil.getCurrentCompanyId()
+            ).orElse(new User());
+            if (user.getId() == null || !user.getRole().equals(User.Role.ROLE_CUSTOMER)) {
+                return response.error("Customer not found");
+            }
+            response.setData("user", user);
+            response.setSuccessful(true);
+            response.success("Successfully retrieved customer");
             return response;
         } catch (Exception e) {
             return response.error(e);
@@ -77,6 +115,12 @@ public class UserService implements UserDetailsService {
 
                 user.setAvatar("avatar/" + randomFileName);
             }
+
+            Account account = new Account();
+            account.setName(user.getName() + " Cash A/C");
+            account.setBalance(0.0);
+            accountRepository.save(account);
+            user.setAccount(account);
 
             user.setCompany(AuthUtil.getCurrentCompany());
             userRepository.save(user);

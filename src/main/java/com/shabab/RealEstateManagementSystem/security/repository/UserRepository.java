@@ -34,4 +34,12 @@ public interface UserRepository extends JpaRepository<User, Long> {
     Optional<User> findById(@Param("userId") Long userId,
                             @Param("companyId") Long companyId);
 
+
+    @Query("""
+            SELECT u FROM User u
+                     WHERE u.company.id = :companyId
+                     AND u.role = 'ROLE_CUSTOMER'
+            """)
+    Optional<List<User>> findAllCustomers(@Param("companyId") Long companyId);
+
 }

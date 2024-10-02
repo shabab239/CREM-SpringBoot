@@ -1,16 +1,21 @@
 package com.shabab.RealEstateManagementSystem.core.service;
 
+import com.shabab.RealEstateManagementSystem.account.model.Account;
+import com.shabab.RealEstateManagementSystem.account.model.Transaction;
+import com.shabab.RealEstateManagementSystem.account.repository.AccountRepository;
+import com.shabab.RealEstateManagementSystem.account.repository.TransactionRepository;
 import com.shabab.RealEstateManagementSystem.core.model.Payment;
-import com.shabab.RealEstateManagementSystem.core.model.PaymentSchedule;
 import com.shabab.RealEstateManagementSystem.core.repository.PaymentRepository;
-import com.shabab.RealEstateManagementSystem.core.repository.PaymentScheduleRepository;
 import com.shabab.RealEstateManagementSystem.util.ApiResponse;
 import com.shabab.RealEstateManagementSystem.util.AuthUtil;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * Project: ConstructionAndRealEstateManagement-SpringBoot
@@ -23,9 +28,10 @@ public class PaymentService {
 
     @Autowired
     private PaymentRepository paymentRepository;
-
     @Autowired
-    private PaymentScheduleRepository paymentScheduleRepository;
+    private TransactionRepository transactionRepository;
+    @Autowired
+    private AccountRepository accountRepository;
 
     // Payment methods
     public ApiResponse getById(Long id) {
@@ -40,6 +46,21 @@ public class PaymentService {
             response.setData("payment", payment);
             response.setSuccessful(true);
             response.setMessage("Successfully retrieved payment");
+        } catch (Exception e) {
+            return response.error(e);
+        }
+        return response;
+    }
+
+    public ApiResponse getAllByCustomerId(Long customerId) {
+        ApiResponse response = new ApiResponse();
+        try {
+            List<Payment> payments = paymentRepository.findAllByCustomerIdAndCompanyId(
+                    customerId, AuthUtil.getCurrentCompanyId()
+            ).orElse(new ArrayList<>());
+            response.setData("payments", payments);
+            response.setSuccessful(true);
+            response.setMessage("Successfully retrieved payments");
         } catch (Exception e) {
             return response.error(e);
         }
@@ -61,34 +82,44 @@ public class PaymentService {
         return response;
     }
 
+    @Transactional(rollbackOn = Exception.class)
     public ApiResponse save(Payment payment) {
         ApiResponse response = new ApiResponse();
         try {
+            String groupTransactionId = UUID.randomUUID().toString();
+
+            Transaction debitTransaction = new Transaction();
+            debitTransaction.setAmount(payment.getAmount());
+            debitTransaction.setType(Transaction.TransactionType.DEBIT);
+            debitTransaction.setAccount(payment.getCustomer().getAccount());
+            debitTransaction.setGroupTransactionId(groupTransactionId);
+            debitTransaction.setTransactionDate(new Date());
+            debitTransaction.setCompanyId(AuthUtil.getCurrentCompanyId());
+            transactionRepository.save(debitTransaction);
+
+            Transaction creditTransaction = new Transaction();
+            creditTransaction.setAmount(payment.getAmount());
+            creditTransaction.setType(Transaction.TransactionType.CREDIT);
+            creditTransaction.setAccount(AuthUtil.getCurrentUser().getAccount());
+            creditTransaction.setGroupTransactionId(groupTransactionId);
+            creditTransaction.setTransactionDate(new Date());
+            creditTransaction.setCompanyId(AuthUtil.getCurrentCompanyId());
+            transactionRepository.save(creditTransaction);
+
+            Account customerAccount = payment.getBooking().getCustomer().getAccount();
+            customerAccount.setBalance(customerAccount.getBalance() - payment.getAmount());
+            accountRepository.save(customerAccount);
+
+            Account companyAccount = AuthUtil.getCurrentUser().getAccount();
+            companyAccount.setBalance(companyAccount.getBalance() + payment.getAmount());
+            accountRepository.save(companyAccount);
+
+            payment.setGroupTransactionId(groupTransactionId);
             payment.setCompanyId(AuthUtil.getCurrentCompanyId());
             paymentRepository.save(payment);
             response.setData("payment", payment);
             response.setSuccessful(true);
             response.success("Saved Successfully");
-        } catch (Exception e) {
-            return response.error(e);
-        }
-        return response;
-    }
-
-    public ApiResponse update(Payment payment) {
-        ApiResponse response = new ApiResponse();
-        try {
-            Payment dbPayment = paymentRepository.findByIdAndCompanyId(
-                    payment.getId(), AuthUtil.getCurrentCompanyId()
-            ).orElse(null);
-            if (dbPayment == null) {
-                return response.error("Payment not found");
-            }
-            payment.setCompanyId(AuthUtil.getCurrentCompanyId());
-            paymentRepository.save(payment);
-            response.setData("payment", payment);
-            response.setSuccessful(true);
-            response.success("Updated Successfully");
         } catch (Exception e) {
             return response.error(e);
         }
@@ -113,89 +144,4 @@ public class PaymentService {
         return response;
     }
 
-    // PaymentSchedule methods
-    public ApiResponse getScheduleById(Long id) {
-        ApiResponse response = new ApiResponse();
-        try {
-            PaymentSchedule paymentSchedule = paymentScheduleRepository.findByIdAndCompanyId(
-                    id, AuthUtil.getCurrentCompanyId()
-            ).orElse(null);
-            if (paymentSchedule == null) {
-                return response.error("Payment schedule not found");
-            }
-            response.setData("paymentSchedule", paymentSchedule);
-            response.setSuccessful(true);
-            response.setMessage("Successfully retrieved payment schedule");
-        } catch (Exception e) {
-            return response.error(e);
-        }
-        return response;
-    }
-
-    public ApiResponse getAllSchedules() {
-        ApiResponse response = new ApiResponse();
-        try {
-            List<PaymentSchedule> paymentSchedules = paymentScheduleRepository.findAllByCompanyId(
-                    AuthUtil.getCurrentCompanyId()
-            ).orElse(new ArrayList<>());
-            response.setData("paymentSchedules", paymentSchedules);
-            response.setSuccessful(true);
-            response.setMessage("Successfully retrieved payment schedules");
-        } catch (Exception e) {
-            return response.error(e);
-        }
-        return response;
-    }
-
-    public ApiResponse saveSchedule(PaymentSchedule paymentSchedule) {
-        ApiResponse response = new ApiResponse();
-        try {
-            paymentSchedule.setCompanyId(AuthUtil.getCurrentCompanyId());
-            paymentScheduleRepository.save(paymentSchedule);
-            response.setData("paymentSchedule", paymentSchedule);
-            response.setSuccessful(true);
-            response.success("Saved Successfully");
-        } catch (Exception e) {
-            return response.error(e);
-        }
-        return response;
-    }
-
-    public ApiResponse updateSchedule(PaymentSchedule paymentSchedule) {
-        ApiResponse response = new ApiResponse();
-        try {
-            PaymentSchedule dbPaymentSchedule = paymentScheduleRepository.findByIdAndCompanyId(
-                    paymentSchedule.getId(), AuthUtil.getCurrentCompanyId()
-            ).orElse(null);
-            if (dbPaymentSchedule == null) {
-                return response.error("Payment schedule not found");
-            }
-            paymentSchedule.setCompanyId(AuthUtil.getCurrentCompanyId());
-            paymentScheduleRepository.save(paymentSchedule);
-            response.setData("paymentSchedule", paymentSchedule);
-            response.setSuccessful(true);
-            response.success("Updated Successfully");
-        } catch (Exception e) {
-            return response.error(e);
-        }
-        return response;
-    }
-
-    public ApiResponse deleteScheduleById(Long id) {
-        ApiResponse response = new ApiResponse();
-        try {
-            PaymentSchedule dbPaymentSchedule = paymentScheduleRepository.findByIdAndCompanyId(
-                    id, AuthUtil.getCurrentCompanyId()
-            ).orElse(null);
-            if (dbPaymentSchedule == null) {
-                return response.error("Payment schedule not found");
-            }
-            paymentScheduleRepository.delete(dbPaymentSchedule);
-            response.setSuccessful(true);
-            response.success("Deleted Successfully");
-        } catch (Exception e) {
-            return response.error(e);
-        }
-        return response;
-    }
 }

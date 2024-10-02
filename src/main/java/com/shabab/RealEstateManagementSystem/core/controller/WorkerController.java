@@ -143,5 +143,10 @@ public class WorkerController {
     public ApiResponse recordAttendance(@RequestParam Long attendanceId, @RequestParam String attendance) {
         return workerService.recordAttendance(attendanceId, attendance);
     }
+    
+    @GetMapping("/attendance/getAllAttendanceByDateAndCompanyId")
+    public ApiResponse getAllAttendanceByDateAndCompanyId(@RequestParam Date date) {
+        return workerService.getAllAttendanceByDateAndCompanyId(date);
+    }
 
 }

@@ -501,4 +501,19 @@ public ApiResponse getAttendanceByStageIdAndDate(Long stageId, LocalDate date) {
         return response;
     }
 
+    public ApiResponse getAllAttendanceByDateAndCompanyId(Date date) {
+        ApiResponse response = new ApiResponse();
+        try {
+            List<WorkerAttendance> workerAttendances = workerAttendanceRepository.findAllByDateAndCompanyId(
+                    date, AuthUtil.getCurrentCompanyId()
+            ).orElse(new ArrayList<>());
+            response.setData("workerAttendances", workerAttendances);
+            response.setSuccessful(true);
+            response.setMessage("Successfully retrieved worker attendances");
+        } catch (Exception e) {
+            return response.error(e);
+        }
+        return response;
+    }
+
 }

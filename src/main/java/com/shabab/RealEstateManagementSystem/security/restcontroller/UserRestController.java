@@ -49,5 +49,15 @@ public class UserRestController {
         return userService.deleteById(id);
     }
 
+    @GetMapping("/customer/{id}")
+    public ApiResponse getCustomerById(@PathVariable Long id) {
+        return userService.getCustomerById(id);
+    }
+
+    @GetMapping("/customers")
+    public ApiResponse getAllCustomers() {
+        return userService.getAllCustomers();
+    }
+
 }
 

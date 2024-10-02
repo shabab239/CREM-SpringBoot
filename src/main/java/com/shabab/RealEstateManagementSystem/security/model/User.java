@@ -1,6 +1,7 @@
 package com.shabab.RealEstateManagementSystem.security.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.shabab.RealEstateManagementSystem.account.model.Account;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
@@ -79,11 +80,14 @@ public class User implements UserDetails {
     @Column(name = "role", nullable = false)
     private Role role;
 
+    @OneToOne(cascade = CascadeType.ALL)
+    private Account account;
+
     @ManyToOne
     private Company company;
 
     @JsonIgnore
-    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+    @OneToOne(mappedBy = "user")
     private Token token;
 
     @JsonIgnore

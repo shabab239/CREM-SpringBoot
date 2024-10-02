@@ -65,6 +65,10 @@ public class ConstructionStage {
     @OneToMany(mappedBy = "stage", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
     private List<WorkerAttendance> workerAttendances;
 
+    @JsonIgnore
+    @OneToMany(mappedBy = "stage", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
+    private List<RawMaterialUsage> usages;
+
     @Column(nullable = false)
     private Long companyId; //Loose relation to Company
 

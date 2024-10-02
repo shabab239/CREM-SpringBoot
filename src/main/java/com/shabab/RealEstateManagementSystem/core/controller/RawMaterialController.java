@@ -5,6 +5,7 @@ package com.shabab.RealEstateManagementSystem.core.controller;
 import com.shabab.RealEstateManagementSystem.core.model.RawMaterial;
 import com.shabab.RealEstateManagementSystem.core.model.RawMaterialOrder;
 import com.shabab.RealEstateManagementSystem.core.model.RawMaterialStock;
+import com.shabab.RealEstateManagementSystem.core.model.RawMaterialUsage;
 import com.shabab.RealEstateManagementSystem.core.service.RawMaterialService;
 import com.shabab.RealEstateManagementSystem.util.ApiResponse;
 import jakarta.validation.Valid;
@@ -98,6 +99,21 @@ public class RawMaterialController {
     @DeleteMapping("/stocks/{id}")
     public ApiResponse deleteStockById(@PathVariable Long id) {
         return rawMaterialService.deleteStockById(id);
+    }
+
+    @GetMapping("/usages")
+    public ApiResponse getAllUsages() {
+        return rawMaterialService.getAllUsages();
+    }
+
+    @GetMapping("/usages/{stageId}")
+    public ApiResponse getAllUsagesByStageId(@PathVariable Long stageId) {
+        return rawMaterialService.getAllUsagesByStageId(stageId);
+    }
+
+    @PostMapping("/usage/save")
+    public ApiResponse saveRawMaterialUsage(@Valid @RequestBody RawMaterialUsage rawMaterialUsage) {
+        return rawMaterialService.saveRawMaterialUsage(rawMaterialUsage);
     }
 
 

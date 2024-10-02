@@ -1,6 +1,6 @@
 package com.shabab.RealEstateManagementSystem.core.model;
 
-import com.shabab.RealEstateManagementSystem.security.model.Company;
+import com.shabab.RealEstateManagementSystem.account.model.Transaction;
 import com.shabab.RealEstateManagementSystem.security.model.User;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
@@ -10,11 +10,12 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.sql.Date;
+import java.util.List;
 
 /**
  * Project: ConstructionAndRealEstateManagement-SpringBoot
  * Author: Shabab
- * Created on: 30/09/2024
+ * Created on: 28/09/2024
  */
 
 @AllArgsConstructor
@@ -29,25 +30,22 @@ public class Payment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotNull(message = "Paid Amount is required")
+    @NotNull(message = "Amount is required")
     @Column(nullable = false)
-    private Double paidAmount;
+    private Double amount;
 
-    @NotNull(message = "Date is required")
+    @Temporal(TemporalType.DATE)
     @Column(nullable = false)
     private Date date;
 
+    @Column(nullable = false)
+    private String groupTransactionId;
+
+    @ManyToOne
+    private Booking booking;
+
     @ManyToOne
     private User customer;
-
-    @ManyToOne
-    @JoinColumn(name = "company")
-    private Company company;
-
-    @NotNull(message = "Payment schedule is required")
-    @ManyToOne
-    @JoinColumn(nullable = false)
-    private PaymentSchedule paymentSchedule;
 
     @Column(nullable = false)
     private Long companyId; //Loose relation to Company

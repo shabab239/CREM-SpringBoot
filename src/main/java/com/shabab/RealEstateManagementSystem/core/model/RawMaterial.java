@@ -41,6 +41,10 @@ public class RawMaterial {
     @OneToMany(mappedBy = "rawMaterial", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
     private List<RawMaterialStock> stocks;
 
+    @JsonIgnore
+    @OneToMany(mappedBy = "rawMaterial", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
+    private List<RawMaterialUsage> usages;
+
     @Column(nullable = false)
     private Long companyId; //Loose relation to Company
 }

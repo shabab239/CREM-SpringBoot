@@ -51,6 +51,8 @@ public class RawMaterialOrder {
     @Column(nullable = false)
     private RawMaterialOrderStatus status;
 
+    private String groupTransactionId;
+
     @ManyToOne
     @JoinColumn(nullable = false)
     private RawMaterial rawMaterial;
