@@ -45,4 +45,14 @@ public class TransactionController {
     public ApiResponse deleteById(@PathVariable Long id) {
         return transactionService.deleteById(id);
     }
+
+    @GetMapping("/groupTransaction")
+    public ApiResponse getAllByGroupTransactionId(@RequestParam String groupTransactionId) {
+        return transactionService.getAllByGroupTransactionId(groupTransactionId);
+    }
+
+    @PostMapping("/payWorkers")
+    public ApiResponse payWorkers(@Valid @RequestBody Transaction transaction) {
+        return transactionService.payWorkers(transaction);
+    }
 }

@@ -20,4 +20,6 @@ public interface TransactionRepository extends JpaRepository<Transaction, Long> 
     Optional<List<Transaction>> findAllByAccountIdAndCompanyId(Long accountId, Long companyId);
 
     Optional<Transaction> findByGroupTransactionIdAndTypeAndCompanyId(String groupTransactionId, Transaction.TransactionType type, Long companyId);
+
+    Optional<List<Transaction>> findAllByGroupTransactionIdAndCompanyId(String groupTransactionId, Long companyId);
 }
