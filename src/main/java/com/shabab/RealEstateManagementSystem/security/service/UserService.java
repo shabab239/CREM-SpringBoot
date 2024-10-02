@@ -118,6 +118,7 @@ public class UserService implements UserDetailsService {
 
             Account account = new Account();
             account.setName(user.getName() + " Cash A/C");
+            account.setNumber((long) (Math.random() * 1_000_000_0000L));
             account.setBalance(0.0);
             accountRepository.save(account);
             user.setAccount(account);

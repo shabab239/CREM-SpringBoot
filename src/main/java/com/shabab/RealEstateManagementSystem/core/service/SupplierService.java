@@ -66,6 +66,7 @@ public class SupplierService {
         try {
             Account account = new Account();
             account.setName(supplier.getName() + " Cash A/C");
+            account.setNumber((long) (Math.random() * 1_000_000_0000L));
             account.setBalance(0.0);
             account.setCompanyId(AuthUtil.getCurrentCompanyId());
             accountRepository.save(account);

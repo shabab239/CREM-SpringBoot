@@ -33,6 +33,9 @@ public class Account {
     private String name;
 
     @Column(nullable = false)
+    private Long number;
+
+    @Column(nullable = false)
     private Double balance;
 
     @JsonIgnore

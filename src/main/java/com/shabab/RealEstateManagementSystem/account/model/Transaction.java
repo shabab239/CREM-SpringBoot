@@ -37,6 +37,9 @@ public class Transaction {
     @Column(nullable = false)
     private String groupTransactionId;
 
+    @Column(nullable = false)
+    private String particular;
+
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private TransactionType type;
