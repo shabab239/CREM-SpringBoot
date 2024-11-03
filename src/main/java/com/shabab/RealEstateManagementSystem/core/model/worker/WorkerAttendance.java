@@ -1,5 +1,6 @@
-package com.shabab.RealEstateManagementSystem.core.model;
+package com.shabab.RealEstateManagementSystem.core.model.worker;
 
+import com.shabab.RealEstateManagementSystem.core.model.construction.ConstructionStage;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -20,29 +21,37 @@ import java.sql.Date;
 @Getter
 @Setter
 @Entity
-@Table(name = "const_raw_material_usage")
-public class RawMaterialUsage {
+@Table(name = "worker_attendances")
+public class WorkerAttendance {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotNull(message = "Quantity is required")
-    @Column(nullable = false)
-    private Double quantity;
-
+    @NotNull(message = "Date is required")
     @Temporal(TemporalType.DATE)
-    private Date entryDate;
+    @Column(nullable = false)
+    private Date date;
 
-    @ManyToOne
-    @JoinColumn(nullable = false)
-    private RawMaterial rawMaterial;
+    @Enumerated(EnumType.STRING)
+    private AttendanceStatus status;
 
+    @NotNull(message = "Stage is required")
     @ManyToOne
     @JoinColumn(nullable = false)
     private ConstructionStage stage;
 
+    @NotNull(message = "Worker ID is required")
+    @ManyToOne
+    @JoinColumn(nullable = false)
+    private Worker worker;
+
     @Column(nullable = false)
     private Long companyId; //Loose relation to Company
 
+    public enum AttendanceStatus {
+        PRESENT,
+        ABSENT,
+        ON_LEAVE
+    }
 }

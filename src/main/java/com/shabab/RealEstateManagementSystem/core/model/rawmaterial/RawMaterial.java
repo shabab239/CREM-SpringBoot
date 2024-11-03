@@ -1,7 +1,6 @@
-package com.shabab.RealEstateManagementSystem.core.model;
+package com.shabab.RealEstateManagementSystem.core.model.rawmaterial;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.shabab.RealEstateManagementSystem.account.model.Account;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -22,8 +21,8 @@ import java.util.List;
 @Getter
 @Setter
 @Entity
-@Table(name = "const_suppliers")
-public class Supplier {
+@Table(name = "raw_materials")
+public class RawMaterial {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -33,13 +32,17 @@ public class Supplier {
     @Column(nullable = false)
     private String name;
 
-    @OneToOne
-    @JoinColumn(nullable = false)
-    private Account account;
+    @JsonIgnore
+    @OneToMany(mappedBy = "rawMaterial", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
+    private List<RawMaterialOrder> orders;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "supplier", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
-    private List<RawMaterialOrder> orders;
+    @OneToMany(mappedBy = "rawMaterial", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
+    private List<RawMaterialStock> stocks;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "rawMaterial", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
+    private List<RawMaterialUsage> usages;
 
     @Column(nullable = false)
     private Long companyId; //Loose relation to Company

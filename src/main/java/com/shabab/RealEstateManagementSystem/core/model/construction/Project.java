@@ -1,4 +1,4 @@
-package com.shabab.RealEstateManagementSystem.core.model;
+package com.shabab.RealEstateManagementSystem.core.model.construction;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.shabab.RealEstateManagementSystem.security.model.User;
@@ -24,7 +24,7 @@ import java.util.List;
 @Getter
 @Setter
 @Entity
-@Table(name = "core_projects")
+@Table(name = "const_projects")
 public class Project {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

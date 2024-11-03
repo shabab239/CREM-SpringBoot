@@ -1,6 +1,7 @@
-package com.shabab.RealEstateManagementSystem.core.model;
+package com.shabab.RealEstateManagementSystem.core.model.construction;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -18,13 +19,14 @@ import lombok.Setter;
 @Getter
 @Setter
 @Entity
-@Table(name = "core_units")
+@Table(name = "const_units")
 public class Unit {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotBlank(message = "Name is required")
     private String name;
 
     private Integer size;

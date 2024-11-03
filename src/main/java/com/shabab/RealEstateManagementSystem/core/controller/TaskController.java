@@ -1,19 +1,11 @@
 package com.shabab.RealEstateManagementSystem.core.controller;
 
 import com.shabab.RealEstateManagementSystem.core.model.Task;
-import com.shabab.RealEstateManagementSystem.core.model.Worker;
-import com.shabab.RealEstateManagementSystem.core.model.WorkerAttendance;
 import com.shabab.RealEstateManagementSystem.core.service.TaskService;
-import com.shabab.RealEstateManagementSystem.core.service.WorkerService;
 import com.shabab.RealEstateManagementSystem.util.ApiResponse;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
-
-import java.sql.Date;
-import java.time.LocalDate;
 
 /**
  * Project: ConstructionAndRealEstateManagement-SpringBoot

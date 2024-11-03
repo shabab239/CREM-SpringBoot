@@ -2,7 +2,7 @@ package com.shabab.RealEstateManagementSystem.core.service;
 
 import com.shabab.RealEstateManagementSystem.account.model.Account;
 import com.shabab.RealEstateManagementSystem.account.repository.AccountRepository;
-import com.shabab.RealEstateManagementSystem.core.model.Supplier;
+import com.shabab.RealEstateManagementSystem.core.model.rawmaterial.Supplier;
 import com.shabab.RealEstateManagementSystem.core.repository.SupplierRepository;
 import com.shabab.RealEstateManagementSystem.util.ApiResponse;
 import com.shabab.RealEstateManagementSystem.util.AuthUtil;

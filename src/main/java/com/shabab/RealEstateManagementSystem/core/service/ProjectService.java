@@ -1,9 +1,9 @@
 package com.shabab.RealEstateManagementSystem.core.service;
 
-import com.shabab.RealEstateManagementSystem.core.model.Project;
-import com.shabab.RealEstateManagementSystem.core.model.Building;
-import com.shabab.RealEstateManagementSystem.core.model.Floor;
-import com.shabab.RealEstateManagementSystem.core.model.Unit;
+import com.shabab.RealEstateManagementSystem.core.model.construction.Project;
+import com.shabab.RealEstateManagementSystem.core.model.construction.Building;
+import com.shabab.RealEstateManagementSystem.core.model.construction.Floor;
+import com.shabab.RealEstateManagementSystem.core.model.construction.Unit;
 import com.shabab.RealEstateManagementSystem.core.repository.ProjectRepository;
 import com.shabab.RealEstateManagementSystem.core.repository.BuildingRepository;
 import com.shabab.RealEstateManagementSystem.core.repository.FloorRepository;

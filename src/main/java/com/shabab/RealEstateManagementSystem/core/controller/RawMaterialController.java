@@ -2,10 +2,10 @@
 
 package com.shabab.RealEstateManagementSystem.core.controller;
 
-import com.shabab.RealEstateManagementSystem.core.model.RawMaterial;
-import com.shabab.RealEstateManagementSystem.core.model.RawMaterialOrder;
-import com.shabab.RealEstateManagementSystem.core.model.RawMaterialStock;
-import com.shabab.RealEstateManagementSystem.core.model.RawMaterialUsage;
+import com.shabab.RealEstateManagementSystem.core.model.rawmaterial.RawMaterial;
+import com.shabab.RealEstateManagementSystem.core.model.rawmaterial.RawMaterialOrder;
+import com.shabab.RealEstateManagementSystem.core.model.rawmaterial.RawMaterialStock;
+import com.shabab.RealEstateManagementSystem.core.model.rawmaterial.RawMaterialUsage;
 import com.shabab.RealEstateManagementSystem.core.service.RawMaterialService;
 import com.shabab.RealEstateManagementSystem.util.ApiResponse;
 import jakarta.validation.Valid;

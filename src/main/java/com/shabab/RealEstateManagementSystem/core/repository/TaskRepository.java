@@ -1,7 +1,6 @@
 package com.shabab.RealEstateManagementSystem.core.repository;
 
 import com.shabab.RealEstateManagementSystem.core.model.Task;
-import com.shabab.RealEstateManagementSystem.core.model.Worker;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

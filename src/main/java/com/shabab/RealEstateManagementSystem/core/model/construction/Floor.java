@@ -1,4 +1,4 @@
-package com.shabab.RealEstateManagementSystem.core.model;
+package com.shabab.RealEstateManagementSystem.core.model.construction;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
@@ -21,7 +21,7 @@ import java.util.List;
 @Getter
 @Setter
 @Entity
-@Table(name = "core_floors")
+@Table(name = "const_floors")
 public class Floor {
 
     @Id

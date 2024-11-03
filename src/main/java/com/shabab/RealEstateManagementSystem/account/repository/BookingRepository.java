@@ -1,9 +1,8 @@
-package com.shabab.RealEstateManagementSystem.core.repository;
+package com.shabab.RealEstateManagementSystem.account.repository;
 
-import com.shabab.RealEstateManagementSystem.core.model.Booking;
+import com.shabab.RealEstateManagementSystem.account.model.Booking;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import java.sql.Date;
 import java.util.List;
 import java.util.Optional;
 

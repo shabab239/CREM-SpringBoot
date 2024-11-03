@@ -1,8 +1,6 @@
 package com.shabab.RealEstateManagementSystem.account.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.shabab.RealEstateManagementSystem.core.model.Booking;
-import com.shabab.RealEstateManagementSystem.security.model.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

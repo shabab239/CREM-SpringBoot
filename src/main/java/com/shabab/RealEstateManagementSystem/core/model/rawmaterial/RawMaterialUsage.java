@@ -1,5 +1,6 @@
-package com.shabab.RealEstateManagementSystem.core.model;
+package com.shabab.RealEstateManagementSystem.core.model.rawmaterial;
 
+import com.shabab.RealEstateManagementSystem.core.model.construction.ConstructionStage;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -20,8 +21,8 @@ import java.sql.Date;
 @Getter
 @Setter
 @Entity
-@Table(name = "const_raw_material_orders")
-public class RawMaterialOrder {
+@Table(name = "raw_material_usage")
+public class RawMaterialUsage {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -31,27 +32,8 @@ public class RawMaterialOrder {
     @Column(nullable = false)
     private Double quantity;
 
-    @NotNull(message = "Unit price is required")
-    @Column(nullable = false)
-    private Double unitPrice;
-
-    @NotNull(message = "Order date is required")
     @Temporal(TemporalType.DATE)
-    @Column(nullable = false)
-    private Date orderDate;
-
-    @Temporal(TemporalType.DATE)
-    private Date deliveryDate;
-
-    @NotNull(message = "Total price is required")
-    @Column(nullable = false)
-    private Double totalPrice;
-
-    @NotNull(message = "Status is required")
-    @Column(nullable = false)
-    private RawMaterialOrderStatus status;
-
-    private String groupTransactionId;
+    private Date entryDate;
 
     @ManyToOne
     @JoinColumn(nullable = false)
@@ -59,14 +41,9 @@ public class RawMaterialOrder {
 
     @ManyToOne
     @JoinColumn(nullable = false)
-    private Supplier supplier;
+    private ConstructionStage stage;
 
     @Column(nullable = false)
     private Long companyId; //Loose relation to Company
 
-    public enum RawMaterialOrderStatus {
-        PENDING,
-        DELIVERED,
-        CANCELLED
-    }
 }

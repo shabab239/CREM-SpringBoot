@@ -1,4 +1,4 @@
-package com.shabab.RealEstateManagementSystem.core.model;
+package com.shabab.RealEstateManagementSystem.core.model.rawmaterial;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
@@ -20,7 +20,7 @@ import java.util.Date;
 @Getter
 @Setter
 @Entity
-@Table(name = "const_raw_material_stocks")
+@Table(name = "raw_material_stocks")
 public class RawMaterialStock {
 
     @Id

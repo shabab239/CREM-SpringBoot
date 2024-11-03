@@ -1,9 +1,9 @@
 package com.shabab.RealEstateManagementSystem.core.controller;
 
-import com.shabab.RealEstateManagementSystem.core.model.Project;
-import com.shabab.RealEstateManagementSystem.core.model.Building;
-import com.shabab.RealEstateManagementSystem.core.model.Floor;
-import com.shabab.RealEstateManagementSystem.core.model.Unit;
+import com.shabab.RealEstateManagementSystem.core.model.construction.Project;
+import com.shabab.RealEstateManagementSystem.core.model.construction.Building;
+import com.shabab.RealEstateManagementSystem.core.model.construction.Floor;
+import com.shabab.RealEstateManagementSystem.core.model.construction.Unit;
 import com.shabab.RealEstateManagementSystem.core.service.ProjectService;
 import com.shabab.RealEstateManagementSystem.util.ApiResponse;
 import jakarta.validation.Valid;

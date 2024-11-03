@@ -1,7 +1,7 @@
 package com.shabab.RealEstateManagementSystem.core.controller;
 
-import com.shabab.RealEstateManagementSystem.core.model.Worker;
-import com.shabab.RealEstateManagementSystem.core.model.WorkerAttendance;
+import com.shabab.RealEstateManagementSystem.core.model.worker.Worker;
+import com.shabab.RealEstateManagementSystem.core.model.worker.WorkerAttendance;
 import com.shabab.RealEstateManagementSystem.core.service.WorkerService;
 import com.shabab.RealEstateManagementSystem.util.ApiResponse;
 import jakarta.validation.Valid;

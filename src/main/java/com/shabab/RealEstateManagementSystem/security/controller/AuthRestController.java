@@ -1,4 +1,4 @@
-package com.shabab.RealEstateManagementSystem.security.restcontroller;
+package com.shabab.RealEstateManagementSystem.security.controller;
 
 import com.shabab.RealEstateManagementSystem.security.model.Token;
 import com.shabab.RealEstateManagementSystem.security.service.AuthService;

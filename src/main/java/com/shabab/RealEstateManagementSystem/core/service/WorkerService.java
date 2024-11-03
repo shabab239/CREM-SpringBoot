@@ -1,8 +1,8 @@
 package com.shabab.RealEstateManagementSystem.core.service;
 
-import com.shabab.RealEstateManagementSystem.core.model.ConstructionStage;
-import com.shabab.RealEstateManagementSystem.core.model.Worker;
-import com.shabab.RealEstateManagementSystem.core.model.WorkerAttendance;
+import com.shabab.RealEstateManagementSystem.core.model.construction.ConstructionStage;
+import com.shabab.RealEstateManagementSystem.core.model.worker.Worker;
+import com.shabab.RealEstateManagementSystem.core.model.worker.WorkerAttendance;
 import com.shabab.RealEstateManagementSystem.core.repository.ConstructionStageRepository;
 import com.shabab.RealEstateManagementSystem.core.repository.WorkerAttendanceRepository;
 import com.shabab.RealEstateManagementSystem.core.repository.WorkerRepository;

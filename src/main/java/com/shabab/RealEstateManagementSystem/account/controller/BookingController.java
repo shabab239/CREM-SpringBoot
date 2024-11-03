@@ -1,7 +1,7 @@
-package com.shabab.RealEstateManagementSystem.core.controller;
+package com.shabab.RealEstateManagementSystem.account.controller;
 
-import com.shabab.RealEstateManagementSystem.core.model.Booking;
-import com.shabab.RealEstateManagementSystem.core.service.BookingService;
+import com.shabab.RealEstateManagementSystem.account.model.Booking;
+import com.shabab.RealEstateManagementSystem.account.service.BookingService;
 import com.shabab.RealEstateManagementSystem.util.ApiResponse;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;

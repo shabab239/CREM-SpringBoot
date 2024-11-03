@@ -1,6 +1,5 @@
-package com.shabab.RealEstateManagementSystem.core.model;
+package com.shabab.RealEstateManagementSystem.account.model;
 
-import com.shabab.RealEstateManagementSystem.account.model.Transaction;
 import com.shabab.RealEstateManagementSystem.security.model.User;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
@@ -10,7 +9,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.sql.Date;
-import java.util.List;
 
 /**
  * Project: ConstructionAndRealEstateManagement-SpringBoot
@@ -23,7 +21,7 @@ import java.util.List;
 @Getter
 @Setter
 @Entity
-@Table(name = "const_payments")
+@Table(name = "acc_payments")
 public class Payment {
 
     @Id
@@ -34,6 +32,7 @@ public class Payment {
     @Column(nullable = false)
     private Double amount;
 
+    @NotNull(message = "Date is required")
     @Temporal(TemporalType.DATE)
     @Column(nullable = false)
     private Date date;
@@ -41,9 +40,11 @@ public class Payment {
     @Column(nullable = false)
     private String groupTransactionId;
 
+    @NotNull(message = "Booking is required")
     @ManyToOne
     private Booking booking;
 
+    @NotNull(message = "Customer is required")
     @ManyToOne
     private User customer;
 

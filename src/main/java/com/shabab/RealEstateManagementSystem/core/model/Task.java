@@ -22,7 +22,7 @@ import java.util.List;
 @Getter
 @Setter
 @Entity
-@Table(name = "const_tasks")
+@Table(name = "tasks")
 public class Task {
 
     @Id

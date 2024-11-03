@@ -1,15 +1,14 @@
-package com.shabab.RealEstateManagementSystem.core.model;
+package com.shabab.RealEstateManagementSystem.account.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.shabab.RealEstateManagementSystem.core.model.Booking;
 import com.shabab.RealEstateManagementSystem.security.model.User;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -23,35 +22,26 @@ import java.util.List;
 @Getter
 @Setter
 @Entity
-@Table(name = "const_bookings")
-public class Booking {
+@Table(name = "acc_accounts")
+public class Account {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Temporal(TemporalType.DATE)
     @Column(nullable = false)
-    private Date bookingDate;
+    private String name;
 
-    @NotNull(message = "Amount is required")
     @Column(nullable = false)
-    private Double amount;
+    private Long number;
 
-    @OneToOne
-    @JoinColumn(nullable = false)
-    private Unit unit;
-
-    @ManyToOne
-    @JoinColumn(nullable = false)
-    private User customer;
+    @Column(nullable = false)
+    private Double balance;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "booking", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
-    @Column(nullable = false)
-    private List<Payment> payments;
+    @OneToMany(mappedBy = "account", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
+    private List<Transaction> transactions;
 
     @Column(nullable = false)
     private Long companyId; // Loose relation to Company
-
 }

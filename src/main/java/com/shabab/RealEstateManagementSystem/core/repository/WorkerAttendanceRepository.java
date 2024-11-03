@@ -1,11 +1,10 @@
 package com.shabab.RealEstateManagementSystem.core.repository;
 
-import com.shabab.RealEstateManagementSystem.core.model.Worker;
-import com.shabab.RealEstateManagementSystem.core.model.WorkerAttendance;
+import com.shabab.RealEstateManagementSystem.core.model.worker.Worker;
+import com.shabab.RealEstateManagementSystem.core.model.worker.WorkerAttendance;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
-import javax.xml.crypto.Data;
 import java.sql.Date;
 import java.util.List;
 import java.util.Optional;

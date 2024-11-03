@@ -1,6 +1,5 @@
 package com.shabab.RealEstateManagementSystem.account.model;
 
-import com.shabab.RealEstateManagementSystem.core.model.Booking;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

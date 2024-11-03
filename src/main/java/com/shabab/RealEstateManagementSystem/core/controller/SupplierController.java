@@ -1,6 +1,6 @@
 package com.shabab.RealEstateManagementSystem.core.controller;
 
-import com.shabab.RealEstateManagementSystem.core.model.Supplier;
+import com.shabab.RealEstateManagementSystem.core.model.rawmaterial.Supplier;
 import com.shabab.RealEstateManagementSystem.core.service.SupplierService;
 import com.shabab.RealEstateManagementSystem.util.ApiResponse;
 import jakarta.validation.Valid;

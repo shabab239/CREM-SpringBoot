@@ -1,11 +1,11 @@
-package com.shabab.RealEstateManagementSystem.core.service;
+package com.shabab.RealEstateManagementSystem.account.service;
 
 import com.shabab.RealEstateManagementSystem.account.model.Account;
 import com.shabab.RealEstateManagementSystem.account.model.Transaction;
 import com.shabab.RealEstateManagementSystem.account.repository.AccountRepository;
 import com.shabab.RealEstateManagementSystem.account.repository.TransactionRepository;
-import com.shabab.RealEstateManagementSystem.core.model.Payment;
-import com.shabab.RealEstateManagementSystem.core.repository.PaymentRepository;
+import com.shabab.RealEstateManagementSystem.account.model.Payment;
+import com.shabab.RealEstateManagementSystem.account.repository.PaymentRepository;
 import com.shabab.RealEstateManagementSystem.util.ApiResponse;
 import com.shabab.RealEstateManagementSystem.util.AuthUtil;
 import jakarta.transaction.Transactional;

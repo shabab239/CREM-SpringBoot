@@ -1,7 +1,6 @@
 package com.shabab.RealEstateManagementSystem.core.repository;
 
-import com.shabab.RealEstateManagementSystem.core.model.RawMaterialStock;
-import com.shabab.RealEstateManagementSystem.core.model.Supplier;
+import com.shabab.RealEstateManagementSystem.core.model.rawmaterial.Supplier;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

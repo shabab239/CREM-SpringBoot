@@ -1,4 +1,4 @@
-package com.shabab.RealEstateManagementSystem.core.model;
+package com.shabab.RealEstateManagementSystem.core.model.worker;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
@@ -9,7 +9,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.sql.Date;
 
@@ -24,7 +23,7 @@ import java.sql.Date;
 @Getter
 @Setter
 @Entity
-@Table(name = "sec_workers")
+@Table(name = "workers")
 public class Worker {
 
     @Id
