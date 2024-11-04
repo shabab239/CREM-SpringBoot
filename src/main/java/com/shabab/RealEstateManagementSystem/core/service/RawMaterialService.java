@@ -40,12 +40,13 @@ public class RawMaterialService {
 
     @Autowired
     private RawMaterialStockRepository rawMaterialStockRepository;
+
     @Autowired
     private RawMaterialUsageRepository rawMaterialUsageRepository;
-    @Autowired
-    private BookingRepository bookingRepository;
+
     @Autowired
     private TransactionRepository transactionRepository;
+
     @Autowired
     private AccountRepository accountRepository;
 
@@ -177,7 +178,7 @@ public class RawMaterialService {
                 debitTransaction.setType(Transaction.TransactionType.DEBIT);
                 debitTransaction.setAccount(rawMaterialOrder.getSupplier().getAccount());
                 debitTransaction.setGroupTransactionId(groupTransactionId);
-                debitTransaction.setTransactionDate(new Date());
+                debitTransaction.setDate(new Date());
                 debitTransaction.setParticular("Raw Material Order - " + rawMaterialOrder.getRawMaterial().getName());
                 debitTransaction.setCompanyId(AuthUtil.getCurrentCompanyId());
                 transactionRepository.save(debitTransaction);
@@ -187,7 +188,7 @@ public class RawMaterialService {
                 creditTransaction.setType(Transaction.TransactionType.CREDIT);
                 creditTransaction.setAccount(AuthUtil.getCurrentUser().getAccount());
                 creditTransaction.setGroupTransactionId(groupTransactionId);
-                creditTransaction.setTransactionDate(new Date());
+                creditTransaction.setDate(new Date());
                 creditTransaction.setParticular("Raw Material Order - " + rawMaterialOrder.getRawMaterial().getName());
                 creditTransaction.setCompanyId(AuthUtil.getCurrentCompanyId());
                 transactionRepository.save(creditTransaction);

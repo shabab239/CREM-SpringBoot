@@ -212,7 +212,7 @@ public class TransactionService {
 
         Ledger ledger = new Ledger();
         ledger.setAmount(amount);
-        ledger.setType(transactionType);
+        ledger.setTransactionType(transactionType);
         ledger.setAccount(debitAccount);
         ledger.setGroupTransactionId(groupTransactionId);
         ledger.setDate(new Date());
