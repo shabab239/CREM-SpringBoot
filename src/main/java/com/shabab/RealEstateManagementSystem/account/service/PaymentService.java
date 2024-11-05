@@ -93,7 +93,7 @@ public class PaymentService {
             debitTransaction.setType(Transaction.TransactionType.DEBIT);
             debitTransaction.setAccount(payment.getCustomer().getAccount());
             debitTransaction.setGroupTransactionId(groupTransactionId);
-            debitTransaction.setTransactionDate(new Date());
+            debitTransaction.setDate(new Date());
             debitTransaction.setParticular("Payment for " + payment.getBooking().getUnit().getName());
             debitTransaction.setCompanyId(AuthUtil.getCurrentCompanyId());
             transactionRepository.save(debitTransaction);
@@ -103,7 +103,7 @@ public class PaymentService {
             creditTransaction.setType(Transaction.TransactionType.CREDIT);
             creditTransaction.setAccount(AuthUtil.getCurrentUser().getAccount());
             creditTransaction.setGroupTransactionId(groupTransactionId);
-            creditTransaction.setTransactionDate(new Date());
+            creditTransaction.setDate(new Date());
             creditTransaction.setParticular("Payment for " + payment.getBooking().getUnit().getName());
             creditTransaction.setCompanyId(AuthUtil.getCurrentCompanyId());
             transactionRepository.save(creditTransaction);

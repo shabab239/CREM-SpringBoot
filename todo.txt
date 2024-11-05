@@ -1,0 +1,2 @@
+supplier list
+new supplier should load immediately in new Order

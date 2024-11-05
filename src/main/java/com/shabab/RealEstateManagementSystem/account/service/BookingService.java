@@ -104,7 +104,7 @@ public class BookingService {
             debitTransaction.setAmount(booking.getAmount());
             debitTransaction.setType(Transaction.TransactionType.DEBIT);
             debitTransaction.setAccount(customerAccount);
-            debitTransaction.setTransactionDate(new Date());
+            debitTransaction.setDate(new Date());
             debitTransaction.setGroupTransactionId(groupTransactionId);
             debitTransaction.setParticular("Booking Fee for " + unit.getName());
             debitTransaction.setCompanyId(AuthUtil.getCurrentCompanyId());
@@ -116,7 +116,7 @@ public class BookingService {
             creditTransaction.setType(Transaction.TransactionType.CREDIT);
             creditTransaction.setAccount(AuthUtil.getCurrentUser().getAccount());
             creditTransaction.setGroupTransactionId(groupTransactionId);
-            creditTransaction.setTransactionDate(new Date());
+            creditTransaction.setDate(new Date());
             creditTransaction.setParticular("Booking Fee for " + unit.getName());
             creditTransaction.setCompanyId(AuthUtil.getCurrentCompanyId());
             transactionRepository.save(creditTransaction);

@@ -25,7 +25,7 @@ public class LedgerHead {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(length = 50, nullable = false)
+    @Column(length = 50, nullable = false, unique = true)
     @Size(min = 3, max = 50, message = "3-50 Characters Required")
     private String name;
 

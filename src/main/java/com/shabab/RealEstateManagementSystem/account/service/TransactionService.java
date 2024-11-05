@@ -154,7 +154,7 @@ public class TransactionService {
             debitTransaction.setType(Transaction.TransactionType.DEBIT);
             debitTransaction.setAccount(workerAccount);
             debitTransaction.setGroupTransactionId(groupTransactionId);
-            debitTransaction.setTransactionDate(new Date());
+            debitTransaction.setDate(new Date());
             debitTransaction.setParticular("Worker Salary");
             debitTransaction.setCompanyId(AuthUtil.getCurrentCompanyId());
             transactionRepository.save(debitTransaction);
@@ -164,7 +164,7 @@ public class TransactionService {
             creditTransaction.setType(Transaction.TransactionType.CREDIT);
             creditTransaction.setAccount(AuthUtil.getCurrentUser().getAccount());
             creditTransaction.setGroupTransactionId(groupTransactionId);
-            creditTransaction.setTransactionDate(new Date());
+            creditTransaction.setDate(new Date());
             creditTransaction.setParticular("Worker Salary");
             creditTransaction.setCompanyId(AuthUtil.getCurrentCompanyId());
             transactionRepository.save(creditTransaction);
@@ -209,16 +209,6 @@ public class TransactionService {
         debitTransaction.setParticular(description);
         debitTransaction.setCompanyId(AuthUtil.getCurrentCompanyId());
         transactionRepository.save(debitTransaction);
-
-        Ledger ledger = new Ledger();
-        ledger.setAmount(amount);
-        ledger.setType(transactionType);
-        ledger.setAccount(debitAccount);
-        ledger.setGroupTransactionId(groupTransactionId);
-        ledger.setDate(new Date());
-        ledger.setParticular(description);
-        ledger.setCompanyId(AuthUtil.getCurrentCompanyId());
-        ledgerRepository.save(ledger);
 
         Transaction creditTransaction = new Transaction();
         creditTransaction.setAmount(amount);
