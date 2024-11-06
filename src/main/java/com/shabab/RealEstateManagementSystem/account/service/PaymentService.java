@@ -1,10 +1,10 @@
 package com.shabab.RealEstateManagementSystem.account.service;
 
 import com.shabab.RealEstateManagementSystem.account.model.Account;
+import com.shabab.RealEstateManagementSystem.account.model.BookingPayment;
 import com.shabab.RealEstateManagementSystem.account.model.Transaction;
 import com.shabab.RealEstateManagementSystem.account.repository.AccountRepository;
 import com.shabab.RealEstateManagementSystem.account.repository.TransactionRepository;
-import com.shabab.RealEstateManagementSystem.account.model.Payment;
 import com.shabab.RealEstateManagementSystem.account.repository.PaymentRepository;
 import com.shabab.RealEstateManagementSystem.util.ApiResponse;
 import com.shabab.RealEstateManagementSystem.util.AuthUtil;
@@ -33,19 +33,19 @@ public class PaymentService {
     @Autowired
     private AccountRepository accountRepository;
 
-    // Payment methods
+    // BookingPayment methods
     public ApiResponse getById(Long id) {
         ApiResponse response = new ApiResponse();
         try {
-            Payment payment = paymentRepository.findByIdAndCompanyId(
+            BookingPayment bookingPayment = paymentRepository.findByIdAndCompanyId(
                     id, AuthUtil.getCurrentCompanyId()
             ).orElse(null);
-            if (payment == null) {
-                return response.error("Payment not found");
+            if (bookingPayment == null) {
+                return response.error("BookingPayment not found");
             }
-            response.setData("payment", payment);
+            response.setData("bookingPayment", bookingPayment);
             response.setSuccessful(true);
-            response.setMessage("Successfully retrieved payment");
+            response.setMessage("Successfully retrieved bookingPayment");
         } catch (Exception e) {
             return response.error(e);
         }
@@ -55,12 +55,12 @@ public class PaymentService {
     public ApiResponse getAllByCustomerId(Long customerId) {
         ApiResponse response = new ApiResponse();
         try {
-            List<Payment> payments = paymentRepository.findAllByCustomerIdAndCompanyId(
+            List<BookingPayment> bookingPayments = paymentRepository.findAllByCustomerIdAndCompanyId(
                     customerId, AuthUtil.getCurrentCompanyId()
             ).orElse(new ArrayList<>());
-            response.setData("payments", payments);
+            response.setData("bookingPayments", bookingPayments);
             response.setSuccessful(true);
-            response.setMessage("Successfully retrieved payments");
+            response.setMessage("Successfully retrieved bookingPayments");
         } catch (Exception e) {
             return response.error(e);
         }
@@ -70,12 +70,12 @@ public class PaymentService {
     public ApiResponse getAll() {
         ApiResponse response = new ApiResponse();
         try {
-            List<Payment> payments = paymentRepository.findAllByCompanyId(
+            List<BookingPayment> bookingPayments = paymentRepository.findAllByCompanyId(
                     AuthUtil.getCurrentCompanyId()
             ).orElse(new ArrayList<>());
-            response.setData("payments", payments);
+            response.setData("bookingPayments", bookingPayments);
             response.setSuccessful(true);
-            response.setMessage("Successfully retrieved payments");
+            response.setMessage("Successfully retrieved bookingPayments");
         } catch (Exception e) {
             return response.error(e);
         }
@@ -83,43 +83,43 @@ public class PaymentService {
     }
 
     @Transactional(rollbackOn = Exception.class)
-    public ApiResponse save(Payment payment) {
+    public ApiResponse save(BookingPayment bookingPayment) {
         ApiResponse response = new ApiResponse();
         try {
             String groupTransactionId = UUID.randomUUID().toString();
 
             Transaction debitTransaction = new Transaction();
-            debitTransaction.setAmount(payment.getAmount());
+            debitTransaction.setAmount(bookingPayment.getAmount());
             debitTransaction.setType(Transaction.TransactionType.DEBIT);
-            debitTransaction.setAccount(payment.getCustomer().getAccount());
+            debitTransaction.setAccount(bookingPayment.getCustomer().getAccount());
             debitTransaction.setGroupTransactionId(groupTransactionId);
             debitTransaction.setDate(new Date());
-            debitTransaction.setParticular("Payment for " + payment.getBooking().getUnit().getName());
+            debitTransaction.setParticular("BookingPayment for " + bookingPayment.getBooking().getUnit().getName());
             debitTransaction.setCompanyId(AuthUtil.getCurrentCompanyId());
             transactionRepository.save(debitTransaction);
 
             Transaction creditTransaction = new Transaction();
-            creditTransaction.setAmount(payment.getAmount());
+            creditTransaction.setAmount(bookingPayment.getAmount());
             creditTransaction.setType(Transaction.TransactionType.CREDIT);
             creditTransaction.setAccount(AuthUtil.getCurrentUser().getAccount());
             creditTransaction.setGroupTransactionId(groupTransactionId);
             creditTransaction.setDate(new Date());
-            creditTransaction.setParticular("Payment for " + payment.getBooking().getUnit().getName());
+            creditTransaction.setParticular("BookingPayment for " + bookingPayment.getBooking().getUnit().getName());
             creditTransaction.setCompanyId(AuthUtil.getCurrentCompanyId());
             transactionRepository.save(creditTransaction);
 
-            Account customerAccount = payment.getBooking().getCustomer().getAccount();
-            customerAccount.setBalance(customerAccount.getBalance() - payment.getAmount());
+            Account customerAccount = bookingPayment.getBooking().getCustomer().getAccount();
+            customerAccount.setBalance(customerAccount.getBalance() - bookingPayment.getAmount());
             accountRepository.save(customerAccount);
 
             Account companyAccount = AuthUtil.getCurrentUser().getAccount();
-            companyAccount.setBalance(companyAccount.getBalance() + payment.getAmount());
+            companyAccount.setBalance(companyAccount.getBalance() + bookingPayment.getAmount());
             accountRepository.save(companyAccount);
 
-            payment.setGroupTransactionId(groupTransactionId);
-            payment.setCompanyId(AuthUtil.getCurrentCompanyId());
-            paymentRepository.save(payment);
-            response.setData("payment", payment);
+            bookingPayment.setGroupTransactionId(groupTransactionId);
+            bookingPayment.setCompanyId(AuthUtil.getCurrentCompanyId());
+            paymentRepository.save(bookingPayment);
+            response.setData("bookingPayment", bookingPayment);
             response.setSuccessful(true);
             response.success("Saved Successfully");
         } catch (Exception e) {
@@ -131,13 +131,13 @@ public class PaymentService {
     public ApiResponse deleteById(Long id) {
         ApiResponse response = new ApiResponse();
         try {
-            Payment dbPayment = paymentRepository.findByIdAndCompanyId(
+            BookingPayment dbBookingPayment = paymentRepository.findByIdAndCompanyId(
                     id, AuthUtil.getCurrentCompanyId()
             ).orElse(null);
-            if (dbPayment == null) {
-                return response.error("Payment not found");
+            if (dbBookingPayment == null) {
+                return response.error("BookingPayment not found");
             }
-            paymentRepository.delete(dbPayment);
+            paymentRepository.delete(dbBookingPayment);
             response.setSuccessful(true);
             response.success("Deleted Successfully");
         } catch (Exception e) {

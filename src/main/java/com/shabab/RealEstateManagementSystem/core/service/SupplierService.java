@@ -2,6 +2,7 @@ package com.shabab.RealEstateManagementSystem.core.service;
 
 import com.shabab.RealEstateManagementSystem.account.model.Account;
 import com.shabab.RealEstateManagementSystem.account.repository.AccountRepository;
+import com.shabab.RealEstateManagementSystem.account.service.AccountService;
 import com.shabab.RealEstateManagementSystem.core.model.rawmaterial.Supplier;
 import com.shabab.RealEstateManagementSystem.core.repository.SupplierRepository;
 import com.shabab.RealEstateManagementSystem.util.ApiResponse;
@@ -26,6 +27,8 @@ public class SupplierService {
     private SupplierRepository supplierRepository;
     @Autowired
     private AccountRepository accountRepository;
+    @Autowired
+    private AccountService accountService;
 
     public ApiResponse getById(Long id) {
         ApiResponse response = new ApiResponse();
@@ -64,17 +67,11 @@ public class SupplierService {
     public ApiResponse save(Supplier supplier) {
         ApiResponse response = new ApiResponse();
         try {
-            Account account = new Account();
-            account.setName(supplier.getName() + " Cash A/C");
-            account.setNumber((long) (Math.random() * 1_000_000_0000L));
-            account.setBalance(0.0);
-            account.setCompanyId(AuthUtil.getCurrentCompanyId());
-            accountRepository.save(account);
-
-            supplier.setAccount(account);
-
             supplier.setCompanyId(AuthUtil.getCurrentCompanyId());
             supplierRepository.save(supplier);
+
+            accountService.getSupplierAccount(supplier.getId()); // will create if not exists
+
             response.setData("supplier", supplier);
             response.setSuccessful(true);
             response.success("Saved Successfully");
@@ -95,6 +92,9 @@ public class SupplierService {
             }
             supplier.setCompanyId(AuthUtil.getCurrentCompanyId());
             supplierRepository.save(supplier);
+
+            accountService.getSupplierAccount(supplier.getId()); // will create if not exists
+
             response.setData("supplier", supplier);
             response.setSuccessful(true);
             response.success("Updated Successfully");

@@ -27,12 +27,12 @@ public class TransactionService {
 
     @Autowired
     private TransactionRepository transactionRepository;
+
     @Autowired
     private AccountRepository accountRepository;
+
     @Autowired
     private PaymentRepository paymentRepository;
-    @Autowired
-    private VoucherRepository voucherRepository;
 
     public ApiResponse getById(Long id) {
         ApiResponse response = new ApiResponse();
@@ -113,21 +113,6 @@ public class TransactionService {
             transactionRepository.delete(dbTransaction);
             response.setSuccessful(true);
             response.success("Deleted Successfully");
-        } catch (Exception e) {
-            return response.error(e);
-        }
-        return response;
-    }
-
-    public ApiResponse getAllByGroupTransactionId(String groupTransactionId) {
-        ApiResponse response = new ApiResponse();
-        try {
-            List<Transaction> transactions = transactionRepository.findAllByGroupTransactionIdAndCompanyId(
-                    groupTransactionId, AuthUtil.getCurrentCompanyId()
-            ).orElse(new ArrayList<>());
-            response.setData("transactions", transactions);
-            response.setSuccessful(true);
-            response.setMessage("Successfully retrieved transactions");
         } catch (Exception e) {
             return response.error(e);
         }
@@ -232,14 +217,14 @@ public class TransactionService {
         accountRepository.save(creditAccount);
 
         if (booking != null) {
-            Payment payment = new Payment();
-            payment.setAmount(amount);
-            payment.setDate(new Date());
-            payment.setBooking(booking);
-            payment.setGroupTransactionId(groupTransactionId);
-            payment.setCustomer(booking.getCustomer());
-            payment.setCompanyId(AuthUtil.getCurrentCompanyId());
-            paymentRepository.save(payment);
+            BookingPayment bookingPayment = new BookingPayment();
+            bookingPayment.setAmount(amount);
+            bookingPayment.setDate(new Date());
+            bookingPayment.setBooking(booking);
+            bookingPayment.setGroupTransactionId(groupTransactionId);
+            bookingPayment.setCustomer(booking.getCustomer());
+            bookingPayment.setCompanyId(AuthUtil.getCurrentCompanyId());
+            paymentRepository.save(bookingPayment);
         }
 
         Voucher voucher = new Voucher();

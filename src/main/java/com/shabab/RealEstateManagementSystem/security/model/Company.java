@@ -1,5 +1,7 @@
 package com.shabab.RealEstateManagementSystem.security.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.shabab.RealEstateManagementSystem.account.model.Account;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
@@ -42,6 +44,11 @@ public class Company {
     @NotBlank(message = "Address is required")
     @Column(nullable = false)
     private String address;
+
+    @JsonIgnore
+    @OneToOne(mappedBy = "company", cascade = CascadeType.REMOVE)
+    @JoinColumn(nullable = false)
+    private Account account;
 
     public Company(Long id) {
         this.id = id;

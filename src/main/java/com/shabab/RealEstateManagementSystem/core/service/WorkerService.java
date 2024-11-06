@@ -1,5 +1,6 @@
 package com.shabab.RealEstateManagementSystem.core.service;
 
+import com.shabab.RealEstateManagementSystem.account.service.AccountService;
 import com.shabab.RealEstateManagementSystem.core.model.construction.ConstructionStage;
 import com.shabab.RealEstateManagementSystem.core.model.worker.Worker;
 import com.shabab.RealEstateManagementSystem.core.model.worker.WorkerAttendance;
@@ -35,6 +36,8 @@ public class WorkerService {
     private WorkerAttendanceRepository workerAttendanceRepository;
     @Autowired
     private ConstructionStageRepository constructionStageRepository;
+    @Autowired
+    private AccountService accountService;
 
     public ApiResponse getById(Long id) {
         ApiResponse response = new ApiResponse();
@@ -81,6 +84,9 @@ public class WorkerService {
             }
             worker.setCompanyId(AuthUtil.getCurrentCompanyId());
             workerRepository.save(worker);
+
+            accountService.getWorkerAccount(worker.getId());
+
             response.setData("worker", worker);
             response.setSuccessful(true);
             response.success("Saved Successfully");
@@ -115,6 +121,9 @@ public class WorkerService {
             dbWorker.setJoiningDate(worker.getJoiningDate());
             dbWorker.setCompanyId(AuthUtil.getCurrentCompanyId());
             workerRepository.save(dbWorker);
+
+            accountService.getWorkerAccount(worker.getId());
+
             response.setData("worker", dbWorker);
             response.setSuccessful(true);
             response.success("Updated Successfully");

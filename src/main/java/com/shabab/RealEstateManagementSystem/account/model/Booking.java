@@ -36,10 +36,6 @@ public class Booking {
     @Column(nullable = false)
     private Date bookingDate;
 
-    @NotNull(message = "Amount is required")
-    @Column(nullable = false)
-    private Double amount;
-
     @NotNull(message = "Unit is required")
     @OneToOne
     @JoinColumn(nullable = false)
@@ -53,7 +49,7 @@ public class Booking {
     @JsonIgnore
     @OneToMany(mappedBy = "booking", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
     @Column(nullable = false)
-    private List<Payment> payments;
+    private List<BookingPayment> bookingPayments;
 
     @Column(nullable = false)
     private Long companyId; // Loose relation to Company

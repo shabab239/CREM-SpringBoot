@@ -1,5 +1,7 @@
 package com.shabab.RealEstateManagementSystem.core.model.worker;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.shabab.RealEstateManagementSystem.account.model.Account;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -59,6 +61,11 @@ public class Worker {
 
     @Column(name = "blood_group")
     private String bloodGroup;
+
+    @JsonIgnore
+    @OneToOne(mappedBy = "worker", cascade = CascadeType.REMOVE)
+    @JoinColumn(nullable = false)
+    private Account account;
 
     @Column(nullable = false)
     private Long companyId; //Loose relation to Company

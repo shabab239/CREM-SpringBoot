@@ -39,21 +39,18 @@ public class Transaction {
     @Column(nullable = false)
     private TransactionType type;
 
-    @Column(name = "GRP_TR_ID", nullable = false)
-    private String groupTransactionId;
-
     @Column(nullable = false)
     private String particular;
 
     @ManyToOne
-    @JoinColumn(nullable = false)
+    @JoinColumn(name = "account_id", nullable = false)
     private Account account;
 
     @Column(nullable = false)
     private Long companyId; // Loose relation to Company
 
     public enum TransactionType {
-        DEBIT, CREDIT
+        INCOME, EXPENSE
     }
 
 }

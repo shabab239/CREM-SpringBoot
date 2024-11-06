@@ -1,6 +1,6 @@
 package com.shabab.RealEstateManagementSystem.account.controller;
 
-import com.shabab.RealEstateManagementSystem.account.model.Payment;
+import com.shabab.RealEstateManagementSystem.account.model.BookingPayment;
 import com.shabab.RealEstateManagementSystem.account.service.PaymentService;
 import com.shabab.RealEstateManagementSystem.util.ApiResponse;
 import jakarta.validation.Valid;
@@ -27,8 +27,8 @@ public class PaymentController {
     }
 
     @PostMapping("/save")
-    public ApiResponse save(@Valid @RequestBody Payment payment) {
-        return paymentService.save(payment);
+    public ApiResponse save(@Valid @RequestBody BookingPayment bookingPayment) {
+        return paymentService.save(bookingPayment);
     }
 
     @GetMapping("/{id}")

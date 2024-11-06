@@ -16,4 +16,12 @@ public interface AccountRepository extends JpaRepository<Account, Long> {
     Optional<List<Account>> findAllByCompanyId(Long companyId);
 
     Optional<Account> findByIdAndCompanyId(Long id, Long companyId);
+
+    Optional<Account> findByCompany_IdAndCompanyId(Long id, Long companyId);
+
+    Optional<Account> findBySupplier_IdAndCompanyId(Long supplierId, Long companyId);
+
+    Optional<Account> findByUser_IdAndCompanyId(Long userId, Long companyId);
+
+    Optional<Account> findByWorker_IdAndCompanyId(Long workerId, Long companyId);
 }
