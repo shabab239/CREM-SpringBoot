@@ -35,7 +35,6 @@ public class Supplier {
 
     @JsonIgnore
     @OneToOne(mappedBy = "supplier", cascade = CascadeType.REMOVE)
-    @JoinColumn(nullable = false)
     private Account account;
 
     @JsonIgnore

@@ -36,7 +36,7 @@ public class Account {
     @Column(nullable = false)
     private String name;
 
-    @Column(nullable = false, columnDefinition = "default 0.0")
+    @Column(nullable = false, columnDefinition = "double default 0.0")
     private Double balance;
 
     @OneToOne
@@ -52,15 +52,12 @@ public class Account {
     private Worker worker;
 
     @OneToOne
-    @JoinColumn(name = "company_id")
+    @JoinColumn(name = "company")
     private Company company; // One company account
 
     @JsonIgnore
     @OneToMany(mappedBy = "account", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
     private List<Transaction> transactions;
-
-    @Column(nullable = false)
-    private Long companyId; // Loose relation to Company
 
 
 }

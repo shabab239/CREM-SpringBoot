@@ -47,7 +47,6 @@ public class Company {
 
     @JsonIgnore
     @OneToOne(mappedBy = "company", cascade = CascadeType.REMOVE)
-    @JoinColumn(nullable = false)
     private Account account;
 
     public Company(Long id) {

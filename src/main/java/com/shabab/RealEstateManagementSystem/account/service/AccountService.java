@@ -8,6 +8,7 @@ import com.shabab.RealEstateManagementSystem.core.repository.SupplierRepository;
 import com.shabab.RealEstateManagementSystem.core.repository.WorkerRepository;
 import com.shabab.RealEstateManagementSystem.security.model.Company;
 import com.shabab.RealEstateManagementSystem.security.model.User;
+import com.shabab.RealEstateManagementSystem.security.repository.CompanyRepository;
 import com.shabab.RealEstateManagementSystem.security.repository.UserRepository;
 import com.shabab.RealEstateManagementSystem.util.ApiResponse;
 import com.shabab.RealEstateManagementSystem.util.AuthUtil;
@@ -34,6 +35,8 @@ public class AccountService {
     private UserRepository userRepository;
     @Autowired
     private WorkerRepository workerRepository;
+    @Autowired
+    private CompanyRepository companyRepository;
 
     public ApiResponse getById(Long id) {
         ApiResponse response = new ApiResponse();
@@ -64,8 +67,10 @@ public class AccountService {
                 account.setName(company.getName() + " Company A/C");
                 account.setBalance(0.0);
                 account.setCompany(company);
-                account.setCompanyId(company.getId());
                 accountRepository.save(account);
+
+                company.setAccount(account);
+                companyRepository.save(company);
             }
             return account;
         } catch (Exception e) {
@@ -89,8 +94,10 @@ public class AccountService {
                 account.setName(supplier.getName() + " Company A/C");
                 account.setBalance(0.0);
                 account.setSupplier(supplier);
-                account.setCompanyId(AuthUtil.getCurrentCompanyId());
                 accountRepository.save(account);
+
+                supplier.setAccount(account);
+                supplierRepository.save(supplier);
             }
             return account;
         } catch (Exception e) {
@@ -114,8 +121,10 @@ public class AccountService {
                 account.setName(user.getName() + " Company A/C");
                 account.setBalance(0.0);
                 account.setUser(user);
-                account.setCompanyId(AuthUtil.getCurrentCompanyId());
                 accountRepository.save(account);
+
+                user.setAccount(account);
+                userRepository.save(user);
             }
             return account;
         } catch (Exception e) {
@@ -139,8 +148,10 @@ public class AccountService {
                 account.setName(worker.getName() + " Company A/C");
                 account.setBalance(0.0);
                 account.setWorker(worker);
-                account.setCompanyId(AuthUtil.getCurrentCompanyId());
                 accountRepository.save(account);
+
+                worker.setAccount(account);
+                workerRepository.save(worker);
             }
             return account;
         } catch (Exception e) {
@@ -166,7 +177,6 @@ public class AccountService {
     public ApiResponse save(Account account) {
         ApiResponse response = new ApiResponse();
         try {
-            account.setCompanyId(AuthUtil.getCurrentCompanyId());
             accountRepository.save(account);
             response.setData("account", account);
             response.setSuccessful(true);
@@ -186,7 +196,6 @@ public class AccountService {
             if (dbAccount == null) {
                 return response.error("Account not found");
             }
-            account.setCompanyId(AuthUtil.getCurrentCompanyId());
             accountRepository.save(account);
             response.setData("account", account);
             response.setSuccessful(true);

@@ -97,7 +97,8 @@ public class BookingService {
             if (customerAccount == null) {
                 return response.error("Customer Account not found");
             }
-            customerAccount.setBalance(customerAccount.getBalance() - booking.getAmount());
+            //todo fix
+            /*customerAccount.setBalance(customerAccount.getBalance() - booking.getAmount());
             accountRepository.save(customerAccount);
 
             Transaction debitTransaction = new Transaction();
@@ -123,7 +124,7 @@ public class BookingService {
 
             Account companyAccount = AuthUtil.getCurrentUser().getAccount();
             companyAccount.setBalance(companyAccount.getBalance() + booking.getAmount());
-            accountRepository.save(companyAccount);
+            accountRepository.save(companyAccount);*/
 
             response.setData("booking", booking);
             response.setSuccessful(true);

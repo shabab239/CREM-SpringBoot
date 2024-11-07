@@ -88,7 +88,7 @@ public class PaymentService {
         try {
             String groupTransactionId = UUID.randomUUID().toString();
 
-            Transaction debitTransaction = new Transaction();
+            /*Transaction debitTransaction = new Transaction();
             debitTransaction.setAmount(bookingPayment.getAmount());
             debitTransaction.setType(Transaction.TransactionType.DEBIT);
             debitTransaction.setAccount(bookingPayment.getCustomer().getAccount());
@@ -116,7 +116,7 @@ public class PaymentService {
             companyAccount.setBalance(companyAccount.getBalance() + bookingPayment.getAmount());
             accountRepository.save(companyAccount);
 
-            bookingPayment.setGroupTransactionId(groupTransactionId);
+            bookingPayment.setGroupTransactionId(groupTransactionId);*/
             bookingPayment.setCompanyId(AuthUtil.getCurrentCompanyId());
             paymentRepository.save(bookingPayment);
             response.setData("bookingPayment", bookingPayment);

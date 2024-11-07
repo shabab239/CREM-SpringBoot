@@ -2,6 +2,7 @@ package com.shabab.RealEstateManagementSystem.security.service;
 
 import com.shabab.RealEstateManagementSystem.account.model.Account;
 import com.shabab.RealEstateManagementSystem.account.repository.AccountRepository;
+import com.shabab.RealEstateManagementSystem.account.service.AccountService;
 import com.shabab.RealEstateManagementSystem.security.model.Token;
 import com.shabab.RealEstateManagementSystem.security.model.User;
 import com.shabab.RealEstateManagementSystem.security.repository.TokenRepository;
@@ -46,6 +47,8 @@ public class UserService implements UserDetailsService {
 
     @Autowired
     private AccountRepository accountRepository;
+    @Autowired
+    private AccountService accountService;
 
     public ApiResponse getAll() {
         ApiResponse response = new ApiResponse();
@@ -116,14 +119,12 @@ public class UserService implements UserDetailsService {
                 user.setAvatar("avatar/" + randomFileName);
             }
 
-            Account account = new Account();
-            account.setName(user.getName() + " Cash A/C");
-            account.setNumber((long) (Math.random() * 1_000_000_0000L));
-            account.setBalance(0.0);
-            accountRepository.save(account);
-            user.setAccount(account);
-
             user.setCompany(AuthUtil.getCurrentCompany());
+            userRepository.save(user);
+
+            Account userAccount = accountService.getUserAccount(user.getId());
+            user.setAccount(userAccount);
+
             userRepository.save(user);
 
             response.setData("user", user);

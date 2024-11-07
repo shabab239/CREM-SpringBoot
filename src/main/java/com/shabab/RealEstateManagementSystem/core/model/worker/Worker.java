@@ -64,7 +64,6 @@ public class Worker {
 
     @JsonIgnore
     @OneToOne(mappedBy = "worker", cascade = CascadeType.REMOVE)
-    @JoinColumn(nullable = false)
     private Account account;
 
     @Column(nullable = false)
