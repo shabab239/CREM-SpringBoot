@@ -1,5 +1,6 @@
 package com.shabab.RealEstateManagementSystem.core.controller;
 
+import com.shabab.RealEstateManagementSystem.account.model.Transaction;
 import com.shabab.RealEstateManagementSystem.core.model.worker.Worker;
 import com.shabab.RealEstateManagementSystem.core.model.worker.WorkerAttendance;
 import com.shabab.RealEstateManagementSystem.core.service.WorkerService;
@@ -12,6 +13,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.sql.Date;
 import java.time.LocalDate;
+import java.util.List;
 
 /**
  * Project: ConstructionAndRealEstateManagement-SpringBoot
@@ -147,6 +149,11 @@ public class WorkerController {
     @GetMapping("/attendance/getAllAttendanceByDateAndCompanyId")
     public ApiResponse getAllAttendanceByDateAndCompanyId(@RequestParam Date date) {
         return workerService.getAllAttendanceByDateAndCompanyId(date);
+    }
+
+    @PostMapping("/payWorkers")
+    public ApiResponse payWorkers(@Valid @RequestBody List<Worker> workers) {
+        return workerService.payWorkers(workers);
     }
 
 }

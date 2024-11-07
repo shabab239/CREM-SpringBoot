@@ -8,6 +8,7 @@ import com.shabab.RealEstateManagementSystem.account.repository.AccountRepositor
 import com.shabab.RealEstateManagementSystem.account.repository.BookingRepository;
 import com.shabab.RealEstateManagementSystem.account.repository.TransactionRepository;
 import com.shabab.RealEstateManagementSystem.account.service.AccountService;
+import com.shabab.RealEstateManagementSystem.account.service.TransactionService;
 import com.shabab.RealEstateManagementSystem.core.model.rawmaterial.RawMaterial;
 import com.shabab.RealEstateManagementSystem.core.model.rawmaterial.RawMaterialOrder;
 import com.shabab.RealEstateManagementSystem.core.model.rawmaterial.RawMaterialStock;
@@ -19,10 +20,7 @@ import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * Project: ConstructionAndRealEstateManagement-SpringBoot
@@ -52,6 +50,8 @@ public class RawMaterialService {
     private AccountRepository accountRepository;
     @Autowired
     private AccountService accountService;
+    @Autowired
+    private TransactionService transactionService;
 
     // RawMaterial methods
     public ApiResponse getById(Long id) {
@@ -174,30 +174,26 @@ public class RawMaterialService {
                 stock.setCompanyId(AuthUtil.getCurrentCompanyId());
                 rawMaterialStockRepository.save(stock);
 
-                Account companyAccount = AuthUtil.getCurrentUser().getAccount();
-                Transaction expenseTrx = new Transaction();
-                expenseTrx.setAmount(rawMaterialOrder.getTotalPrice());
-                expenseTrx.setType(Transaction.TransactionType.EXPENSE);
-                expenseTrx.setAccount(companyAccount);
-                expenseTrx.setDate(new Date());
-                expenseTrx.setParticular("Raw Material Order - " + rawMaterialOrder.getRawMaterial().getName());
-                expenseTrx.setCompanyId(AuthUtil.getCurrentCompanyId());
-                transactionRepository.save(expenseTrx);
-                companyAccount.setBalance(companyAccount.getBalance() - rawMaterialOrder.getTotalPrice());
+                String groupTransactionId = TransactionService.generateTransactionId();
 
-                Account supplierAccount = accountService.getSupplierAccount(rawMaterialOrder.getSupplier().getId());
-                Transaction incomeTrx = new Transaction();
-                incomeTrx.setAmount(rawMaterialOrder.getTotalPrice());
-                incomeTrx.setType(Transaction.TransactionType.INCOME);
-                incomeTrx.setAccount(supplierAccount);
-                incomeTrx.setDate(new Date());
-                incomeTrx.setParticular("Raw Material Order - " + rawMaterialOrder.getRawMaterial().getName());
-                incomeTrx.setCompanyId(AuthUtil.getCurrentCompanyId());
-                transactionRepository.save(incomeTrx);
-                supplierAccount.setBalance(supplierAccount.getBalance() + rawMaterialOrder.getTotalPrice());
+                transactionService.recordExpense(
+                        rawMaterialOrder.getTotalPrice(),
+                        "Raw Material Order - " + rawMaterialOrder.getRawMaterial().getName(),
+                        accountService.getCompanyAccount(),
+                        groupTransactionId,
+                        Optional.empty()
 
-                accountRepository.save(supplierAccount);
-                accountRepository.save(companyAccount);
+                );
+
+                transactionService.recordIncome(
+                        rawMaterialOrder.getTotalPrice(),
+                        "Raw Material Order - " + rawMaterialOrder.getRawMaterial().getName(),
+                        accountService.getSupplierAccount(rawMaterialOrder.getSupplier().getId()),
+                        groupTransactionId,
+                        Optional.empty()
+                );
+
+                rawMaterialOrder.setGroupTransactionId(groupTransactionId);
 
             }
             rawMaterialOrder.setCompanyId(AuthUtil.getCurrentCompanyId());
@@ -239,30 +235,26 @@ public class RawMaterialService {
                 stock.setCompanyId(AuthUtil.getCurrentCompanyId());
                 rawMaterialStockRepository.save(stock);
 
-                Account companyAccount = AuthUtil.getCurrentUser().getAccount();
-                Transaction expenseTrx = new Transaction();
-                expenseTrx.setAmount(rawMaterialOrder.getTotalPrice());
-                expenseTrx.setType(Transaction.TransactionType.EXPENSE);
-                expenseTrx.setAccount(companyAccount);
-                expenseTrx.setDate(new Date());
-                expenseTrx.setParticular("Raw Material Order - " + rawMaterialOrder.getRawMaterial().getName());
-                expenseTrx.setCompanyId(AuthUtil.getCurrentCompanyId());
-                transactionRepository.save(expenseTrx);
-                companyAccount.setBalance(companyAccount.getBalance() - rawMaterialOrder.getTotalPrice());
+                String groupTransactionId = TransactionService.generateTransactionId();
 
-                Account supplierAccount = accountService.getSupplierAccount(rawMaterialOrder.getSupplier().getId());
-                Transaction incomeTrx = new Transaction();
-                incomeTrx.setAmount(rawMaterialOrder.getTotalPrice());
-                incomeTrx.setType(Transaction.TransactionType.INCOME);
-                incomeTrx.setAccount(supplierAccount);
-                incomeTrx.setDate(new Date());
-                incomeTrx.setParticular("Raw Material Order - " + rawMaterialOrder.getRawMaterial().getName());
-                incomeTrx.setCompanyId(AuthUtil.getCurrentCompanyId());
-                transactionRepository.save(incomeTrx);
-                supplierAccount.setBalance(supplierAccount.getBalance() + rawMaterialOrder.getTotalPrice());
+                transactionService.recordExpense(
+                        rawMaterialOrder.getTotalPrice(),
+                        "Raw Material Order - " + rawMaterialOrder.getRawMaterial().getName(),
+                        accountService.getCompanyAccount(),
+                        groupTransactionId,
+                        Optional.empty()
 
-                accountRepository.save(supplierAccount);
-                accountRepository.save(companyAccount);
+                );
+
+                transactionService.recordIncome(
+                        rawMaterialOrder.getTotalPrice(),
+                        "Raw Material Order - " + rawMaterialOrder.getRawMaterial().getName(),
+                        accountService.getSupplierAccount(rawMaterialOrder.getSupplier().getId()),
+                        groupTransactionId,
+                        Optional.empty()
+                );
+
+                rawMaterialOrder.setGroupTransactionId(groupTransactionId);
 
             }
             rawMaterialOrder.setCompanyId(AuthUtil.getCurrentCompanyId());

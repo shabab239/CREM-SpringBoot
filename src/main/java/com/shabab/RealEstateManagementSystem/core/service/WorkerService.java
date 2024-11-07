@@ -1,6 +1,9 @@
 package com.shabab.RealEstateManagementSystem.core.service;
 
+import com.shabab.RealEstateManagementSystem.account.model.Account;
+import com.shabab.RealEstateManagementSystem.account.model.Transaction;
 import com.shabab.RealEstateManagementSystem.account.service.AccountService;
+import com.shabab.RealEstateManagementSystem.account.service.TransactionService;
 import com.shabab.RealEstateManagementSystem.core.model.construction.ConstructionStage;
 import com.shabab.RealEstateManagementSystem.core.model.worker.Worker;
 import com.shabab.RealEstateManagementSystem.core.model.worker.WorkerAttendance;
@@ -19,6 +22,8 @@ import java.sql.Date;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
 /**
  * Project: ConstructionAndRealEstateManagement-SpringBoot
@@ -38,6 +43,8 @@ public class WorkerService {
     private ConstructionStageRepository constructionStageRepository;
     @Autowired
     private AccountService accountService;
+    @Autowired
+    private TransactionService transactionService;
 
     public ApiResponse getById(Long id) {
         ApiResponse response = new ApiResponse();
@@ -444,49 +451,49 @@ public class WorkerService {
     }
 
     @Transactional(rollbackOn = Exception.class)
-public ApiResponse getAttendanceByStageIdAndDate(Long stageId, LocalDate date) {
-    ApiResponse response = new ApiResponse();
-    try {
-        ConstructionStage constructionStage = constructionStageRepository.findByIdAndCompanyId(
-                stageId, AuthUtil.getCurrentCompanyId()
-        ).orElse(null);
-        if (constructionStage == null) {
-            return response.error("Construction Stage not found");
-        }
-        List<Worker> workers = constructionStage.getWorkers();
-        if (workers.isEmpty()) {
-            return response.error("No workers found in this stage");
-        }
-        List<WorkerAttendance> workerAttendances = workerAttendanceRepository.findAllByWorkerListAndDateAndStageIdAndCompanyId(
-                workers, Date.valueOf(date), stageId, AuthUtil.getCurrentCompanyId()
-        ).orElse(new ArrayList<>());
-        for (Worker worker : workers) {
-            boolean found = false;
-            for (WorkerAttendance workerAttendance : workerAttendances) {
-                if (workerAttendance.getWorker().getId().equals(worker.getId()) && workerAttendance.getStage().getId().equals(stageId)) {
-                    found = true;
-                    break;
+    public ApiResponse getAttendanceByStageIdAndDate(Long stageId, LocalDate date) {
+        ApiResponse response = new ApiResponse();
+        try {
+            ConstructionStage constructionStage = constructionStageRepository.findByIdAndCompanyId(
+                    stageId, AuthUtil.getCurrentCompanyId()
+            ).orElse(null);
+            if (constructionStage == null) {
+                return response.error("Construction Stage not found");
+            }
+            List<Worker> workers = constructionStage.getWorkers();
+            if (workers.isEmpty()) {
+                return response.error("No workers found in this stage");
+            }
+            List<WorkerAttendance> workerAttendances = workerAttendanceRepository.findAllByWorkerListAndDateAndStageIdAndCompanyId(
+                    workers, Date.valueOf(date), stageId, AuthUtil.getCurrentCompanyId()
+            ).orElse(new ArrayList<>());
+            for (Worker worker : workers) {
+                boolean found = false;
+                for (WorkerAttendance workerAttendance : workerAttendances) {
+                    if (workerAttendance.getWorker().getId().equals(worker.getId()) && workerAttendance.getStage().getId().equals(stageId)) {
+                        found = true;
+                        break;
+                    }
+                }
+                if (!found) {
+                    WorkerAttendance emptyAttendance = new WorkerAttendance();
+                    emptyAttendance.setWorker(worker);
+                    emptyAttendance.setDate(Date.valueOf(date));
+                    emptyAttendance.setStage(constructionStage);
+                    emptyAttendance.setCompanyId(AuthUtil.getCurrentCompanyId());
+                    workerAttendances.add(emptyAttendance);
                 }
             }
-            if (!found) {
-                WorkerAttendance emptyAttendance = new WorkerAttendance();
-                emptyAttendance.setWorker(worker);
-                emptyAttendance.setDate(Date.valueOf(date));
-                emptyAttendance.setStage(constructionStage);
-                emptyAttendance.setCompanyId(AuthUtil.getCurrentCompanyId());
-                workerAttendances.add(emptyAttendance);
-            }
+            workerAttendanceRepository.saveAll(workerAttendances);
+            response.setData("workers", workers);
+            response.setData("attendances", workerAttendances);
+            response.setSuccessful(true);
+            response.setMessage("Successfully retrieved worker attendances");
+        } catch (Exception e) {
+            return response.error(e);
         }
-        workerAttendanceRepository.saveAll(workerAttendances);
-        response.setData("workers", workers);
-        response.setData("attendances", workerAttendances);
-        response.setSuccessful(true);
-        response.setMessage("Successfully retrieved worker attendances");
-    } catch (Exception e) {
-        return response.error(e);
+        return response;
     }
-    return response;
-}
 
     public ApiResponse recordAttendance(Long attendanceId, String attendance) {
         ApiResponse response = new ApiResponse();
@@ -519,6 +526,37 @@ public ApiResponse getAttendanceByStageIdAndDate(Long stageId, LocalDate date) {
             response.setData("workerAttendances", workerAttendances);
             response.setSuccessful(true);
             response.setMessage("Successfully retrieved worker attendances");
+        } catch (Exception e) {
+            return response.error(e);
+        }
+        return response;
+    }
+
+    @Transactional(rollbackOn = Exception.class)
+    public ApiResponse payWorkers(List<Worker> workerList) {
+        ApiResponse response = new ApiResponse();
+        try {
+            for (Worker worker : workerList) {
+                String groupTransactionId = TransactionService.generateTransactionId();
+
+                transactionService.recordIncome(
+                        worker.getSalary(),
+                        "Worker Salary",
+                        accountService.getWorkerAccount(worker.getId()),
+                        groupTransactionId,
+                        Optional.empty()
+                );
+
+                transactionService.recordExpense(
+                        worker.getSalary(),
+                        "Worker Salary",
+                        accountService.getCompanyAccount(),
+                        groupTransactionId,
+                        Optional.empty()
+                );
+            }
+            response.setSuccessful(true);
+            response.success("Saved Successfully");
         } catch (Exception e) {
             return response.error(e);
         }

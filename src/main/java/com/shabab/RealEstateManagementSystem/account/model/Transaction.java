@@ -40,6 +40,9 @@ public class Transaction {
     private TransactionType type;
 
     @Column(nullable = false)
+    private String groupTransactionId; // detects trx of both accounts
+
+    @Column(nullable = false)
     private String particular;
 
     @ManyToOne
