@@ -67,6 +67,7 @@ public class AccountService {
                 account.setName(company.getName() + " Company A/C");
                 account.setBalance(0.0);
                 account.setCompany(company);
+                account.setCompanyId(AuthUtil.getCurrentCompanyId());
                 accountRepository.save(account);
 
                 company.setAccount(account);
@@ -91,9 +92,10 @@ public class AccountService {
                     return null;
                 }
                 account = new Account();
-                account.setName(supplier.getName() + " Company A/C");
+                account.setName(supplier.getName() + " Supplier A/C");
                 account.setBalance(0.0);
                 account.setSupplier(supplier);
+                account.setCompanyId(AuthUtil.getCurrentCompanyId());
                 accountRepository.save(account);
 
                 supplier.setAccount(account);
@@ -118,9 +120,10 @@ public class AccountService {
                     return null;
                 }
                 account = new Account();
-                account.setName(user.getName() + " Company A/C");
+                account.setName(user.getName() + " User A/C");
                 account.setBalance(0.0);
                 account.setUser(user);
+                account.setCompanyId(AuthUtil.getCurrentCompanyId());
                 accountRepository.save(account);
 
                 user.setAccount(account);
@@ -145,9 +148,10 @@ public class AccountService {
                     return null;
                 }
                 account = new Account();
-                account.setName(worker.getName() + " Company A/C");
+                account.setName(worker.getName() + " Worker A/C");
                 account.setBalance(0.0);
                 account.setWorker(worker);
+                account.setCompanyId(AuthUtil.getCurrentCompanyId());
                 accountRepository.save(account);
 
                 worker.setAccount(account);
@@ -177,6 +181,7 @@ public class AccountService {
     public ApiResponse save(Account account) {
         ApiResponse response = new ApiResponse();
         try {
+            account.setCompanyId(AuthUtil.getCurrentCompanyId());
             accountRepository.save(account);
             response.setData("account", account);
             response.setSuccessful(true);
@@ -196,6 +201,7 @@ public class AccountService {
             if (dbAccount == null) {
                 return response.error("Account not found");
             }
+            account.setCompanyId(AuthUtil.getCurrentCompanyId());
             accountRepository.save(account);
             response.setData("account", account);
             response.setSuccessful(true);

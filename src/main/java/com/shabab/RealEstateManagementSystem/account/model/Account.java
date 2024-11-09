@@ -59,5 +59,8 @@ public class Account {
     @OneToMany(mappedBy = "account", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
     private List<Transaction> transactions;
 
+    @Column(nullable = false)
+    private Long companyId; // Loose relation to Company
+
 
 }
