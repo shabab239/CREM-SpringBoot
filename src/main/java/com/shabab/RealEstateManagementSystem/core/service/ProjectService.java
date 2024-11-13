@@ -11,10 +11,18 @@ import com.shabab.RealEstateManagementSystem.core.repository.UnitRepository;
 import com.shabab.RealEstateManagementSystem.util.ApiResponse;
 import com.shabab.RealEstateManagementSystem.util.AuthUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * Project: ConstructionAndRealEstateManagement-SpringBoot
@@ -24,6 +32,9 @@ import java.util.List;
 
 @Service
 public class ProjectService {
+
+    @Value("${unitImages.dir}")
+    private String unitImagesDir;
 
     @Autowired
     private ProjectRepository projectRepository;
@@ -337,6 +348,46 @@ public class ProjectService {
             unit.setCompanyId(AuthUtil.getCurrentCompanyId());
             unitRepository.save(unit);
             response.setData("unit", unit);
+            response.setSuccessful(true);
+            response.success("Updated Successfully");
+        } catch (Exception e) {
+            return response.error(e);
+        }
+        return response;
+    }
+
+    @Transactional
+    public ApiResponse updateUnitImage(MultipartFile image, Long unitId) {
+        ApiResponse response = new ApiResponse();
+        try {
+            if (image == null || unitId == null) {
+                return response.error("Invalid request");
+            }
+            Unit dbUnit = unitRepository.findByIdAndCompanyId(
+                    unitId, AuthUtil.getCurrentCompanyId()
+            ).orElse(null);
+            if (dbUnit == null) {
+                return response.error("Unit not found");
+            }
+            if (image != null && !image.isEmpty()) {
+                Path directoryPath = Paths.get(unitImagesDir);
+                if (!Files.exists(directoryPath)) {
+                    Files.createDirectories(directoryPath);
+                }
+
+                String originalFilename = image.getOriginalFilename();
+                String fileExtension = originalFilename != null ?
+                        originalFilename.substring(originalFilename.lastIndexOf('.')) : "";
+                String randomFileName = UUID.randomUUID() + fileExtension;
+                Path filePath = directoryPath.resolve(randomFileName);
+
+                Files.copy(image.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
+
+                dbUnit.setImage(randomFileName);
+            }
+            dbUnit.setCompanyId(AuthUtil.getCurrentCompanyId());
+            unitRepository.save(dbUnit);
+            response.setData("unit", dbUnit);
             response.setSuccessful(true);
             response.success("Updated Successfully");
         } catch (Exception e) {

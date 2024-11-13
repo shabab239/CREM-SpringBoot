@@ -20,16 +20,43 @@ import java.nio.file.Paths;
 
 @CrossOrigin
 @RestController
-@RequestMapping("/image/")
-public class ImageController {
+@RequestMapping("api/image/")
+public class
+ImageController {
 
     @Value("${avatar.dir}")
     private String avatarDir;
 
-    @GetMapping("avatar/{filename}")
+    @Value("${unitImages.dir}")
+    private String unitImagesDir;
+
+    @GetMapping("avatars/{filename}")
     public ResponseEntity<Resource> getAvatar(@PathVariable String filename) {
         try {
             Path filePath = Paths.get(avatarDir).resolve(filename).normalize();
+
+            Resource resource = new UrlResource(filePath.toUri());
+            if (!resource.exists()) {
+                return ResponseEntity.notFound().build();
+            }
+
+            String contentType = Files.probeContentType(filePath);
+            if (contentType == null) {
+                contentType = "application/octet-stream";
+            }
+
+            return ResponseEntity.ok()
+                    .contentType(MediaType.parseMediaType(contentType))
+                    .body(resource);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
+    @GetMapping("unitImages/{filename}")
+    public ResponseEntity<Resource> getUnitImage(@PathVariable String filename) {
+        try {
+            Path filePath = Paths.get(unitImagesDir).resolve(filename).normalize();
 
             Resource resource = new UrlResource(filePath.toUri());
             if (!resource.exists()) {

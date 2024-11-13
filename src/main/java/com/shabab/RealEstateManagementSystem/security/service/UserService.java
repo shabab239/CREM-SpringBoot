@@ -116,7 +116,7 @@ public class UserService implements UserDetailsService {
 
                 Files.copy(avatar.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
 
-                user.setAvatar("avatar/" + randomFileName);
+                user.setAvatar(randomFileName);
             }
 
             user.setCompany(AuthUtil.getCurrentCompany());
@@ -160,7 +160,7 @@ public class UserService implements UserDetailsService {
 
                 Files.copy(avatar.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
 
-                user.setAvatar("avatar/" + randomFileName);
+                user.setAvatar(randomFileName);
             }
 
             user.setCompany(AuthUtil.getCurrentCompany());

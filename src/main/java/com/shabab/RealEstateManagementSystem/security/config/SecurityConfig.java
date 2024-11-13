@@ -48,8 +48,8 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(request -> request
                         .requestMatchers("/api/auth/login").permitAll()
-                        .requestMatchers("/image/**").permitAll()
-                        .requestMatchers("/api/**").hasAnyRole("ADMIN", "MANAGER", "EMPLOYEE")
+                        .requestMatchers("/api/image/**").permitAll()
+                        .requestMatchers("/api/**").hasAnyRole("ADMIN", "MANAGER", "EMPLOYEE") //temporary
                         .anyRequest().authenticated())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)

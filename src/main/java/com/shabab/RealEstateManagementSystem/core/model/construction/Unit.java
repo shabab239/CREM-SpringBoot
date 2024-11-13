@@ -44,6 +44,8 @@ public class Unit {
     @JoinColumn(nullable = false)
     private Floor floor;
 
+    private String image;
+
     @Column(nullable = false)
     private Long companyId; //Loose relation to Company
 

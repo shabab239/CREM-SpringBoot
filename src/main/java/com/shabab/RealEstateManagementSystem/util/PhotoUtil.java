@@ -42,7 +42,7 @@ public class PhotoUtil {
 
             Files.copy(avatar.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
             response.setSuccessful(true);
-            response.setData("avatar", "avatar/" + randomFileName);
+            response.setData("avatar", randomFileName);
         } catch (Exception e) {
             response.setMessage(e.getMessage());
         }

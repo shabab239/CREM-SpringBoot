@@ -9,6 +9,7 @@ import com.shabab.RealEstateManagementSystem.util.ApiResponse;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  * Project: ConstructionAndRealEstateManagement-SpringBoot
@@ -112,6 +113,11 @@ public class ProjectController {
     @PutMapping("/unit/update")
     public ApiResponse updateUnit(@Valid @RequestBody Unit unit) {
         return projectService.updateUnit(unit);
+    }
+
+    @PutMapping("/unit/updateImage")
+    public ApiResponse updateUnitImage(@RequestParam(required = false) MultipartFile image, @RequestParam(required = false) Long unitId) {
+        return projectService.updateUnitImage(image, unitId);
     }
 
     @GetMapping("/unit/{id}")
