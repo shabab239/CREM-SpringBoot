@@ -51,4 +51,14 @@ public class TaskController {
         return taskService.deleteById(id);
     }
 
+    @PostMapping("/getAllByStatus")
+    public ApiResponse getAllByStatus(@RequestParam Task.Status status) {
+        return taskService.getAllByStatus(status);
+    }
+
+    @PostMapping("/changeStatus")
+    public ApiResponse changeStatus(@RequestParam Long id, @RequestParam Task.Status status) {
+        return taskService.changeStatus(id, status);
+    }
+
 }

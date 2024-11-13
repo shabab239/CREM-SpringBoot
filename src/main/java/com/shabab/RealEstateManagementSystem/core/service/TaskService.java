@@ -55,6 +55,23 @@ public class TaskService {
         return response;
     }
 
+
+    public ApiResponse getAllByStatus(Task.Status status) {
+        ApiResponse response = new ApiResponse();
+        try {
+            List<Task> tasks = taskRepository.findAllByStatusAndCompanyId(
+                    status, AuthUtil.getCurrentCompanyId()
+            ).orElse(new ArrayList<>());
+
+            response.setData("tasks", tasks);
+            response.setSuccessful(true);
+            response.setMessage("Successfully retrieved tasks");
+        } catch (Exception e) {
+            return response.error(e);
+        }
+        return response;
+    }
+
     public ApiResponse save(Task task) {
         ApiResponse response = new ApiResponse();
         try {
@@ -123,6 +140,25 @@ public class TaskService {
             taskRepository.save(dbTask);
             response.setSuccessful(true);
             response.success("Marked as Completed");
+        } catch (Exception e) {
+            return response.error(e);
+        }
+        return response;
+    }
+
+    public ApiResponse changeStatus(Long id, Task.Status status) {
+        ApiResponse response = new ApiResponse();
+        try {
+            Task dbTask = taskRepository.findByIdAndCompanyId(
+                    id, AuthUtil.getCurrentCompanyId()
+            ).orElse(null);
+            if (dbTask == null) {
+                return response.error("Task not found");
+            }
+            dbTask.setStatus(status);
+            taskRepository.save(dbTask);
+            response.setSuccessful(true);
+            response.success("Status updated successfully");
         } catch (Exception e) {
             return response.error(e);
         }
