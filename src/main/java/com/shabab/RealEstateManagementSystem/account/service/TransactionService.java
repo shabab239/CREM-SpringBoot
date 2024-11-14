@@ -151,6 +151,75 @@ public class TransactionService {
         }
     }
 
+    public ApiResponse getTotalIncome() {
+        ApiResponse response = new ApiResponse();
+        try {
+            Double totalIncome = transactionRepository.sumAmountByTypeAndCompanyId(
+                    Transaction.TransactionType.INCOME, AuthUtil.getCurrentCompanyId()
+            ).orElse(0.0);
+            response.setData("totalIncome", totalIncome);
+            response.setSuccessful(true);
+            response.setMessage("Successfully retrieved total income");
+        } catch (Exception e) {
+            return response.error(e);
+        }
+        return response;
+    }
+
+    public ApiResponse getTotalExpense() {
+        ApiResponse response = new ApiResponse();
+        try {
+            Double totalExpense = transactionRepository.sumAmountByTypeAndCompanyId(
+                    Transaction.TransactionType.EXPENSE, AuthUtil.getCurrentCompanyId()
+            ).orElse(0.0);
+            response.setData("totalExpense", totalExpense);
+            response.setSuccessful(true);
+            response.setMessage("Successfully retrieved total expenses");
+        } catch (Exception e) {
+            return response.error(e);
+        }
+        return response;
+    }
+
+    public ApiResponse getTransactionsByDateRange(Date startDate, Date endDate) {
+        ApiResponse response = new ApiResponse();
+        try {
+            List<Transaction> transactions = transactionRepository.findByDateBetweenAndCompanyId(
+                    startDate, endDate, AuthUtil.getCurrentCompanyId()
+            ).orElse(new ArrayList<>());
+            response.setData("transactions", transactions);
+            response.setSuccessful(true);
+            response.setMessage("Successfully retrieved transactions for the given date range");
+        } catch (Exception e) {
+            return response.error(e);
+        }
+        return response;
+    }
+
+    public ApiResponse getTransactionsByAccount(Long accountId) {
+        ApiResponse response = new ApiResponse();
+        try {
+            Account account = accountRepository.findByIdAndCompanyId(
+                    accountId, AuthUtil.getCurrentCompanyId()
+            ).orElse(null);
+            if (account == null) {
+                return response.error("Account not found");
+            }
+            List<Transaction> transactions = transactionRepository.findByAccount_IdAndCompanyId(
+                    accountId, AuthUtil.getCurrentCompanyId()
+            ).orElse(new ArrayList<>());
+            response.setData("transactions", transactions);
+            response.setData("account", account);
+            response.setSuccessful(true);
+            response.setMessage("Successfully retrieved transactions for the account");
+        } catch (Exception e) {
+            return response.error(e);
+        }
+        return response;
+    }
+
+
+
     public static String generateTransactionId() {
         return UUID.randomUUID().toString();
     }

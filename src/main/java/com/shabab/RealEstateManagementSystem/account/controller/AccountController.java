@@ -55,4 +55,19 @@ public class AccountController {
     public ApiResponse getByIdAndCompanyId(@PathVariable Long id, @PathVariable Long companyId) {
         return accountService.getByIdAndCompanyId(id, companyId);
     }
+
+    @GetMapping("/total-account-balance")
+    public ApiResponse getTotalAccountBalance() {
+        return accountService.getTotalAccountBalance();
+    }
+
+    @GetMapping("/balance-by-account-type")
+    public ApiResponse getBalanceByAccountType(@RequestParam String accountType) {
+        return accountService.getBalanceByAccountType(accountType);
+    }
+
+    @GetMapping("/account-summary")
+    public ApiResponse getAccountSummary(@RequestParam Long accountId) {
+        return accountService.getAccountSummary(accountId);
+    }
 }

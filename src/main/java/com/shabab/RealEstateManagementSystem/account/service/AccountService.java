@@ -2,6 +2,7 @@ package com.shabab.RealEstateManagementSystem.account.service;
 
 import com.shabab.RealEstateManagementSystem.account.model.Account;
 import com.shabab.RealEstateManagementSystem.account.repository.AccountRepository;
+import com.shabab.RealEstateManagementSystem.account.repository.TransactionRepository;
 import com.shabab.RealEstateManagementSystem.core.model.rawmaterial.Supplier;
 import com.shabab.RealEstateManagementSystem.core.model.worker.Worker;
 import com.shabab.RealEstateManagementSystem.core.repository.SupplierRepository;
@@ -17,6 +18,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Project: ConstructionAndRealEstateManagement-SpringBoot
@@ -37,6 +39,8 @@ public class AccountService {
     private WorkerRepository workerRepository;
     @Autowired
     private CompanyRepository companyRepository;
+    @Autowired
+    private TransactionRepository transactionRepository;
 
     public ApiResponse getById(Long id) {
         ApiResponse response = new ApiResponse();
@@ -262,4 +266,85 @@ public class AccountService {
         }
         return response;
     }
+
+    public ApiResponse getTotalAccountBalance() {
+        ApiResponse response = new ApiResponse();
+        try {
+            List<Account> accounts = accountRepository.findAllByCompanyId(
+                    AuthUtil.getCurrentCompanyId()
+            ).orElse(new ArrayList<>());
+
+            Double totalBalance = accounts.stream()
+                    .mapToDouble(Account::getBalance)
+                    .sum();
+
+            response.setData("totalBalance", totalBalance);
+            response.setSuccessful(true);
+            response.setMessage("Successfully retrieved total account balance");
+        } catch (Exception e) {
+            return response.error(e);
+        }
+        return response;
+    }
+
+    public ApiResponse getBalanceByAccountType(String accountType) {
+        ApiResponse response = new ApiResponse();
+        try {
+            List<Account> accounts = accountRepository.findAllByCompanyId(
+                    AuthUtil.getCurrentCompanyId()
+            ).orElse(new ArrayList<>());
+
+            Double totalBalance = 0.0;
+            for (Account account : accounts) {
+                switch (accountType.toUpperCase()) {
+                    case "USER":
+                        if (account.getUser() != null) totalBalance += account.getBalance();
+                        break;
+                    case "SUPPLIER":
+                        if (account.getSupplier() != null) totalBalance += account.getBalance();
+                        break;
+                    case "WORKER":
+                        if (account.getWorker() != null) totalBalance += account.getBalance();
+                        break;
+                    case "COMPANY":
+                        if (account.getCompany() != null) totalBalance += account.getBalance();
+                        break;
+                }
+            }
+            response.setData("totalBalanceByAccountType", totalBalance);
+            response.setSuccessful(true);
+            response.setMessage("Successfully retrieved total balance by account type");
+        } catch (Exception e) {
+            return response.error(e);
+        }
+        return response;
+    }
+
+    public ApiResponse getAccountSummary(Long accountId) {
+        ApiResponse response = new ApiResponse();
+        try {
+            Account account = accountRepository.findByIdAndCompanyId(
+                    accountId, AuthUtil.getCurrentCompanyId()
+            ).orElse(null);
+            if (account == null) {
+                return response.error("Account not found");
+            }
+
+            Double totalTransactions = transactionRepository.sumAmountByAccountIdAndCompanyId(
+                    accountId, AuthUtil.getCurrentCompanyId()
+            ).orElse(0.0);
+
+            response.setData("accountSummary", Map.of(
+                    "account", account,
+                    "totalTransactions", totalTransactions
+            ));
+            response.setSuccessful(true);
+            response.setMessage("Successfully retrieved account summary");
+        } catch (Exception e) {
+            return response.error(e);
+        }
+        return response;
+    }
+
+
 }
