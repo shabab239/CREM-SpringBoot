@@ -41,6 +41,8 @@ public class BookingPayment {
     @ManyToOne
     private Booking booking;
 
+    private String groupTransactionId;
+
     @NotNull(message = "Customer is required")
     @ManyToOne
     private User customer;

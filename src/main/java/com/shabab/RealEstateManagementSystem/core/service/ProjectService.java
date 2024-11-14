@@ -1,5 +1,6 @@
 package com.shabab.RealEstateManagementSystem.core.service;
 
+import com.shabab.RealEstateManagementSystem.account.model.Booking;
 import com.shabab.RealEstateManagementSystem.core.model.construction.Project;
 import com.shabab.RealEstateManagementSystem.core.model.construction.Building;
 import com.shabab.RealEstateManagementSystem.core.model.construction.Floor;

@@ -49,7 +49,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(request -> request
                         .requestMatchers("/api/auth/login").permitAll()
                         .requestMatchers("/api/image/**").permitAll()
-                        .requestMatchers("/api/**").hasAnyRole("ADMIN", "MANAGER", "EMPLOYEE") //temporary
+                        .requestMatchers("/api/**").hasAnyRole("ADMIN", "MANAGER", "EMPLOYEE", "CUSTOMER", "OWNER") //temporary
                         .anyRequest().authenticated())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
