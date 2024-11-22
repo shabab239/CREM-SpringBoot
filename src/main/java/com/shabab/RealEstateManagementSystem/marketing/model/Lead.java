@@ -44,6 +44,9 @@ public class Lead {
     @ManyToOne
     private Campaign campaign;
 
+    @Column(nullable = false)
+    private Long companyId; //Loose relation to Company
+
     public enum LeadStatus{
         NEW,
         CONTACTED,

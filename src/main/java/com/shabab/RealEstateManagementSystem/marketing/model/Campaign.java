@@ -47,6 +47,9 @@ public class Campaign {
     @Enumerated(EnumType.STRING)
     private CampaignStatus status;
 
+    @Column(nullable = false)
+    private Long companyId; //Loose relation to Company
+
     public enum CampaignType{
         EMAIL,
         SOCIAL_MEDIA,

@@ -46,4 +46,14 @@ public class LeadController {
         return leadService.deleteById(id);
     }
 
+    @GetMapping("/status/{status}")
+    public ApiResponse getByStatus(@PathVariable Lead.LeadStatus status) {
+        return leadService.getByStatus(status);
+    }
+
+    @GetMapping("/campaign/{campaignId}")
+    public ApiResponse getByCampaignId(@PathVariable Long campaignId) {
+        return leadService.getByCampaignId(campaignId);
+    }
+
 }

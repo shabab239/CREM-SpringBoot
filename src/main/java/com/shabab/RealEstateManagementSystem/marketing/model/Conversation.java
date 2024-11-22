@@ -48,4 +48,7 @@ public class Conversation {
     @Column(nullable = false)
     private String description;
 
+    @Column(nullable = false)
+    private Long companyId; //Loose relation to Company
+
 }
