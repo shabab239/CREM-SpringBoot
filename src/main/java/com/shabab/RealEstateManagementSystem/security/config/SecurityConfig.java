@@ -47,6 +47,11 @@ public class SecurityConfig {
                 .cors(withDefaults())
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(request -> request
+                        .requestMatchers(
+                                "/swagger-ui/**",
+                                "/v3/api-docs/**",
+                                "/swagger-ui.html"
+                        ).permitAll()
                         .requestMatchers("/api/auth/login").permitAll()
                         .requestMatchers("/api/image/**").permitAll()
                         .requestMatchers("/api/**").hasAnyRole("ADMIN", "MANAGER", "EMPLOYEE", "CUSTOMER", "OWNER") //temporary

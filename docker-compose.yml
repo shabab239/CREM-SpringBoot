@@ -1,0 +1,23 @@
+version: '3.8'
+services:
+  app:
+    #image: crem
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "80:80"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://host.docker.internal:3306/crems # jdbc:mysql://db:3306/crems
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: ""
+
+  #db:
+    #image: mysql:8
+    #container_name: mysql-db
+    #environment:
+      #MYSQL_ROOT_PASSWORD: ""
+      #MYSQL_DATABASE: crems
+      #MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
+    #ports:
+      #- "3306:3306"

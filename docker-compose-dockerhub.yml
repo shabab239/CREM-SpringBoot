@@ -1,0 +1,13 @@
+version: '3.8'
+services:
+  app:
+    image: shabab239/crem:2.0
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "80:80"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://host.docker.internal:3306/crems # jdbc:mysql://db:3306/crems
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: ""

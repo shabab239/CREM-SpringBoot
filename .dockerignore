@@ -1,0 +1,36 @@
+# Ignore Maven/Gradle build directories
+target/
+build/
+
+# Ignore IDE-specific files
+.idea/
+*.iml
+*.ipr
+*.iws
+*.sublime-project
+*.sublime-workspace
+.vscode/
+
+# Ignore OS-specific files
+.DS_Store
+Thumbs.db
+
+# Ignore temporary files
+*.log
+*.tmp
+*.bak
+*.swp
+*.swo
+
+# Ignore Git files
+.git/
+.gitignore
+
+# Ignore dependency caches
+**/.mvn/
+**/.gradle/
+.gradle/
+.mvn/
+
+# Ignore node modules if using frontend files
+node_modules/
