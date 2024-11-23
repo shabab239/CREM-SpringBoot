@@ -72,8 +72,9 @@ public class User implements UserDetails {
     @Column(name = "blood_group")
     private String bloodGroup;
 
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private String status;
+    private Status status;
 
     @NotNull(message = "Role is required")
     @Enumerated(EnumType.STRING)
@@ -116,6 +117,18 @@ public class User implements UserDetails {
         ROLE_CUSTOMER,
         ROLE_OWNER
     }
+
+    public enum Status {
+        ACTIVE,
+        INACTIVE,
+        LOCKED
+    }
+
+    @Transient
+    private String username;
+
+    @Transient
+    private String password;
 
     public User(Long id) {
         this.id = id;

@@ -59,5 +59,43 @@ public class UserRestController {
         return userService.getAllCustomers();
     }
 
-}
+    @GetMapping("/manager/{id}")
+    public ApiResponse getManagerById(@PathVariable Long id) {
+        return userService.getManagerById(id);
+    }
 
+    @GetMapping("/managers")
+    public ApiResponse getAllManagers() {
+        return userService.getAllManagers();
+    }
+
+    @GetMapping("/employee/{id}")
+    public ApiResponse getEmployeeById(@PathVariable Long id) {
+        return userService.getEmployeeById(id);
+    }
+
+    @GetMapping("/employees")
+    public ApiResponse getAllEmployees() {
+        return userService.getAllEmployees();
+    }
+
+    @GetMapping("/admin/{id}")
+    public ApiResponse getAdminById(@PathVariable Long id) {
+        return userService.getAdminById(id);
+    }
+
+    @GetMapping("/admins")
+    public ApiResponse getAllAdmins() {
+        return userService.getAllAdmins();
+    }
+
+    @GetMapping("/owner/{id}")
+    public ApiResponse getOwnerById(@PathVariable Long id) {
+        return userService.getOwnerById(id);
+    }
+
+    @GetMapping("/owners")
+    public ApiResponse getAllOwners() {
+        return userService.getAllOwners();
+    }
+}

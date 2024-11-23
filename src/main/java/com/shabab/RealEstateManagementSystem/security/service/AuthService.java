@@ -1,9 +1,12 @@
 package com.shabab.RealEstateManagementSystem.security.service;
 
+import com.shabab.RealEstateManagementSystem.security.model.Company;
 import com.shabab.RealEstateManagementSystem.security.model.Token;
 import com.shabab.RealEstateManagementSystem.security.model.User;
 import com.shabab.RealEstateManagementSystem.security.repository.TokenRepository;
+import com.shabab.RealEstateManagementSystem.security.repository.UserRepository;
 import com.shabab.RealEstateManagementSystem.util.ApiResponse;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -33,6 +36,8 @@ public class AuthService {
 
     @Autowired
     private JwtService jwtService;
+    @Autowired
+    private UserRepository userRepository;
 
 
     public ApiResponse authenticate(Token token) {
@@ -57,6 +62,30 @@ public class AuthService {
             }
         } catch (Exception e) {
             apiResponse.setMessage("Invalid username or password");
+        }
+        return apiResponse;
+    }
+
+    @Transactional
+    public ApiResponse register(User user) {
+        ApiResponse apiResponse = new ApiResponse();
+
+        try {
+            if (user.getUsername() == null || user.getPassword() == null) {
+                apiResponse.setMessage("Invalid username or password");
+                return apiResponse;
+            }
+            user.setStatus(User.Status.ACTIVE);
+            user.setCompany(new Company(1L)); // TODO change to get company dynamically from company URL or something!
+            userRepository.save(user);
+            Token token = new Token();
+            token.setUsername(user.getUsername());
+            token.setPassword(new BCryptPasswordEncoder().encode(user.getPassword()));
+            token.setUser(user);
+            tokenRepository.save(token);
+            apiResponse.success("Registration Successful");
+        } catch (Exception e) {
+            apiResponse.setMessage("Sorry, something went wrong");
         }
         return apiResponse;
     }

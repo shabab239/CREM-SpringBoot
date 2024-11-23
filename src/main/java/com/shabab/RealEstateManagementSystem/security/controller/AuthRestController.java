@@ -28,4 +28,9 @@ public class AuthRestController {
         return authService.authenticate(token);
     }
 
+    @PostMapping("/register")
+    public ApiResponse register(@Valid @RequestBody Token token) {
+        return authService.authenticate(token);
+    }
+
 }

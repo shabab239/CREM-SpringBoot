@@ -47,6 +47,7 @@ public class UserService implements UserDetailsService {
 
     @Autowired
     private AccountRepository accountRepository;
+
     @Autowired
     private AccountService accountService;
 
@@ -59,39 +60,6 @@ public class UserService implements UserDetailsService {
             response.setData("users", users);
             response.setSuccessful(true);
             response.success("Successfully retrieved all users");
-            return response;
-        } catch (Exception e) {
-            return response.error(e);
-        }
-    };
-
-    public ApiResponse getAllCustomers() {
-        ApiResponse response = new ApiResponse();
-        try {
-            List<User> users = userRepository.findAllCustomers(
-                    AuthUtil.getCurrentCompanyId()
-            ).orElse(new ArrayList<>());
-            response.setData("users", users);
-            response.setSuccessful(true);
-            response.success("Successfully retrieved all customers");
-            return response;
-        } catch (Exception e) {
-            return response.error(e);
-        }
-    }
-
-    public ApiResponse getCustomerById(Long id) {
-        ApiResponse response = new ApiResponse();
-        try {
-            User user = userRepository.findById(
-                    id, AuthUtil.getCurrentCompanyId()
-            ).orElse(new User());
-            if (user.getId() == null || !user.getRole().equals(User.Role.ROLE_CUSTOMER)) {
-                return response.error("Customer not found");
-            }
-            response.setData("user", user);
-            response.setSuccessful(true);
-            response.success("Successfully retrieved customer");
             return response;
         } catch (Exception e) {
             return response.error(e);
@@ -205,6 +173,171 @@ public class UserService implements UserDetailsService {
             userRepository.deleteById(id);
             response.setSuccessful(true);
             response.success("Deleted Successfully");
+            return response;
+        } catch (Exception e) {
+            return response.error(e);
+        }
+    }
+
+    public ApiResponse getAllCustomers() {
+        ApiResponse response = new ApiResponse();
+        try {
+            List<User> users = userRepository.findAllCustomers(
+                    AuthUtil.getCurrentCompanyId()
+            ).orElse(new ArrayList<>());
+            response.setData("users", users);
+            response.setSuccessful(true);
+            response.success("Successfully retrieved all customers");
+            return response;
+        } catch (Exception e) {
+            return response.error(e);
+        }
+    }
+
+    public ApiResponse getCustomerById(Long id) {
+        ApiResponse response = new ApiResponse();
+        try {
+            User user = userRepository.findCustomerById(
+                    id, AuthUtil.getCurrentCompanyId()
+            ).orElse(new User());
+            if (user.getId() == null) {
+                return response.error("Customer not found");
+            }
+            response.setData("user", user);
+            response.setSuccessful(true);
+            response.success("Successfully retrieved customer");
+            return response;
+        } catch (Exception e) {
+            return response.error(e);
+        }
+    }
+
+    public ApiResponse getAllManagers() {
+        ApiResponse response = new ApiResponse();
+        try {
+            List<User> users = userRepository.findAllManagers(
+                    AuthUtil.getCurrentCompanyId()
+            ).orElse(new ArrayList<>());
+            response.setData("users", users);
+            response.setSuccessful(true);
+            response.success("Successfully retrieved all managers");
+            return response;
+        } catch (Exception e) {
+            return response.error(e);
+        }
+    }
+
+    public ApiResponse getManagerById(Long id) {
+        ApiResponse response = new ApiResponse();
+        try {
+            User user = userRepository.findManagerById(
+                    id, AuthUtil.getCurrentCompanyId()
+            ).orElse(new User());
+            if (user.getId() == null) {
+                return response.error("Manager not found");
+            }
+            response.setData("user", user);
+            response.setSuccessful(true);
+            response.success("Successfully retrieved manager");
+            return response;
+        } catch (Exception e) {
+            return response.error(e);
+        }
+    }
+
+    public ApiResponse getAllEmployees() {
+        ApiResponse response = new ApiResponse();
+        try {
+            List<User> users = userRepository.findAllEmployees(
+                    AuthUtil.getCurrentCompanyId()
+            ).orElse(new ArrayList<>());
+            response.setData("users", users);
+            response.setSuccessful(true);
+            response.success("Successfully retrieved all employees");
+            return response;
+        } catch (Exception e) {
+            return response.error(e);
+        }
+    }
+
+    public ApiResponse getEmployeeById(Long id) {
+        ApiResponse response = new ApiResponse();
+        try {
+            User user = userRepository.findEmployeeById(
+                    id, AuthUtil.getCurrentCompanyId()
+            ).orElse(new User());
+            if (user.getId() == null) {
+                return response.error("Employee not found");
+            }
+            response.setData("user", user);
+            response.setSuccessful(true);
+            response.success("Successfully retrieved employee");
+            return response;
+        } catch (Exception e) {
+            return response.error(e);
+        }
+    }
+
+    public ApiResponse getAllAdmins() {
+        ApiResponse response = new ApiResponse();
+        try {
+            List<User> users = userRepository.findAllAdmins(
+                    AuthUtil.getCurrentCompanyId()
+            ).orElse(new ArrayList<>());
+            response.setData("users", users);
+            response.setSuccessful(true);
+            response.success("Successfully retrieved all admins");
+            return response;
+        } catch (Exception e) {
+            return response.error(e);
+        }
+    }
+
+    public ApiResponse getAdminById(Long id) {
+        ApiResponse response = new ApiResponse();
+        try {
+            User user = userRepository.findAdminById(
+                    id, AuthUtil.getCurrentCompanyId()
+            ).orElse(new User());
+            if (user.getId() == null) {
+                return response.error("Admin not found");
+            }
+            response.setData("user", user);
+            response.setSuccessful(true);
+            response.success("Successfully retrieved admin");
+            return response;
+        } catch (Exception e) {
+            return response.error(e);
+        }
+    }
+
+    public ApiResponse getAllOwners() {
+        ApiResponse response = new ApiResponse();
+        try {
+            List<User> users = userRepository.findAllOwners(
+                    AuthUtil.getCurrentCompanyId()
+            ).orElse(new ArrayList<>());
+            response.setData("users", users);
+            response.setSuccessful(true);
+            response.success("Successfully retrieved all owners");
+            return response;
+        } catch (Exception e) {
+            return response.error(e);
+        }
+    }
+
+    public ApiResponse getOwnerById(Long id) {
+        ApiResponse response = new ApiResponse();
+        try {
+            User user = userRepository.findOwnerById(
+                    id, AuthUtil.getCurrentCompanyId()
+            ).orElse(new User());
+            if (user.getId() == null) {
+                return response.error("Owner not found");
+            }
+            response.setData("user", user);
+            response.setSuccessful(true);
+            response.success("Successfully retrieved owner");
             return response;
         } catch (Exception e) {
             return response.error(e);
