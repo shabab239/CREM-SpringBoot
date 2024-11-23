@@ -53,6 +53,7 @@ public class SecurityConfig {
                                 "/swagger-ui.html"
                         ).permitAll()
                         .requestMatchers("/api/auth/login").permitAll()
+                        .requestMatchers("/api/auth/register").permitAll()
                         .requestMatchers("/api/image/**").permitAll()
                         .requestMatchers("/api/**").hasAnyRole("ADMIN", "MANAGER", "EMPLOYEE", "CUSTOMER", "OWNER") //temporary
                         .anyRequest().authenticated())

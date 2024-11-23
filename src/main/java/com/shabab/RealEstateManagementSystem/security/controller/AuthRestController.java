@@ -1,6 +1,7 @@
 package com.shabab.RealEstateManagementSystem.security.controller;
 
 import com.shabab.RealEstateManagementSystem.security.model.Token;
+import com.shabab.RealEstateManagementSystem.security.model.User;
 import com.shabab.RealEstateManagementSystem.security.service.AuthService;
 import com.shabab.RealEstateManagementSystem.util.ApiResponse;
 import jakarta.validation.Valid;
@@ -29,8 +30,8 @@ public class AuthRestController {
     }
 
     @PostMapping("/register")
-    public ApiResponse register(@Valid @RequestBody Token token) {
-        return authService.authenticate(token);
+    public ApiResponse register(@Valid @RequestBody User user) {
+        return authService.register(user);
     }
 
 }

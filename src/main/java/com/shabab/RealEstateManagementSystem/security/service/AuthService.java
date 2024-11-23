@@ -66,7 +66,7 @@ public class AuthService {
         return apiResponse;
     }
 
-    @Transactional
+    @Transactional(rollbackOn = Exception.class)
     public ApiResponse register(User user) {
         ApiResponse apiResponse = new ApiResponse();
 
@@ -75,12 +75,16 @@ public class AuthService {
                 apiResponse.setMessage("Invalid username or password");
                 return apiResponse;
             }
-            user.setStatus(User.Status.ACTIVE);
-            user.setCompany(new Company(1L)); // TODO change to get company dynamically from company URL or something!
-            userRepository.save(user);
             Token token = new Token();
             token.setUsername(user.getUsername());
-            token.setPassword(new BCryptPasswordEncoder().encode(user.getPassword()));
+            token.setPassword(new BCryptPasswordEncoder(12).encode(user.getPassword()));
+
+            user.setStatus(User.Status.ACTIVE);
+            user.setRole(User.Role.ROLE_CUSTOMER);
+            user.setToken(null);
+            user.setCompany(new Company(1L)); // TODO change to get company dynamically from company URL or something!
+            userRepository.save(user);
+
             token.setUser(user);
             tokenRepository.save(token);
             apiResponse.success("Registration Successful");

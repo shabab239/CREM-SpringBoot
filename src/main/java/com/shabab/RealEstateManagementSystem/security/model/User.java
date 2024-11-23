@@ -1,6 +1,7 @@
 package com.shabab.RealEstateManagementSystem.security.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.shabab.RealEstateManagementSystem.account.model.Account;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
@@ -88,7 +89,7 @@ public class User implements UserDetails {
     @ManyToOne
     private Company company;
 
-    @JsonIgnore
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @OneToOne(mappedBy = "user")
     private Token token;
 
@@ -123,12 +124,6 @@ public class User implements UserDetails {
         INACTIVE,
         LOCKED
     }
-
-    @Transient
-    private String username;
-
-    @Transient
-    private String password;
 
     public User(Long id) {
         this.id = id;
