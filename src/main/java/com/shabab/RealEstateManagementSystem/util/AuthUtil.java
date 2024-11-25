@@ -2,8 +2,12 @@ package com.shabab.RealEstateManagementSystem.util;
 
 import com.shabab.RealEstateManagementSystem.security.model.Company;
 import com.shabab.RealEstateManagementSystem.security.model.User;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 
 /**
@@ -32,7 +36,34 @@ public class AuthUtil {
     }
 
     public static Long getCurrentCompanyId() {
-        return getCurrentCompany().getId();
+        try {
+            Company company = getCurrentCompany();
+            return company.getId();
+        } catch (Exception e) {
+            return getCompanyIdFromSession(); //fallback
+        }
+
     }
+
+    private static HttpSession getCurrentSession() {
+        ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+        if (attributes != null) {
+            HttpServletRequest request = attributes.getRequest();
+            return request.getSession(false);
+        }
+        return null;
+    }
+
+    public static Long getCompanyIdFromSession() {
+        HttpSession session = getCurrentSession();
+        if (session != null) {
+            Object companyId = session.getAttribute("companyId");
+            if (companyId instanceof Long) {
+                return (Long) companyId;
+            }
+        }
+        return null;
+    }
+
 
 }

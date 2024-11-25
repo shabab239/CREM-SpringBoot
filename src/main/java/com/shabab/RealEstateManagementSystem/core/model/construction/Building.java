@@ -38,6 +38,8 @@ public class Building {
     @JoinColumn(nullable = false)
     private Project project;
 
+    private String image;
+
     @JsonIgnore
     @OneToMany(mappedBy = "building", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
     private List<Floor> floors;
