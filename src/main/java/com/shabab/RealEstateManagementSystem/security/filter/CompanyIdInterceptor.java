@@ -19,7 +19,7 @@ public class CompanyIdInterceptor implements HandlerInterceptor {
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
         String requestURL = request.getRequestURL().toString();
 
-        if (requestURL.contains("/marketplace")) {
+        if (requestURL.contains("/marketplace") || requestURL.contains("/register")) {
             String host = request.getServerName();
 
             if ("localhost".equals(host)) {

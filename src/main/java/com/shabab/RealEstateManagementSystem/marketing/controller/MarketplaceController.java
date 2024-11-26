@@ -27,8 +27,13 @@ public class MarketplaceController {
         return marketplaceService.getAllAvailableBuildings();
     }
 
+    @GetMapping("/getBuildingsByBuildingType")
+    public ApiResponse getBuildingsByBuildingType(@RequestParam("type") Building.BuildingType type) {
+        return marketplaceService.getBuildingsByBuildingType(type);
+    }
+
     @GetMapping("/buildings/{id}")
-    public ApiResponse getBuildingWithAvailableUnits(@PathVariable Long id) {
+    public ApiResponse getBuildingWithAvailableUnits(@PathVariable("id") Long id) {
         return marketplaceService.getBuildingWithAvailableUnits(id);
     }
 

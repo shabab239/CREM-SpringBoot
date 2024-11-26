@@ -55,6 +55,24 @@ public class MarketplaceService {
         return response;
     }
 
+    public ApiResponse getBuildingsByBuildingType(Building.BuildingType type) {
+        ApiResponse response = new ApiResponse();
+        try {
+            List<Building> buildings = buildingRepository.findAllByTypeAndCompanyId(
+                            type,
+                            AuthUtil.getCurrentCompanyId()
+                    )
+                    .orElse(new ArrayList<>());
+
+            response.setData("buildings", buildings);
+            response.setSuccessful(true);
+            response.setMessage("Successfully retrieved buildings by building type");
+        } catch (Exception e) {
+            return response.error(e);
+        }
+        return response;
+    }
+
     public ApiResponse getBuildingWithAvailableUnits(Long buildingId) {
         ApiResponse response = new ApiResponse();
         try {
@@ -124,8 +142,7 @@ public class MarketplaceService {
     public ApiResponse getUnitsByBuildingType(Building.BuildingType type) {
         ApiResponse response = new ApiResponse();
         try {
-            List<Unit> units = unitRepository
-                    .findAllByFloor_Building_TypeAndStatusAndCompanyId(
+            List<Unit> units = unitRepository.findAllByFloor_Building_TypeAndStatusAndCompanyId(
                             type,
                             Unit.UnitStatus.AVAILABLE,
                             AuthUtil.getCurrentCompanyId()

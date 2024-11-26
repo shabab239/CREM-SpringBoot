@@ -24,6 +24,9 @@ import java.nio.file.Paths;
 public class
 ImageController {
 
+    @Value("${static.dir}")
+    private String staticDir;
+
     @Value("${avatar.dir}")
     private String avatarDir;
 
@@ -57,6 +60,29 @@ ImageController {
     public ResponseEntity<Resource> getUnitImage(@PathVariable String filename) {
         try {
             Path filePath = Paths.get(unitImagesDir).resolve(filename).normalize();
+
+            Resource resource = new UrlResource(filePath.toUri());
+            if (!resource.exists()) {
+                return ResponseEntity.notFound().build();
+            }
+
+            String contentType = Files.probeContentType(filePath);
+            if (contentType == null) {
+                contentType = "application/octet-stream";
+            }
+
+            return ResponseEntity.ok()
+                    .contentType(MediaType.parseMediaType(contentType))
+                    .body(resource);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
+    @GetMapping("buildingImages/{filename}")
+    public ResponseEntity<Resource> getBuildingImage(@PathVariable String filename) {
+        try {
+            Path filePath = Paths.get(staticDir + "/buildingImages").resolve(filename).normalize();
 
             Resource resource = new UrlResource(filePath.toUri());
             if (!resource.exists()) {

@@ -22,4 +22,6 @@ public interface BuildingRepository extends JpaRepository<Building, Long> {
 
     Optional<List<Building>> findAllByProject_IdAndCompanyId(Long projectId, Long companyId);
 
+    Optional<List<Building>> findAllByTypeAndCompanyId(Building.BuildingType type, Long companyId);
+
 }

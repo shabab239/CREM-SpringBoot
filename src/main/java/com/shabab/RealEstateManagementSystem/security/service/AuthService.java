@@ -6,6 +6,7 @@ import com.shabab.RealEstateManagementSystem.security.model.User;
 import com.shabab.RealEstateManagementSystem.security.repository.TokenRepository;
 import com.shabab.RealEstateManagementSystem.security.repository.UserRepository;
 import com.shabab.RealEstateManagementSystem.util.ApiResponse;
+import com.shabab.RealEstateManagementSystem.util.AuthUtil;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -82,7 +83,7 @@ public class AuthService {
             user.setStatus(User.Status.ACTIVE);
             user.setRole(User.Role.ROLE_CUSTOMER);
             user.setToken(null);
-            user.setCompany(new Company(1L)); // TODO change to get company dynamically from company URL or something!
+            user.setCompany(new Company(AuthUtil.getCurrentCompanyId()));
             userRepository.save(user);
 
             token.setUser(user);
