@@ -46,6 +46,18 @@ public class MarketplaceService {
                     AuthUtil.getCurrentCompanyId()
             ).orElse(new ArrayList<>());
 
+            for (Building building : buildings) {
+                List<Floor> floors = building.getFloors();
+                building.setFloorCount(floors.size());
+
+                int unitCount = floors.stream()
+                        .flatMap(floor -> floor.getUnits().stream())
+                        .mapToInt(unit -> 1)
+                        .sum();
+
+                building.setUnitCount(unitCount);
+            }
+
             response.setData("buildings", buildings);
             response.setSuccessful(true);
             response.setMessage("Successfully retrieved available buildings");
@@ -59,6 +71,24 @@ public class MarketplaceService {
         ApiResponse response = new ApiResponse();
         try {
             List<Building> buildings = buildingRepository.findAllByTypeAndCompanyId(
+                            type,
+                            AuthUtil.getCurrentCompanyId()
+                    )
+                    .orElse(new ArrayList<>());
+
+            response.setData("buildings", buildings);
+            response.setSuccessful(true);
+            response.setMessage("Successfully retrieved buildings by building type");
+        } catch (Exception e) {
+            return response.error(e);
+        }
+        return response;
+    }
+
+    public ApiResponse getBuildingsByUnitType(Unit.UnitType type) {
+        ApiResponse response = new ApiResponse();
+        try {
+            List<Building> buildings = buildingRepository.findAllByUnitType(
                             type,
                             AuthUtil.getCurrentCompanyId()
                     )

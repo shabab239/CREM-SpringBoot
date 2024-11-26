@@ -1,6 +1,7 @@
 package com.shabab.RealEstateManagementSystem.marketing.controller;
 
 import com.shabab.RealEstateManagementSystem.core.model.construction.Building;
+import com.shabab.RealEstateManagementSystem.core.model.construction.Unit;
 import com.shabab.RealEstateManagementSystem.marketing.dto.UnitSearchDTO;
 import com.shabab.RealEstateManagementSystem.marketing.service.MarketplaceService;
 import com.shabab.RealEstateManagementSystem.util.ApiResponse;
@@ -30,6 +31,11 @@ public class MarketplaceController {
     @GetMapping("/getBuildingsByBuildingType")
     public ApiResponse getBuildingsByBuildingType(@RequestParam("type") Building.BuildingType type) {
         return marketplaceService.getBuildingsByBuildingType(type);
+    }
+
+    @GetMapping("/getBuildingsByUnitType")
+    public ApiResponse getBuildingsByUnitType(@RequestParam("type") Unit.UnitType type) {
+        return marketplaceService.getBuildingsByUnitType(type);
     }
 
     @GetMapping("/buildings/{id}")

@@ -44,6 +44,12 @@ public class Building {
     @OneToMany(mappedBy = "building", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
     private List<Floor> floors;
 
+    @Transient
+    private int floorCount;
+
+    @Transient
+    private int unitCount;
+
     public enum BuildingType {
         RESIDENTIAL,
         COMMERCIAL,
