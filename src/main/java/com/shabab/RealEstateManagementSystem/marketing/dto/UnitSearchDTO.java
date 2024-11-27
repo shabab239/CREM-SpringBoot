@@ -2,9 +2,7 @@ package com.shabab.RealEstateManagementSystem.marketing.dto;
 
 import com.shabab.RealEstateManagementSystem.core.model.construction.Building;
 import com.shabab.RealEstateManagementSystem.core.model.construction.Unit;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 /**
  * Project: ConstructionAndRealEstateManagement-SpringBoot
@@ -12,12 +10,14 @@ import lombok.NoArgsConstructor;
  * Created on: 24/11/2024
  */
 
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 public class UnitSearchDTO {
 
     private Unit.UnitType type;
+    private Long buildingId;
     private Building.BuildingType buildingType;
     private Double minPrice;
     private Double maxPrice;

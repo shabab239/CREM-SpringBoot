@@ -17,17 +17,26 @@ public class CompanyIdInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
-        String requestURL = request.getRequestURL().toString();
+        if (request.getRequestURL().toString().contains("/auth")) {
+            return true;
+        }
 
-        if (requestURL.contains("/marketplace") || requestURL.contains("/register")) {
+        Long companyId = (Long) request.getSession().getAttribute("companyId");
+
+        if (companyId == null) {
             String host = request.getServerName();
 
             if ("localhost".equals(host)) {
-                request.getSession().setAttribute("companyId", 1L);
+                companyId = 1L;
             } else if ("abcprops.com".equals(host)) {
-                request.getSession().setAttribute("companyId", 2L);
+                companyId = 2L;
+            }
+
+            if (companyId != null) {
+                request.getSession().setAttribute("companyId", companyId);
             } else {
-                request.getSession().setAttribute("companyId", null);
+                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                return false;
             }
         }
 
