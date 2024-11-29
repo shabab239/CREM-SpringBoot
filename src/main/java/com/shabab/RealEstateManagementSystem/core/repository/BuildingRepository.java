@@ -4,6 +4,7 @@ import com.shabab.RealEstateManagementSystem.core.model.construction.Building;
 import com.shabab.RealEstateManagementSystem.core.model.construction.Unit;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 import java.util.Optional;
@@ -33,5 +34,8 @@ public interface BuildingRepository extends JpaRepository<Building, Long> {
             where b.companyId = :companyId and u.type = :type
             """)
     Optional<List<Building>> findAllByUnitType(Unit.UnitType type, Long companyId);
+
+    @Query("SELECT COUNT(b) FROM Building b WHERE b.companyId = :companyId")
+    Optional<Long> countByCompanyId(@Param("companyId") Long companyId);
 
 }

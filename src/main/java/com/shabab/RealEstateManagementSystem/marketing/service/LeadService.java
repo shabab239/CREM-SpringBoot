@@ -54,6 +54,9 @@ public class LeadService {
     public ApiResponse save(Lead lead) {
         ApiResponse response = new ApiResponse();
         try {
+            if (lead.getStatus() == null) {
+                lead.setStatus(Lead.LeadStatus.NEW);
+            }
             lead.setCompanyId(AuthUtil.getCurrentCompanyId());
             leadRepository.save(lead);
             response.setData("lead", lead);

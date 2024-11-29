@@ -3,6 +3,7 @@ package com.shabab.RealEstateManagementSystem.marketing.controller;
 import com.shabab.RealEstateManagementSystem.core.model.construction.Building;
 import com.shabab.RealEstateManagementSystem.core.model.construction.Unit;
 import com.shabab.RealEstateManagementSystem.marketing.dto.UnitSearchDTO;
+import com.shabab.RealEstateManagementSystem.marketing.model.Lead;
 import com.shabab.RealEstateManagementSystem.marketing.service.MarketplaceService;
 import com.shabab.RealEstateManagementSystem.util.ApiResponse;
 import jakarta.validation.Valid;
@@ -60,6 +61,11 @@ public class MarketplaceController {
     public ApiResponse getUnitsByBuildingType(
             @PathVariable Building.BuildingType type) {
         return marketplaceService.getUnitsByBuildingType(type);
+    }
+
+    @PostMapping("/saveOpenLead")
+    public ApiResponse saveOpenLead(@Valid @RequestBody Lead lead) {
+        return marketplaceService.saveOpenLead(lead);
     }
 
 }

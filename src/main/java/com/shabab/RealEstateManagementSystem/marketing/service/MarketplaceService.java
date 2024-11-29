@@ -7,6 +7,8 @@ import com.shabab.RealEstateManagementSystem.core.repository.BuildingRepository;
 import com.shabab.RealEstateManagementSystem.core.repository.ProjectRepository;
 import com.shabab.RealEstateManagementSystem.core.repository.UnitRepository;
 import com.shabab.RealEstateManagementSystem.marketing.dto.UnitSearchDTO;
+import com.shabab.RealEstateManagementSystem.marketing.model.Lead;
+import com.shabab.RealEstateManagementSystem.marketing.repository.LeadRepository;
 import com.shabab.RealEstateManagementSystem.util.ApiResponse;
 import com.shabab.RealEstateManagementSystem.util.AuthUtil;
 import jakarta.persistence.criteria.Join;
@@ -38,6 +40,8 @@ public class MarketplaceService {
 
     @Autowired
     private ProjectRepository projectRepository;
+    @Autowired
+    private LeadRepository leadRepository;
 
     public ApiResponse getAllAvailableBuildings() {
         ApiResponse response = new ApiResponse();
@@ -234,5 +238,22 @@ public class MarketplaceService {
 
             return cb.and(predicates.toArray(new Predicate[0]));
         };
+    }
+
+    public ApiResponse saveOpenLead(Lead lead) {
+        ApiResponse response = new ApiResponse();
+        try {
+            lead.setStatus(Lead.LeadStatus.NEW);
+            lead.setCampaign(null);
+            lead.setSource("Marketplace");
+            lead.setCompanyId(AuthUtil.getCurrentCompanyId());
+            leadRepository.save(lead);
+            response.setData("lead", lead);
+            response.setSuccessful(true);
+            response.success("Your message has been received. An agent will contact you shortly.");
+        } catch (Exception e) {
+            return response.error(e);
+        }
+        return response;
     }
 }
