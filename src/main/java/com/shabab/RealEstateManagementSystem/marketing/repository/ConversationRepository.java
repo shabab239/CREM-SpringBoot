@@ -18,6 +18,8 @@ public interface ConversationRepository extends JpaRepository<Conversation, Long
 
     Optional<List<Conversation>> findAllByCompanyId(Long companyId);
 
+    Optional<List<Conversation>> findAllByLead_IdAndCompanyId(Long leadId, Long companyId);
+
     Optional<Conversation> findByIdAndCompanyId(Long id, Long companyId);
 
     Optional<List<Conversation>> findAllByDateBetweenAndCompanyId(Date startDate, Date endDate, Long companyId);

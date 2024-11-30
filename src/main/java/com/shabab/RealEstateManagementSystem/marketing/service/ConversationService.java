@@ -23,10 +23,10 @@ public class ConversationService {
     @Autowired
     private ConversationRepository conversationRepository;
 
-    public ApiResponse getById(Long id, Long companyId) {
+    public ApiResponse getById(Long id) {
         ApiResponse response = new ApiResponse();
         try {
-            Conversation conversation = conversationRepository.findByIdAndCompanyId(id, companyId).orElse(null);
+            Conversation conversation = conversationRepository.findByIdAndCompanyId(id, AuthUtil.getCurrentCompanyId()).orElse(null);
             if (conversation == null) {
                 return response.error("Conversation not found");
             }
@@ -39,10 +39,10 @@ public class ConversationService {
         return response;
     }
 
-    public ApiResponse getAll(Long companyId) {
+    public ApiResponse getAll() {
         ApiResponse response = new ApiResponse();
         try {
-            List<Conversation> conversations = conversationRepository.findAllByCompanyId(companyId).orElse(new ArrayList<>());
+            List<Conversation> conversations = conversationRepository.findAllByCompanyId(AuthUtil.getCurrentCompanyId()).orElse(new ArrayList<>());
             response.setData("conversations", conversations);
             response.setSuccessful(true);
             response.setMessage("Successfully retrieved conversations");
@@ -52,10 +52,23 @@ public class ConversationService {
         return response;
     }
 
-    public ApiResponse getByDateRange(Date startDate, Date endDate, Long companyId) {
+    public ApiResponse getAllByLeadId(Long leadId) {
         ApiResponse response = new ApiResponse();
         try {
-            List<Conversation> conversations = conversationRepository.findAllByDateBetweenAndCompanyId(startDate, endDate, companyId).orElse(new ArrayList<>());
+            List<Conversation> conversations = conversationRepository.findAllByLead_IdAndCompanyId(leadId, AuthUtil.getCurrentCompanyId()).orElse(new ArrayList<>());
+            response.setData("conversations", conversations);
+            response.setSuccessful(true);
+            response.setMessage("Successfully retrieved conversations");
+        } catch (Exception e) {
+            return response.error(e);
+        }
+        return response;
+    }
+
+    public ApiResponse getByDateRange(Date startDate, Date endDate) {
+        ApiResponse response = new ApiResponse();
+        try {
+            List<Conversation> conversations = conversationRepository.findAllByDateBetweenAndCompanyId(startDate, endDate, AuthUtil.getCurrentCompanyId()).orElse(new ArrayList<>());
             response.setData("conversations", conversations);
             response.setSuccessful(true);
             response.setMessage("Successfully retrieved conversations within the date range");
@@ -65,10 +78,10 @@ public class ConversationService {
         return response;
     }
 
-    public ApiResponse getByCustomerId(Long customerId, Long companyId) {
+    public ApiResponse getByCustomerId(Long customerId) {
         ApiResponse response = new ApiResponse();
         try {
-            List<Conversation> conversations = conversationRepository.findAllByCustomerIdAndCompanyId(customerId, companyId).orElse(new ArrayList<>());
+            List<Conversation> conversations = conversationRepository.findAllByCustomerIdAndCompanyId(customerId, AuthUtil.getCurrentCompanyId()).orElse(new ArrayList<>());
             response.setData("conversations", conversations);
             response.setSuccessful(true);
             response.setMessage("Successfully retrieved conversations for the customer");
@@ -78,10 +91,10 @@ public class ConversationService {
         return response;
     }
 
-    public ApiResponse getByEmployeeId(Long employeeId, Long companyId) {
+    public ApiResponse getByEmployeeId(Long employeeId) {
         ApiResponse response = new ApiResponse();
         try {
-            List<Conversation> conversations = conversationRepository.findAllByEmployeeIdAndCompanyId(employeeId, companyId).orElse(new ArrayList<>());
+            List<Conversation> conversations = conversationRepository.findAllByEmployeeIdAndCompanyId(employeeId, AuthUtil.getCurrentCompanyId()).orElse(new ArrayList<>());
             response.setData("conversations", conversations);
             response.setSuccessful(true);
             response.setMessage("Successfully retrieved conversations for the employee");
@@ -91,10 +104,10 @@ public class ConversationService {
         return response;
     }
 
-    public ApiResponse getByLeadId(Long leadId, Long companyId) {
+    public ApiResponse getByLeadId(Long leadId) {
         ApiResponse response = new ApiResponse();
         try {
-            List<Conversation> conversations = conversationRepository.findAllByLeadIdAndCompanyId(leadId, companyId).orElse(new ArrayList<>());
+            List<Conversation> conversations = conversationRepository.findAllByLeadIdAndCompanyId(leadId, AuthUtil.getCurrentCompanyId()).orElse(new ArrayList<>());
             response.setData("conversations", conversations);
             response.setSuccessful(true);
             response.setMessage("Successfully retrieved conversations for the lead");
@@ -108,6 +121,10 @@ public class ConversationService {
         ApiResponse response = new ApiResponse();
         try {
             conversation.setEmployee(AuthUtil.getCurrentUser());
+            conversation.setCompanyId(AuthUtil.getCurrentCompanyId());
+            if (conversation.getCustomer() == null || conversation.getCustomer().getId() == null) {
+                conversation.setCustomer(null);
+            }
             conversationRepository.save(conversation);
             response.setData("conversation", conversation);
             response.setSuccessful(true);
@@ -118,15 +135,15 @@ public class ConversationService {
         return response;
     }
 
-    public ApiResponse update(Conversation conversation, Long companyId) {
+    public ApiResponse update(Conversation conversation) {
         ApiResponse response = new ApiResponse();
         try {
-            // Fetch conversation by id and companyId
-            Conversation dbConversation = conversationRepository.findByIdAndCompanyId(conversation.getId(), companyId).orElse(null);
+            Conversation dbConversation = conversationRepository.findByIdAndCompanyId(conversation.getId(), AuthUtil.getCurrentCompanyId()).orElse(null);
             if (dbConversation == null) {
                 return response.error("Conversation not found");
             }
             conversation.setEmployee(AuthUtil.getCurrentUser());
+            conversation.setCompanyId(AuthUtil.getCurrentCompanyId());
             conversationRepository.save(conversation);
             response.setData("conversation", conversation);
             response.setSuccessful(true);
@@ -137,11 +154,10 @@ public class ConversationService {
         return response;
     }
 
-    public ApiResponse deleteById(Long id, Long companyId) {
+    public ApiResponse deleteById(Long id) {
         ApiResponse response = new ApiResponse();
         try {
-            // Fetch conversation by id and companyId
-            Conversation dbConversation = conversationRepository.findByIdAndCompanyId(id, companyId).orElse(null);
+            Conversation dbConversation = conversationRepository.findByIdAndCompanyId(id, AuthUtil.getCurrentCompanyId()).orElse(null);
             if (dbConversation == null) {
                 return response.error("Conversation not found");
             }

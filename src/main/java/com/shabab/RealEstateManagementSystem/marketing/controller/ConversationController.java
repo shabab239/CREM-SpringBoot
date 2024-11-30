@@ -23,9 +23,14 @@ public class ConversationController {
     @Autowired
     private ConversationService conversationService;
 
-    @GetMapping("/all/{companyId}")
-    public ApiResponse getAll(@PathVariable Long companyId) {
-        return conversationService.getAll(companyId);
+    @GetMapping("/all")
+    public ApiResponse getAll() {
+        return conversationService.getAll();
+    }
+
+    @GetMapping("/getAllByLeadId")
+    public ApiResponse getAllByLeadId(@RequestParam Long leadId) {
+        return conversationService.getAllByLeadId(leadId);
     }
 
     @PostMapping("/save")
@@ -35,40 +40,39 @@ public class ConversationController {
 
     @PutMapping("/update")
     public ApiResponse update(@Valid @RequestBody Conversation conversation) {
-        return conversationService.update(conversation, conversation.getCompanyId());
+        return conversationService.update(conversation);
     }
 
-    @GetMapping("/{id}/{companyId}")
-    public ApiResponse getById(@PathVariable Long id, @PathVariable Long companyId) {
-        return conversationService.getById(id, companyId);
+    @GetMapping("/{id}")
+    public ApiResponse getById(@PathVariable Long id) {
+        return conversationService.getById(id);
     }
 
-    @DeleteMapping("/{id}/{companyId}")
-    public ApiResponse deleteById(@PathVariable Long id, @PathVariable Long companyId) {
-        return conversationService.deleteById(id, companyId);
+    @DeleteMapping("/{id}")
+    public ApiResponse deleteById(@PathVariable Long id) {
+        return conversationService.deleteById(id);
     }
 
-    @GetMapping("/date-range/{companyId}")
+    @GetMapping("/date-range")
     public ApiResponse getByDateRange(
             @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") Date startDate,
-            @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") Date endDate,
-            @PathVariable Long companyId) {
-        return conversationService.getByDateRange(startDate, endDate, companyId);
+            @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") Date endDate) {
+        return conversationService.getByDateRange(startDate, endDate);
     }
 
-    @GetMapping("/customer/{customerId}/{companyId}")
-    public ApiResponse getByCustomerId(@PathVariable Long customerId, @PathVariable Long companyId) {
-        return conversationService.getByCustomerId(customerId, companyId);
+    @GetMapping("/customer/{customerId}")
+    public ApiResponse getByCustomerId(@PathVariable Long customerId) {
+        return conversationService.getByCustomerId(customerId);
     }
 
-    @GetMapping("/employee/{employeeId}/{companyId}")
-    public ApiResponse getByEmployeeId(@PathVariable Long employeeId, @PathVariable Long companyId) {
-        return conversationService.getByEmployeeId(employeeId, companyId);
+    @GetMapping("/employee/{employeeId}")
+    public ApiResponse getByEmployeeId(@PathVariable Long employeeId) {
+        return conversationService.getByEmployeeId(employeeId);
     }
 
-    @GetMapping("/lead/{leadId}/{companyId}")
-    public ApiResponse getByLeadId(@PathVariable Long leadId, @PathVariable Long companyId) {
-        return conversationService.getByLeadId(leadId, companyId);
+    @GetMapping("/lead/{leadId}")
+    public ApiResponse getByLeadId(@PathVariable Long leadId) {
+        return conversationService.getByLeadId(leadId);
     }
 }
 

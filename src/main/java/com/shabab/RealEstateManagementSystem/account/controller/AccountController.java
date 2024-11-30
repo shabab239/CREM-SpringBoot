@@ -46,16 +46,6 @@ public class AccountController {
         return accountService.deleteById(id);
     }
 
-    @GetMapping("/company/{companyId}")
-    public ApiResponse getAllByCompanyId(@PathVariable Long companyId) {
-        return accountService.getAllByCompanyId(companyId);
-    }
-
-    @GetMapping("/company/{companyId}/account/{id}")
-    public ApiResponse getByIdAndCompanyId(@PathVariable Long id, @PathVariable Long companyId) {
-        return accountService.getByIdAndCompanyId(id, companyId);
-    }
-
     @GetMapping("/total-account-balance")
     public ApiResponse getTotalAccountBalance() {
         return accountService.getTotalAccountBalance();
