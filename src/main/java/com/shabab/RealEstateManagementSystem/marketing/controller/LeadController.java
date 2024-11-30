@@ -36,6 +36,11 @@ public class LeadController {
         return leadService.save(lead);
     }
 
+    @PostMapping("/convertToCustomer/{id}")
+    public ApiResponse convertToCustomer(@PathVariable Long id) {
+        return leadService.convertToCustomer(id);
+    }
+
     @PutMapping("/update")
     public ApiResponse update(@Valid @RequestBody Lead lead) {
         return leadService.update(lead);

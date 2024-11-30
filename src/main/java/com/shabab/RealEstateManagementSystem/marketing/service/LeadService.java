@@ -1,5 +1,7 @@
 package com.shabab.RealEstateManagementSystem.marketing.service;
 
+import com.shabab.RealEstateManagementSystem.security.model.User;
+import com.shabab.RealEstateManagementSystem.security.repository.UserRepository;
 import com.shabab.RealEstateManagementSystem.util.AuthUtil;
 import org.springframework.stereotype.Service;
 import com.shabab.RealEstateManagementSystem.marketing.model.Lead;
@@ -21,6 +23,8 @@ public class LeadService {
 
     @Autowired
     private LeadRepository leadRepository;
+    @Autowired
+    private UserRepository userRepository;
 
     public ApiResponse getById(Long id) {
         ApiResponse response = new ApiResponse();
@@ -80,6 +84,31 @@ public class LeadService {
             response.setData("lead", lead);
             response.setSuccessful(true);
             response.success("Updated Successfully");
+        } catch (Exception e) {
+            return response.error(e);
+        }
+        return response;
+    }
+
+    public ApiResponse convertToCustomer(Long id) {
+        ApiResponse response = new ApiResponse();
+        try {
+            Lead dbLead = leadRepository.findByIdAndCompanyId(id, AuthUtil.getCurrentCompanyId()).orElse(null);
+            if (dbLead == null) {
+                return response.error("Lead not found");
+            }
+            User user = new User();
+            user.setName(dbLead.getName());
+            if (dbLead.getContactInfo().matches("\\d+")) {
+                user.setCell(dbLead.getContactInfo());
+            }
+            user.setRole(User.Role.ROLE_CUSTOMER);
+            user.setStatus(User.Status.ACTIVE);
+            user.setCompany(AuthUtil.getCurrentCompany());
+            userRepository.save(user);
+            response.setData("user", user);
+            response.setSuccessful(true);
+            response.success("Lead converted successfully");
         } catch (Exception e) {
             return response.error(e);
         }
