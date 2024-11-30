@@ -2,6 +2,7 @@ package com.shabab.RealEstateManagementSystem.core.service;
 
 import com.shabab.RealEstateManagementSystem.account.repository.AccountRepository;
 import com.shabab.RealEstateManagementSystem.account.repository.BookingRepository;
+import com.shabab.RealEstateManagementSystem.core.model.construction.Project;
 import com.shabab.RealEstateManagementSystem.core.repository.BuildingRepository;
 import com.shabab.RealEstateManagementSystem.core.repository.ConstructionStageRepository;
 import com.shabab.RealEstateManagementSystem.core.repository.ProjectRepository;
@@ -15,6 +16,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Project: ConstructionAndRealEstateManagement-SpringBoot
@@ -68,16 +71,31 @@ public class DashboardService {
         return response;
     }
 
-    public ApiResponse getManagerDashboard(Long projectId) {
+    public ApiResponse getManagerDashboard() {
         ApiResponse response = new ApiResponse();
         try {
-            response.setData("stageCount", stageRepository.countByProjectIdAndCompanyId(projectId, AuthUtil.getCurrentCompanyId()).orElse(0L));
-            response.setData("completedStages", stageRepository.countCompletedByProjectIdAndCompanyId(projectId, AuthUtil.getCurrentCompanyId()).orElse(0L));
-            response.setData("unitCount", unitRepository.countByProjectIdAndCompanyId(projectId, AuthUtil.getCurrentCompanyId()).orElse(0L));
-            response.setData("soldUnits", unitRepository.countSoldByProjectIdAndCompanyId(projectId, AuthUtil.getCurrentCompanyId()).orElse(0L));
-            response.setData("projectProgress", projectRepository.getProjectProgress(projectId, AuthUtil.getCurrentCompanyId()).orElse(0.0));
+            Long companyId = AuthUtil.getCurrentCompanyId();
+
+            List<Project> projects = projectRepository.findAllByCompanyId(companyId).orElse(new ArrayList<>());
+
+            List<Map<String, Object>> projectStats = new ArrayList<>();
+
+            for(Project project : projects) {
+                Map<String, Object> stats = new HashMap<>();
+                stats.put("projectId", project.getId());
+                stats.put("projectName", project.getName());
+                stats.put("stageCount", stageRepository.countByProjectIdAndCompanyId(project.getId(), companyId).orElse(0L));
+                stats.put("completedStages", stageRepository.countCompletedByProjectIdAndCompanyId(project.getId(), companyId).orElse(0L));
+                stats.put("unitCount", unitRepository.countByProjectIdAndCompanyId(project.getId(), companyId).orElse(0L));
+                stats.put("soldUnits", unitRepository.countSoldByProjectIdAndCompanyId(project.getId(), companyId).orElse(0L));
+                stats.put("projectProgress", projectRepository.getProjectProgress(project.getId(), companyId).orElse(0.0));
+
+                projectStats.add(stats);
+            }
+
+            response.setData("projects", projectStats);
             response.setSuccessful(true);
-            response.setMessage("Successfully retrieved manager dashboard data");
+            response.setMessage("Successfully retrieved all projects stats");
         } catch (Exception e) {
             return response.error(e);
         }

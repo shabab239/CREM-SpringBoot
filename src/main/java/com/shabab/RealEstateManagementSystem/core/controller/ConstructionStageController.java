@@ -26,6 +26,11 @@ public class ConstructionStageController {
         return constructionStageService.getAll();
     }
 
+    @GetMapping("/getAllStagesByStatus")
+    public ApiResponse getAllStagesByStatus(@RequestParam ConstructionStage.StageStatus status) {
+        return constructionStageService.getAllStagesByStatus(status);
+    }
+
     @PostMapping("/save")
     public ApiResponse save(@Valid @RequestBody ConstructionStage constructionStage) {
         return constructionStageService.save(constructionStage);

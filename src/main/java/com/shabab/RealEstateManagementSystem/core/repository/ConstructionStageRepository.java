@@ -41,6 +41,8 @@ public interface ConstructionStageRepository extends JpaRepository<ConstructionS
 
     Optional<List<ConstructionStage>> findAllByUnitIdAndCompanyId(Long unitId, Long companyId);
 
+    Optional<List<ConstructionStage>> findAllByStatusAndCompanyId(ConstructionStage.StageStatus status, Long companyId);
+
     @Query("SELECT COUNT(s) FROM ConstructionStage s WHERE s.building.project.id = :projectId AND s.companyId = :companyId")
     Optional<Long> countByProjectIdAndCompanyId(@Param("projectId") Long projectId, @Param("companyId") Long companyId);
 

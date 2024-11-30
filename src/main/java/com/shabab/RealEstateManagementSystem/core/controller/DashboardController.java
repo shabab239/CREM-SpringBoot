@@ -24,9 +24,9 @@ public class DashboardController {
         return dashboardService.getAdminDashboard();
     }
 
-    @GetMapping("/manager/project/{id}")
-    public ApiResponse getManagerDashboard(@PathVariable Long id) {
-        return dashboardService.getManagerDashboard(id);
+    @GetMapping("/manager/overview")
+    public ApiResponse getManagerDashboard() {
+        return dashboardService.getManagerDashboard();
     }
 
     @GetMapping("/sales/overview")

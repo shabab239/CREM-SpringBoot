@@ -176,9 +176,13 @@ public class RawMaterialService {
 
                 String groupTransactionId = TransactionService.generateTransactionId();
 
+                RawMaterial rawMaterial = rawMaterialRepository.findByIdAndCompanyId(
+                        rawMaterialOrder.getRawMaterial().getId(), AuthUtil.getCurrentCompanyId()
+                ).orElse(new RawMaterial());
+
                 transactionService.recordExpense(
                         rawMaterialOrder.getTotalPrice(),
-                        "Raw Material Order - " + rawMaterialOrder.getRawMaterial().getName(),
+                        "Raw Material Order - " + rawMaterial.getName(),
                         accountService.getCompanyAccount(),
                         groupTransactionId,
                         Optional.empty()
@@ -187,7 +191,7 @@ public class RawMaterialService {
 
                 transactionService.recordIncome(
                         rawMaterialOrder.getTotalPrice(),
-                        "Raw Material Order - " + rawMaterialOrder.getRawMaterial().getName(),
+                        "Raw Material Order - " + rawMaterial.getName(),
                         accountService.getSupplierAccount(rawMaterialOrder.getSupplier().getId()),
                         groupTransactionId,
                         Optional.empty()
@@ -237,9 +241,13 @@ public class RawMaterialService {
 
                 String groupTransactionId = TransactionService.generateTransactionId();
 
+                RawMaterial rawMaterial = rawMaterialRepository.findByIdAndCompanyId(
+                        rawMaterialOrder.getRawMaterial().getId(), AuthUtil.getCurrentCompanyId()
+                ).orElse(new RawMaterial());
+
                 transactionService.recordExpense(
                         rawMaterialOrder.getTotalPrice(),
-                        "Raw Material Order - " + rawMaterialOrder.getRawMaterial().getName(),
+                        "Raw Material Order - " + rawMaterial.getName(),
                         accountService.getCompanyAccount(),
                         groupTransactionId,
                         Optional.empty()
@@ -248,7 +256,7 @@ public class RawMaterialService {
 
                 transactionService.recordIncome(
                         rawMaterialOrder.getTotalPrice(),
-                        "Raw Material Order - " + rawMaterialOrder.getRawMaterial().getName(),
+                        "Raw Material Order - " + rawMaterial.getName(),
                         accountService.getSupplierAccount(rawMaterialOrder.getSupplier().getId()),
                         groupTransactionId,
                         Optional.empty()

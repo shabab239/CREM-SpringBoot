@@ -59,6 +59,21 @@ public class ConstructionStageService {
         return response;
     }
 
+    public ApiResponse getAllStagesByStatus(ConstructionStage.StageStatus status) {
+        ApiResponse response = new ApiResponse();
+        try {
+            List<ConstructionStage> constructionStages = constructionStageRepository.findAllByStatusAndCompanyId(
+                    status, AuthUtil.getCurrentCompanyId()
+            ).orElse(new ArrayList<>());
+            response.setData("constructionStages", constructionStages);
+            response.setSuccessful(true);
+            response.setMessage("Successfully retrieved all construction stages");
+        } catch (Exception e) {
+            return response.error(e);
+        }
+        return response;
+    }
+
     public ApiResponse save(ConstructionStage constructionStage) {
         ApiResponse response = new ApiResponse();
         try {
