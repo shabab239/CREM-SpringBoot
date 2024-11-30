@@ -37,4 +37,15 @@ public interface TransactionRepository extends JpaRepository<Transaction, Long> 
     Optional<Double> sumAmountByAccountIdAndCompanyId(
             @Param("accountId") Long accountId,
             @Param("companyId") Long companyId);
+
+    @Query("SELECT SUM(t.amount) FROM Transaction t " +
+            "WHERE t.type = 'EXPENSE' " +
+            "AND t.date BETWEEN :startDate AND :endDate " +
+            "AND t.account.worker IS NOT NULL " +
+            "AND t.companyId = :companyId")
+    Optional<Double> sumWorkerPaymentsByDateRange(
+            @Param("startDate") Date startDate,
+            @Param("endDate") Date endDate,
+            @Param("companyId") Long companyId
+    );
 }

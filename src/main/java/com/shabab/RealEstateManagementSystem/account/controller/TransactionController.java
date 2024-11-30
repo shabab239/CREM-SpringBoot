@@ -79,4 +79,18 @@ public class TransactionController {
     public ApiResponse getTransactionsByAccount(@RequestParam Long accountId) {
         return transactionService.getTransactionsByAccount(accountId);
     }
+
+    @GetMapping("/profit-loss")
+    public ApiResponse getProfitAndLossStatement(
+            @RequestParam @DateTimeFormat(pattern = "dd-MM-yyyy") Date startDate,
+            @RequestParam @DateTimeFormat(pattern = "dd-MM-yyyy") Date endDate) {
+        return transactionService.getProfitAndLossStatement(startDate, endDate);
+    }
+
+    @GetMapping("/cash-flow")
+    public ApiResponse getCashFlowStatement(
+            @RequestParam @DateTimeFormat(pattern = "dd-MM-yyyy") Date startDate,
+            @RequestParam @DateTimeFormat(pattern = "dd-MM-yyyy") Date endDate) {
+        return transactionService.getCashFlowStatement(startDate, endDate);
+    }
 }

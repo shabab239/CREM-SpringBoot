@@ -4,8 +4,9 @@ import com.shabab.RealEstateManagementSystem.core.model.worker.Worker;
 import com.shabab.RealEstateManagementSystem.core.model.worker.WorkerAttendance;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
-import java.sql.Date;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -63,4 +64,15 @@ public interface WorkerAttendanceRepository extends JpaRepository<WorkerAttendan
                         AND wa.companyId = :companyId
             """)
     Optional<List<WorkerAttendance>> findAllByWorkerListAndDateAndStageIdAndCompanyId(List<Worker> workerList, Date date, Long stageId, Long companyId);
+
+    @Query("SELECT a FROM WorkerAttendance a " +
+            "WHERE a.stage.building.project.id = :projectId " +
+            "AND a.date BETWEEN :startDate AND :endDate " +
+            "AND a.companyId = :companyId")
+    Optional<List<WorkerAttendance>> findByProjectIdAndDateBetweenAndCompanyId(
+            @Param("projectId") Long projectId,
+            @Param("startDate") Date startDate,
+            @Param("endDate") Date endDate,
+            @Param("companyId") Long companyId
+    );
 }

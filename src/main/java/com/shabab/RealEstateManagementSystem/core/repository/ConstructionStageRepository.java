@@ -116,4 +116,12 @@ public interface ConstructionStageRepository extends JpaRepository<ConstructionS
             ORDER BY s.start_date DESC
             """, nativeQuery = true)
     Optional<List<Map<String, Object>>> getCustomerProjectUpdates(@Param("customerId") Long customerId);
+
+    @Query("SELECT s FROM ConstructionStage s " +
+            "WHERE s.building.project.id = :projectId " +
+            "AND s.companyId = :companyId")
+    Optional<List<ConstructionStage>> findByProjectIdAndCompanyId(
+            @Param("projectId") Long projectId,
+            @Param("companyId") Long companyId
+    );
 }

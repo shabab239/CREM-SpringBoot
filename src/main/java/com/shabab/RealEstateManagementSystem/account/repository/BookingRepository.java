@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -38,21 +39,30 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
     Optional<List<Booking>> findRecentByCompanyId(@Param("companyId") Long companyId);
 
     @Query(value = """
-       SELECT 
-       MONTH(b.booking_date) as month,
-       COUNT(b.id) as bookings,
-       COALESCE(SUM(u.price), 0) as revenue,
-       COUNT(DISTINCT l.id) as leads,
-       CASE WHEN COUNT(DISTINCT l.id) = 0 THEN 0
-       ELSE (COUNT(b.id) * 100.0 / COUNT(DISTINCT l.id)) END as conversion_rate
-       FROM acc_bookings b
-       JOIN const_units u ON b.unit_id = u.id
-       LEFT JOIN leads l ON l.company_id = b.company_id
-       WHERE b.company_id = :companyId
-       GROUP BY MONTH(b.booking_date)
-       LIMIT :size OFFSET :page
-       """, nativeQuery = true)
+            SELECT 
+            MONTH(b.booking_date) as month,
+            COUNT(b.id) as bookings,
+            COALESCE(SUM(u.price), 0) as revenue,
+            COUNT(DISTINCT l.id) as leads,
+            CASE WHEN COUNT(DISTINCT l.id) = 0 THEN 0
+            ELSE (COUNT(b.id) * 100.0 / COUNT(DISTINCT l.id)) END as conversion_rate
+            FROM acc_bookings b
+            JOIN const_units u ON b.unit_id = u.id
+            LEFT JOIN leads l ON l.company_id = b.company_id
+            WHERE b.company_id = :companyId
+            GROUP BY MONTH(b.booking_date)
+            LIMIT :size OFFSET :page
+            """, nativeQuery = true)
     Optional<List<Map<String, Object>>> getSalesTrends(@Param("companyId") Long companyId,
                                                        @Param("page") int page,
                                                        @Param("size") int size);
+
+    @Query("SELECT SUM(bp.amount) FROM BookingPayment bp " +
+            "WHERE bp.date BETWEEN :startDate AND :endDate " +
+            "AND bp.companyId = :companyId")
+    Optional<Double> sumPaymentsByDateRange(
+            @Param("startDate") Date startDate,
+            @Param("endDate") Date endDate,
+            @Param("companyId") Long companyId
+    );
 }

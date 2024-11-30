@@ -38,4 +38,5 @@ public interface AccountRepository extends JpaRepository<Account, Long> {
             "FROM Transaction t WHERE t.account.companyId = :companyId AND t.type = 'INCOME' " +
             "GROUP BY FUNCTION('MONTH', t.date)")
     Optional<Map<String, Object>> getRevenueAnalytics(@Param("companyId") Long companyId);
+
 }
