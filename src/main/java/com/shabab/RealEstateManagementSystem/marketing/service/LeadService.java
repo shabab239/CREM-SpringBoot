@@ -61,6 +61,7 @@ public class LeadService {
             if (lead.getStatus() == null) {
                 lead.setStatus(Lead.LeadStatus.NEW);
             }
+            lead.setCampaign(null); //temporary, will implement later
             lead.setCompanyId(AuthUtil.getCurrentCompanyId());
             leadRepository.save(lead);
             response.setData("lead", lead);
