@@ -21,9 +21,10 @@ A solution to manage construction and real estate projects efficiently. The syst
 - **Frontend**: Angular, Flutter
 - **Database**: MySQL
 
-## Previews
+## Database Setup
+- Import the `CREMS Project Day.sql` file into your MySQL database.
 
-Previews:
+## Previews
 
 ![Preview 1](previews/1.png)  
 ![Preview 2](previews/2.png)  
@@ -34,3 +35,24 @@ Previews:
 ![Preview 7](previews/7.png)  
 ![Preview 8](previews/8.png)  
 ![Preview 9](previews/9.png)  
+![Preview 10](previews/10.png)  
+![Preview 11](previews/11.png)  
+![Preview 12](previews/12.png)  
+![Preview 13](previews/13.png)  
+![Preview 14](previews/14.png)  
+![Preview 15](previews/15.png)  
+![Preview 16](previews/16.png)  
+![Preview 17](previews/17.png)  
+![Preview 18](previews/18.png)  
+![Preview 19](previews/19.png)  
+![Preview 20](previews/20.png)  
+![Preview 21](previews/21.png)  
+![Preview 22](previews/22.png)  
+![Preview 23](previews/23.png)  
+![Preview 24](previews/24.png)  
+![Preview 25](previews/25.png)  
+![Preview 26](previews/26.png)  
+![Preview 27](previews/27.png)  
+![Preview 28](previews/28.png)  
+![Preview 29](previews/29.png)  
+
